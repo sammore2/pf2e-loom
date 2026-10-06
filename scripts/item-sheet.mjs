@@ -1,4 +1,4 @@
-// SDR TATIC — scripts/item-sheet.mjs
+// PF2E — scripts/item-sheet.mjs
 // Uma só ficha pra todos os tipos: cabeçalho (ícone/nome/tipo/custo em
 // ações), corpo em 2 colunas com os campos do tipo, aba Descrição e traços
 // como chips. Forma segue o molde da ficha de item de referência do motor.
@@ -25,7 +25,7 @@ const SIZES = ['tiny', 'sm', 'med', 'lg', 'huge', 'grg'];
 
 const FEAT_CATEGORIES = ['ancestry', 'class', 'general', 'skill'];
 
-export class SdrTaticItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
+export class Pf2eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
   static DEFAULT_OPTIONS = { position: { width: 460, height: 560 } };
   _formSaveTimer;
   _pendingFields = new Map();
@@ -39,13 +39,13 @@ export class SdrTaticItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
       title: (props.title && props.title !== 'undefined') ? props.title : 'Item',
       showFooter: false,
       resizable: true,
-      classes: ['sdr-tatic-sheet', 'sdr-tatic-item-sheet', 'tatic-ui'],
+      classes: ['pf2e-sheet', 'pf2e-item-sheet', 'pf2e-ui'],
     });
   }
 
   get dataKey() { return 'data'; }
 
-  static PARTS = { main: { template: '/marketplace/rulesets/sdr-tatic/templates/item-sheet.hbs' } };
+  static PARTS = { main: { template: '/marketplace/rulesets/pf2e/templates/item-sheet.hbs' } };
 
   _activeTab = 'details';
 
@@ -64,7 +64,7 @@ export class SdrTaticItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
     const root = this.element;
     if (!root) return;
     const tab = this._activeTab || 'details';
-    root.querySelectorAll('.sdr-tatic-tab-btn').forEach((btn) => {
+    root.querySelectorAll('.pf2e-tab-btn').forEach((btn) => {
       btn.classList.toggle('active', btn.dataset.tab === tab);
     });
     root.querySelectorAll('[data-tab-content]').forEach((panel) => {
@@ -200,7 +200,7 @@ export class SdrTaticItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
       icon: ITEM_TYPE_ICON[type] || 'fa-solid fa-box',
       imgUrl: this.document?.imgUrl || '',
       type,
-      typeLabelKey: `sdr-tatic.itemTypes.${type}`,
+      typeLabelKey: `pf2e.itemTypes.${type}`,
       typeFallback: ITEM_TYPE_LABEL[type] || type,
       actionPips,
       costPips,

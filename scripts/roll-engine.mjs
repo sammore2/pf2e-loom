@@ -1,4 +1,4 @@
-// SDR TATIC — scripts/roll-engine.mjs
+// PF2E — scripts/roll-engine.mjs
 // Client rolls: every d20 roll goes through the shared dialog plus a
 // fire-and-forget dispatch. Result evaluation stays in rules.mjs (pure,
 // tested) because the dispatch never returns the total.
@@ -39,7 +39,7 @@ async function baseRoll({ label, modifier = 0, actor = null, dc = null, rollType
   const totalBonus = num(modifier) + num(choice.situational);
   const formula = totalBonus !== 0 ? `1d20 + ${totalBonus}` : '1d20';
 
-  const meta = { label, system: 'sdr-tatic', rollType, ...extraMeta };
+  const meta = { label, system: 'pf2e', rollType, ...extraMeta };
   if (dc !== null && dc !== undefined) meta.dc = dc;
   if (choice.situational) meta.situational = choice.situational;
 
@@ -161,7 +161,7 @@ export async function rollDamage(actor, item, { critical = false } = {}) {
     mode: 'public',
     meta: {
       label: `Damage: ${item.name || 'Weapon'}${critical ? ' (Critical)' : ''}`,
-      system: 'sdr-tatic',
+      system: 'pf2e',
       rollType: 'damage',
       critical: !!critical,
       itemId: item.id,

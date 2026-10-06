@@ -1,4 +1,4 @@
-// SDR TATIC — scripts/schema.mjs
+// PF2E — scripts/schema.mjs
 // Default data for character, npc and every item type. Only the shape and
 // short field names live here; no rule text.
 import { ATTRIBUTE_KEYS, SKILL_ABILITIES } from './config.mjs';

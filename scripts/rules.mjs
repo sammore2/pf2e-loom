@@ -1,4 +1,4 @@
-// SDR TATIC — scripts/rules.mjs
+// PF2E — scripts/rules.mjs
 // Pure rule functions for the tactical d20 MVP. No SDK imports so this
 // module runs under plain Node for tests.
 

@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════════════════
-// SDR_TATIC — scripts/utils.mjs
+// PF2E — scripts/utils.mjs
 // Component Version: 0.1.0
 // Small standalone helpers shared across modules.
 // ══════════════════════════════════════════════════════════════════════════
@@ -43,7 +43,7 @@ export function setPathValue(obj, path, value) {
   target[parts[parts.length - 1]] = value;
 }
 
-// Advantage/disadvantage on d20 rolls (`sdr-taticRoll`'s `advantage` param) was
+// Advantage/disadvantage on d20 rolls (`pf2eRoll`'s `advantage` param) was
 // wired into the roll engine from the start but nothing ever actually
 // triggered it — every ability/skill/save/attack roll call site passed 0
 // (normal), with no UI path to change that. Real the reference implementation's convention
@@ -90,7 +90,7 @@ export async function searchCompendiumEntries(entryType, query, includeData = fa
     const res = await api.get(`/compendium/browse/entries?${params}`);
     return res?.entries ?? [];
   } catch (err) {
-    console.warn('[sdr-tatic] compendium search failed:', err);
+    console.warn('[pf2e] compendium search failed:', err);
     return [];
   }
 }

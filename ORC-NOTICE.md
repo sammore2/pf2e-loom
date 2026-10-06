@@ -1,4 +1,4 @@
-# ORC Notice — SDR TATIC
+# ORC Notice — PF2E
 
 This product's game mechanics are licensed under the ORC License,
 located at the Library of Congress at TX 9-307-067.

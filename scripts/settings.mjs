@@ -1,7 +1,7 @@
-// SDR TATIC — scripts/settings.mjs
+// PF2E — scripts/settings.mjs
 // World/client settings for the ruleset.
 
-export const SDR_TATIC_SETTINGS = [
+export const PF2E_SETTINGS = [
   {
     key: 'proficiencyWithoutLevel',
     name: 'Proficiency Without Level',
@@ -14,9 +14,9 @@ export const SDR_TATIC_SETTINGS = [
 
 export function registerSettings() {
   if (typeof window === 'undefined' || !window.Loom?.settings?.register) return;
-  for (const s of SDR_TATIC_SETTINGS) {
+  for (const s of PF2E_SETTINGS) {
     try {
-      window.Loom.settings.register('sdr-tatic', s.key, {
+      window.Loom.settings.register('pf2e', s.key, {
         name: s.name,
         hint: s.hint,
         scope: s.scope,
@@ -33,7 +33,7 @@ export function registerSettings() {
 export function getSetting(key, fallback = undefined) {
   try {
     if (typeof window === 'undefined') return fallback;
-    const val = window.Loom?.settings?.get('sdr-tatic', key);
+    const val = window.Loom?.settings?.get('pf2e', key);
     return val !== undefined ? val : fallback;
   } catch {
     return fallback;

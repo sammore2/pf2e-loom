@@ -2,21 +2,21 @@
   "engine": "loom",
   "engineVersion": ">=0.1.0",
   "type": "ruleset",
-  "name": "sdr-tatic",
-  "title": "SDR D20 TACTICAL",
+  "name": "pf2e",
+  "title": "PF2E",
   "version": "0.1.0",
   "author": "sammore2",
   "license": "MIT AND ORC",
-  "description": "SDR D20 TACTICAL — d20 tactical ruleset for LoomVTT. Compatible with Pathfinder Second Edition. Game mechanics under the ORC License; code under MIT.",
+  "description": "PF2E — d20 tactical ruleset for LoomVTT. Compatible with Pathfinder Second Edition. Game mechanics under the ORC License; code under MIT.",
   "licenseNotice": {
     "title": "Licenciado sob a ORC License",
-    "html": "As mecânicas de jogo deste produto são licenciadas sob a <strong>ORC License</strong>, registrada na Library of Congress sob TX 9-307-067. Compatível com Pathfinder Segunda Edição — SDR TATIC não é publicado, endossado ou aprovado pela Paizo Inc."
+    "html": "As mecânicas de jogo deste produto são licenciadas sob a <strong>ORC License</strong>, registrada na Library of Congress sob TX 9-307-067. Compatível com Pathfinder Segunda Edição — PF2E não é publicado, endossado ou aprovado pela Paizo Inc."
   },
   "active": true,
-  "backgroundUrl": "/marketplace/rulesets/sdr-tatic/assets/images/cover.webp",
-  "client": "sdr-tatic.mjs",
+  "backgroundUrl": "/marketplace/rulesets/pf2e/assets/images/cover.webp",
+  "client": "pf2e.mjs",
   "styles": [
-    "styles/sdr-tatic.css"
+    "styles/pf2e.css"
   ],
   "actorTypes": [
     "character",

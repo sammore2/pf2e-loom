@@ -1,5 +1,5 @@
-// SDR TATIC — scripts/api.mjs
-// Public surface bound to window.SDR_TATIC by the entry point for the
+// PF2E — scripts/api.mjs
+// Public surface bound to window.PF2E by the entry point for the
 // handoff-03 sheets: rolls plus the pure evaluation helpers.
 import {
   rollCheck,
@@ -13,7 +13,7 @@ import {
 } from './roll-engine.mjs';
 import { degreeOfSuccess, multipleAttackPenalty, proficiencyBonus, dyingThreshold } from './rules.mjs';
 
-export const SdrTaticApi = {
+export const Pf2eApi = {
   rollCheck,
   rollSkill,
   rollSave,

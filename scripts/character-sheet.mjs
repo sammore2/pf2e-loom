@@ -1,4 +1,4 @@
-// SDR TATIC — scripts/character-sheet.mjs
+// PF2E — scripts/character-sheet.mjs
 // "Painel tático": o que importa neste turno (ações, PV, defesas) fica no
 // topo; o resto em abas. Forma (ciclo de vida, save com debounce, drop,
 // delegação via onAction) segue o molde da ficha de referência do motor;
@@ -20,7 +20,7 @@ import {
   rollDamage,
   rollSpellAttack,
 } from './roll-engine.mjs';
-import { SdrTaticItemSheet } from './item-sheet.mjs';
+import { Pf2eItemSheet } from './item-sheet.mjs';
 
 function num(v) {
   const n = Number(v);
@@ -42,7 +42,7 @@ function attrOptions(selected) {
   return ATTRIBUTE_KEYS.map((k) => ({ value: k, selected: k === selected }));
 }
 
-export class SdrTaticCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
+export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   static DEFAULT_OPTIONS = { position: { width: 940, height: 860 } };
 
   _activeTab = 'overview';
@@ -57,19 +57,19 @@ export class SdrTaticCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) 
       ...props,
       id: props.id || `actor-sheet-${props.actorId}`,
       documentId: props.actorId,
-      title: (props.title && props.title !== 'undefined') ? props.title : 'SDR TATIC',
+      title: (props.title && props.title !== 'undefined') ? props.title : 'PF2E',
       showFooter: false,
       resizable: true,
       allowOverflow: true,
-      classes: ['sdr-tatic-sheet', 'sdr-tatic-character-sheet', 'tatic-ui'],
+      classes: ['pf2e-sheet', 'pf2e-character-sheet', 'pf2e-ui'],
     });
   }
 
-  static PARTS = { main: { template: '/marketplace/rulesets/sdr-tatic/templates/character-sheet.hbs' } };
+  static PARTS = { main: { template: '/marketplace/rulesets/pf2e/templates/character-sheet.hbs' } };
 
   get title() {
     const n = this.document?.name;
-    return (n && n !== 'undefined') ? n : 'SDR TATIC';
+    return (n && n !== 'undefined') ? n : 'PF2E';
   }
 
   get documentName() { return 'actor'; }
@@ -93,7 +93,7 @@ export class SdrTaticCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) 
     const root = this.element;
     if (!root) return;
     const tab = this._activeTab || 'overview';
-    root.querySelectorAll('.sdr-tatic-tab-btn').forEach((btn) => {
+    root.querySelectorAll('.pf2e-tab-btn').forEach((btn) => {
       btn.classList.toggle('active', btn.dataset.tab === tab);
     });
     root.querySelectorAll('[data-tab-content]').forEach((panel) => {
@@ -257,7 +257,7 @@ export class SdrTaticCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) 
 
     const abilities = ATTRIBUTE_KEYS.map((k) => ({
       key: k,
-      labelKey: `sdr-tatic.attributes.${k}`,
+      labelKey: `pf2e.attributes.${k}`,
       mod: num(sd.abilities?.[k]?.value),
       modFmt: fmtMod(num(sd.abilities?.[k]?.value)),
     }));
@@ -268,10 +268,10 @@ export class SdrTaticCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) 
         const v = sd.conditions?.[c.id];
         return v === true || num(v) !== 0;
       })
-      .map((c) => ({ id: c.id, labelKey: `sdr-tatic.conditions.${c.id}`, value: num(sd.conditions?.[c.id]) || 0, valued: !!valued.has(c.id) }));
+      .map((c) => ({ id: c.id, labelKey: `pf2e.conditions.${c.id}`, value: num(sd.conditions?.[c.id]) || 0, valued: !!valued.has(c.id) }));
     const conditionOptions = CONDITIONS
       .filter((c) => !(sd.conditions?.[c.id] === true || num(sd.conditions?.[c.id]) !== 0))
-      .map((c) => ({ value: c.id, labelKey: `sdr-tatic.conditions.${c.id}` }));
+      .map((c) => ({ value: c.id, labelKey: `pf2e.conditions.${c.id}` }));
 
     const hpMax = num(sd.hp?.max) || 1;
     const hpPct = Math.max(0, Math.min(100, Math.round((num(sd.hp?.value) / hpMax) * 100)));
@@ -283,7 +283,7 @@ export class SdrTaticCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) 
 
     const skills = Object.keys(SKILL_ABILITIES).map((k) => ({
       key: k,
-      labelKey: `sdr-tatic.skills.${k}`,
+      labelKey: `pf2e.skills.${k}`,
       total: fmtMod(num(sd.skills?.[k]?.total)),
       rank: sd.skills?.[k]?.rank || 'U',
       rankOptions: rankOptions(sd.skills?.[k]?.rank || 'U'),
@@ -314,11 +314,11 @@ export class SdrTaticCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) 
     }
 
     const featGroups = [
-      { key: 'ancestry', labelKey: 'sdr-tatic.itemTypes.ancestry', items: items.filter((i) => i.type === 'ancestry') },
-      { key: 'heritage', labelKey: 'sdr-tatic.itemTypes.heritage', items: items.filter((i) => i.type === 'heritage') },
-      { key: 'background', labelKey: 'sdr-tatic.itemTypes.background', items: items.filter((i) => i.type === 'background') },
-      { key: 'class', labelKey: 'sdr-tatic.itemTypes.class', items: items.filter((i) => i.type === 'class') },
-      { key: 'feat', labelKey: 'sdr-tatic.itemTypes.feat', items: items.filter((i) => i.type === 'feat') },
+      { key: 'ancestry', labelKey: 'pf2e.itemTypes.ancestry', items: items.filter((i) => i.type === 'ancestry') },
+      { key: 'heritage', labelKey: 'pf2e.itemTypes.heritage', items: items.filter((i) => i.type === 'heritage') },
+      { key: 'background', labelKey: 'pf2e.itemTypes.background', items: items.filter((i) => i.type === 'background') },
+      { key: 'class', labelKey: 'pf2e.itemTypes.class', items: items.filter((i) => i.type === 'class') },
+      { key: 'feat', labelKey: 'pf2e.itemTypes.feat', items: items.filter((i) => i.type === 'feat') },
     ].map((g) => ({
       ...g,
       items: g.items.map((i) => ({
@@ -330,20 +330,20 @@ export class SdrTaticCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) 
     const invTypes = ['weapon', 'armor', 'shield', 'equipment', 'consumable'];
     const inventory = invTypes.map((t) => ({
       type: t,
-      labelKey: `sdr-tatic.itemTypes.${t}`,
+      labelKey: `pf2e.itemTypes.${t}`,
       items: items.filter((i) => i.type === t).map((i) => ({ id: i.id, name: i.name })),
     }));
 
     const defenseRanks = [
-      { labelKey: 'sdr-tatic.defenses.ac', path: 'armor.rank', rank: sd.armor?.rank || 'U', rankOptions: rankOptions(sd.armor?.rank || 'U') },
+      { labelKey: 'pf2e.defenses.ac', path: 'armor.rank', rank: sd.armor?.rank || 'U', rankOptions: rankOptions(sd.armor?.rank || 'U') },
       ...SAVE_KEYS.map((k) => ({
-        labelKey: `sdr-tatic.defenses.${k}`,
+        labelKey: `pf2e.defenses.${k}`,
         path: `saves.${k}.rank`,
         rank: sd.saves?.[k]?.rank || 'U',
         rankOptions: rankOptions(sd.saves?.[k]?.rank || 'U'),
       })),
-      { labelKey: 'sdr-tatic.defenses.perception', path: 'perception.rank', rank: sd.perception?.rank || 'U', rankOptions: rankOptions(sd.perception?.rank || 'U') },
-      { labelKey: 'sdr-tatic.defenses.classDC', path: 'classDC.rank', rank: sd.classDC?.rank || 'U', rankOptions: rankOptions(sd.classDC?.rank || 'U') },
+      { labelKey: 'pf2e.defenses.perception', path: 'perception.rank', rank: sd.perception?.rank || 'U', rankOptions: rankOptions(sd.perception?.rank || 'U') },
+      { labelKey: 'pf2e.defenses.classDC', path: 'classDC.rank', rank: sd.classDC?.rank || 'U', rankOptions: rankOptions(sd.classDC?.rank || 'U') },
     ];
 
     // Defense tiles carry their own proficiency seal (replaces the separate rank fieldset).
@@ -355,7 +355,7 @@ export class SdrTaticCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) 
     const defTiles = defenseRanks.map((d, i) => ({
       ...d,
       key: tileKeys[i],
-      shortKey: `sdr-tatic.sheets.short.${tileKeys[i]}`,
+      shortKey: `pf2e.sheets.short.${tileKeys[i]}`,
       value: tileValue[tileKeys[i]],
       roll: tileRoll[tileKeys[i]] || '',
       big: tileKeys[i] === 'ac',
@@ -544,7 +544,7 @@ export class SdrTaticCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) 
       return;
     }
     if (action === 'item-open') {
-      if (id) windowManager.open(`item-sheet-${id}`, SdrTaticItemSheet, { itemId: id });
+      if (id) windowManager.open(`item-sheet-${id}`, Pf2eItemSheet, { itemId: id });
       return;
     }
     if (action === 'item-delete') {

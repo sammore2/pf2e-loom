@@ -1,4 +1,4 @@
-// Tests for sdr-tatic scripts/rules.mjs — node:test + node:assert.
+// Tests for pf2e scripts/rules.mjs — node:test + node:assert.
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import {

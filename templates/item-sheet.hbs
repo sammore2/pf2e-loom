@@ -1,23 +1,23 @@
-{{!-- SDR TATIC — item-sheet.hbs — arsenal heráldico: ícone em moldura de ferro, custo em losangos, um bloco com flâmula --}}
-<div class="sdr-tatic-panel tat-hud tat-item">
+{{!-- PF2E — item-sheet.hbs — arsenal heráldico: ícone em moldura de ferro, custo em losangos, um bloco com flâmula --}}
+<div class="pf2e-panel tat-hud tat-item">
   <header class="tat-item-head">
     <button type="button" class="tat-item-icon" data-action="pick-icon" title="{{localize typeLabelKey}}">
       {{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}<i class="{{icon}}"></i>{{/if}}
     </button>
     <div class="tat-id">
-      <input class="tat-in tat-name" type="text" name="name" value="{{name}}" placeholder="{{localize "sdr-tatic.sheets.name"}}" />
+      <input class="tat-in tat-name" type="text" name="name" value="{{name}}" placeholder="{{localize "pf2e.sheets.name"}}" />
       <div class="tat-id-line">
         <span>{{localize typeLabelKey}}</span>
         {{#if hasCost}}
-        <span class="tat-pips" title="{{localize "sdr-tatic.sheets.cost"}}">{{#each costPips}}<span class="tat-pip" aria-hidden="true"></span>{{/each}}{{#if costText}}<span class="tat-cost">{{costText}}</span>{{/if}}</span>
+        <span class="tat-pips" title="{{localize "pf2e.sheets.cost"}}">{{#each costPips}}<span class="tat-pip" aria-hidden="true"></span>{{/each}}{{#if costText}}<span class="tat-cost">{{costText}}</span>{{/if}}</span>
         {{/if}}
       </div>
     </div>
   </header>
 
   <nav class="tat-tabs">
-    <button type="button" class="sdr-tatic-tab-btn" data-action="tab" data-tab="details">{{localize "sdr-tatic.sheets.details"}}</button>
-    <button type="button" class="sdr-tatic-tab-btn" data-action="tab" data-tab="description">{{localize "sdr-tatic.sheets.description"}}</button>
+    <button type="button" class="pf2e-tab-btn" data-action="tab" data-tab="details">{{localize "pf2e.sheets.details"}}</button>
+    <button type="button" class="pf2e-tab-btn" data-action="tab" data-tab="description">{{localize "pf2e.sheets.description"}}</button>
   </nav>
 
   <div class="tat-panel" data-tab-content="details">
@@ -25,107 +25,107 @@
       <h3 class="tat-label">{{localize typeLabelKey}}</h3>
       <div class="tat-fieldgrid">
         {{#if hasCost}}
-        <label class="tat-field">{{localize "sdr-tatic.sheets.cost"}}
+        <label class="tat-field">{{localize "pf2e.sheets.cost"}}
           <select class="tat-in" name="sd:actions">{{#each costOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select>
         </label>
         {{/if}}
 
         {{#if isAncestry}}
-        <label class="tat-field">{{localize "sdr-tatic.sheets.hp"}} <input class="tat-in" type="number" name="sd:hp" value="{{hp}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.size"}}
+        <label class="tat-field">{{localize "pf2e.sheets.hp"}} <input class="tat-in" type="number" name="sd:hp" value="{{hp}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.size"}}
           <select class="tat-in" name="sd:size">{{#each sizeOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select>
         </label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.speed"}} <input class="tat-in" type="number" name="sd:speed" value="{{speed}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.boosts"}} <input class="tat-in" type="text" name="sd:boosts" value="{{boosts}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.speed"}} <input class="tat-in" type="number" name="sd:speed" value="{{speed}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.boosts"}} <input class="tat-in" type="text" name="sd:boosts" value="{{boosts}}" /></label>
         {{/if}}
 
         {{#if isHeritage}}
-        <label class="tat-field">{{localize "sdr-tatic.itemTypes.ancestry"}} <input class="tat-in" type="text" name="sd:ancestry" value="{{ancestry}}" /></label>
+        <label class="tat-field">{{localize "pf2e.itemTypes.ancestry"}} <input class="tat-in" type="text" name="sd:ancestry" value="{{ancestry}}" /></label>
         {{/if}}
 
         {{#if isBackground}}
-        <label class="tat-field">{{localize "sdr-tatic.sheets.boosts"}} <input class="tat-in" type="text" name="sd:boosts" value="{{boosts}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.trainedSkills"}} <input class="tat-in" type="text" name="sd:trainedSkills" value="{{trainedSkills}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.boosts"}} <input class="tat-in" type="text" name="sd:boosts" value="{{boosts}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.trainedSkills"}} <input class="tat-in" type="text" name="sd:trainedSkills" value="{{trainedSkills}}" /></label>
         {{/if}}
 
         {{#if isClass}}
-        <label class="tat-field">{{localize "sdr-tatic.sheets.hp"}} <input class="tat-in" type="number" name="sd:hp" value="{{hp}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.keyAttribute"}}
+        <label class="tat-field">{{localize "pf2e.sheets.hp"}} <input class="tat-in" type="number" name="sd:hp" value="{{hp}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.keyAttribute"}}
           <select class="tat-in" name="sd:keyAttribute">{{#each keyAttrOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select>
         </label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.perceptionRank"}}
+        <label class="tat-field">{{localize "pf2e.sheets.perceptionRank"}}
           <select class="tat-in" name="sd:perception">{{#each perceptionRankOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select>
         </label>
         <label class="tat-field">Fort <select class="tat-in" name="sd:saves.fortitude">{{#each classSaveRanks.fortitude}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select></label>
         <label class="tat-field">Ref <select class="tat-in" name="sd:saves.reflex">{{#each classSaveRanks.reflex}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select></label>
         <label class="tat-field">Von <select class="tat-in" name="sd:saves.will">{{#each classSaveRanks.will}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.attacksRank"}}
+        <label class="tat-field">{{localize "pf2e.sheets.attacksRank"}}
           <select class="tat-in" name="sd:attacks">{{#each attacksRankOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select>
         </label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.defensesRank"}}
+        <label class="tat-field">{{localize "pf2e.sheets.defensesRank"}}
           <select class="tat-in" name="sd:defenses">{{#each defensesRankOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select>
         </label>
         {{/if}}
 
         {{#if isFeat}}
-        <label class="tat-field">{{localize "sdr-tatic.sheets.level"}} <input class="tat-in" type="number" name="sd:level" value="{{level}}" min="1" max="20" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.category"}}
+        <label class="tat-field">{{localize "pf2e.sheets.level"}} <input class="tat-in" type="number" name="sd:level" value="{{level}}" min="1" max="20" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.category"}}
           <select class="tat-in" name="sd:category">{{#each featCategoryOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select>
         </label>
         {{/if}}
 
         {{#if isWeapon}}
-        <label class="tat-field">{{localize "sdr-tatic.sheets.damage"}} <input class="tat-in" type="text" name="sd:damage" value="{{damage}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.damageType"}} <input class="tat-in" type="text" name="sd:damageType" value="{{damageType}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.group"}} <input class="tat-in" type="text" name="sd:group" value="{{group}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.range"}} <input class="tat-in" type="text" name="sd:range" value="{{range}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.rank"}}
+        <label class="tat-field">{{localize "pf2e.sheets.damage"}} <input class="tat-in" type="text" name="sd:damage" value="{{damage}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.damageType"}} <input class="tat-in" type="text" name="sd:damageType" value="{{damageType}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.group"}} <input class="tat-in" type="text" name="sd:group" value="{{group}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.range"}} <input class="tat-in" type="text" name="sd:range" value="{{range}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.rank"}}
           <select class="tat-in" name="sd:rank">{{#each rankOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select>
         </label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.attackAttribute"}}
+        <label class="tat-field">{{localize "pf2e.sheets.attackAttribute"}}
           <select class="tat-in" name="sd:attackAttribute">{{#each attackAttrOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select>
         </label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.attackBonus"}} <input class="tat-in" type="number" name="sd:attackBonus" value="{{attackBonus}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.agile"}} <input type="checkbox" name="sd:agile"{{#if agile}} checked{{/if}} /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.finesse"}} <input type="checkbox" name="sd:finesse"{{#if finesse}} checked{{/if}} /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.attackBonus"}} <input class="tat-in" type="number" name="sd:attackBonus" value="{{attackBonus}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.agile"}} <input type="checkbox" name="sd:agile"{{#if agile}} checked{{/if}} /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.finesse"}} <input type="checkbox" name="sd:finesse"{{#if finesse}} checked{{/if}} /></label>
         {{/if}}
 
         {{#if isArmor}}
-        <label class="tat-field">{{localize "sdr-tatic.sheets.acBonus"}} <input class="tat-in" type="number" name="sd:acBonus" value="{{acBonus}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.dexCap"}} <input class="tat-in" type="number" name="sd:dexCap" value="{{dexCap}}" data-allow-null /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.checkPenalty"}} <input class="tat-in" type="number" name="sd:checkPenalty" value="{{checkPenalty}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.speedPenalty"}} <input class="tat-in" type="number" name="sd:speedPenalty" value="{{speedPenalty}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.category"}} <input class="tat-in" type="text" name="sd:category" value="{{category}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.acBonus"}} <input class="tat-in" type="number" name="sd:acBonus" value="{{acBonus}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.dexCap"}} <input class="tat-in" type="number" name="sd:dexCap" value="{{dexCap}}" data-allow-null /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.checkPenalty"}} <input class="tat-in" type="number" name="sd:checkPenalty" value="{{checkPenalty}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.speedPenalty"}} <input class="tat-in" type="number" name="sd:speedPenalty" value="{{speedPenalty}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.category"}} <input class="tat-in" type="text" name="sd:category" value="{{category}}" /></label>
         {{/if}}
 
         {{#if isShield}}
-        <label class="tat-field">{{localize "sdr-tatic.sheets.acBonus"}} <input class="tat-in" type="number" name="sd:acBonus" value="{{acBonus}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.hardness"}} <input class="tat-in" type="number" name="sd:hardness" value="{{hardness}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.hp"}} <input class="tat-in" type="number" name="sd:hp" value="{{hp}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.acBonus"}} <input class="tat-in" type="number" name="sd:acBonus" value="{{acBonus}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.hardness"}} <input class="tat-in" type="number" name="sd:hardness" value="{{hardness}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.hp"}} <input class="tat-in" type="number" name="sd:hp" value="{{hp}}" /></label>
         {{/if}}
 
         {{#if isGear}}
-        <label class="tat-field">{{localize "sdr-tatic.sheets.bulk"}} <input class="tat-in" type="text" name="sd:bulk" value="{{bulk}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.quantity"}} <input class="tat-in" type="number" name="sd:quantity" value="{{quantity}}" min="0" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.price"}} <input class="tat-in" type="text" name="sd:price" value="{{price}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.bulk"}} <input class="tat-in" type="text" name="sd:bulk" value="{{bulk}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.quantity"}} <input class="tat-in" type="number" name="sd:quantity" value="{{quantity}}" min="0" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.price"}} <input class="tat-in" type="text" name="sd:price" value="{{price}}" /></label>
         {{/if}}
 
         {{#if isSpell}}
-        <label class="tat-field">{{localize "sdr-tatic.sheets.rank"}} <input class="tat-in" type="number" name="sd:rank" value="{{rank}}" min="0" max="10" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.traditions"}} <input class="tat-in" type="text" name="sd:traditions" value="{{traditions}}" /></label>
-        <label class="tat-field">{{localize "sdr-tatic.sheets.save"}} <input class="tat-in" type="text" name="sd:save" value="{{save}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.rank"}} <input class="tat-in" type="number" name="sd:rank" value="{{rank}}" min="0" max="10" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.traditions"}} <input class="tat-in" type="text" name="sd:traditions" value="{{traditions}}" /></label>
+        <label class="tat-field">{{localize "pf2e.sheets.save"}} <input class="tat-in" type="text" name="sd:save" value="{{save}}" /></label>
         {{/if}}
       </div>
 
       <div class="tat-traits">
         {{#each traits}}<span class="tat-chip">{{this}} <button type="button" data-action="trait-remove" data-trait="{{this}}" title="×"><i class="fa-solid fa-xmark"></i></button></span>{{/each}}
-        <input class="tat-in" type="text" name="new-trait" placeholder="{{localize "sdr-tatic.sheets.traits"}}" />
-        <button type="button" class="tat-add" data-action="trait-add">+ {{localize "sdr-tatic.sheets.add"}}</button>
+        <input class="tat-in" type="text" name="new-trait" placeholder="{{localize "pf2e.sheets.traits"}}" />
+        <button type="button" class="tat-add" data-action="trait-add">+ {{localize "pf2e.sheets.add"}}</button>
       </div>
     </section>
   </div>
 
   <div class="tat-panel" data-tab-content="description">
-    <textarea class="tat-in tat-notes" name="sd:description" placeholder="{{localize "sdr-tatic.sheets.description"}}">{{description}}</textarea>
+    <textarea class="tat-in tat-notes" name="sd:description" placeholder="{{localize "pf2e.sheets.description"}}">{{description}}</textarea>
   </div>
 </div>

@@ -1,25 +1,25 @@
-{{!-- SDR TATIC — npc-sheet.hbs — arsenal heráldico em coluna única: topo, PV, defesas com selo, atributos, golpes, ações, perícias, notas --}}
-<div class="sdr-tatic-panel tat-hud tat-npc">
+{{!-- PF2E — npc-sheet.hbs — arsenal heráldico em coluna única: topo, PV, defesas com selo, atributos, golpes, ações, perícias, notas --}}
+<div class="pf2e-panel tat-hud tat-npc">
   <header class="tat-top">
-    <button type="button" class="tat-portrait" data-action="pick-portrait" title="{{localize "sdr-tatic.sheets.portrait"}}">
+    <button type="button" class="tat-portrait" data-action="pick-portrait" title="{{localize "pf2e.sheets.portrait"}}">
       {{#if avatarUrl}}<img src="{{avatarUrl}}" alt="" />{{else}}<i class="fa-solid fa-user-shield"></i>{{/if}}
     </button>
     <div class="tat-id">
-      <input class="tat-in tat-name" type="text" name="name" value="{{name}}" placeholder="{{localize "sdr-tatic.sheets.name"}}" />
-      <div class="tat-id-line"><span>{{localize "sdr-tatic.sheets.level"}} {{level}}</span></div>
+      <input class="tat-in tat-name" type="text" name="name" value="{{name}}" placeholder="{{localize "pf2e.sheets.name"}}" />
+      <div class="tat-id-line"><span>{{localize "pf2e.sheets.level"}} {{level}}</span></div>
     </div>
-    <label class="tat-level" title="{{localize "sdr-tatic.sheets.level"}}">
-      <span>{{localize "sdr-tatic.sheets.level"}}</span>
+    <label class="tat-level" title="{{localize "pf2e.sheets.level"}}">
+      <span>{{localize "pf2e.sheets.level"}}</span>
       <input class="tat-in" type="number" name="sd:level" value="{{level}}" min="1" max="20" />
     </label>
   </header>
 
   <div class="tat-tile tat-hp{{#if hp.low}} is-low{{/if}}">
-    <span class="tat-label">{{localize "sdr-tatic.sheets.hp"}}</span>
+    <span class="tat-label">{{localize "pf2e.sheets.hp"}}</span>
     <div class="tat-hp-read">
       <input class="tat-in tat-hp-cur" type="number" name="sd:hp.value" value="{{hp.value}}" />
       <span class="tat-hp-max">/ <input class="tat-in tat-in-sm" type="number" name="sd:hp.max" value="{{hp.max}}" /></span>
-      <label class="tat-hp-temp">{{localize "sdr-tatic.sheets.temp"}} <input class="tat-in tat-in-sm" type="number" name="sd:hp.temp" value="{{hp.temp}}" /></label>
+      <label class="tat-hp-temp">{{localize "pf2e.sheets.temp"}} <input class="tat-in tat-in-sm" type="number" name="sd:hp.temp" value="{{hp.temp}}" /></label>
     </div>
     <div class="tat-meter"><span style="width: {{hp.pct}}%"></span></div>
   </div>
@@ -28,7 +28,7 @@
     {{#each defTiles}}
     <div class="tat-tile tat-def{{#if big}} tat-def-ac{{/if}}">
       <span class="tat-rank rank-{{rank}}">
-        <button type="button" class="tat-seal" data-action="rank-seal" title="{{localize (concat "sdr-tatic.ranks." rank)}}">{{rank}}</button>
+        <button type="button" class="tat-seal" data-action="rank-seal" title="{{localize (concat "pf2e.ranks." rank)}}">{{rank}}</button>
         <select class="tat-in rank-select" name="sd:{{path}}" style="display:none">{{#each rankOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select>
       </span>
       {{#if roll}}
@@ -42,11 +42,11 @@
   </section>
 
   <section class="tat-block">
-    <h3 class="tat-label">{{localize "sdr-tatic.sheets.attributes"}}</h3>
+    <h3 class="tat-label">{{localize "pf2e.sheets.attributes"}}</h3>
     <div class="tat-attrs">
       {{#each abilities}}
       <div class="tat-attr-cell">
-        <button type="button" class="tat-attr-key" data-action="roll-attribute" data-key="{{key}}" title="{{localize labelKey}}">{{localize (concat "sdr-tatic.sheets.abbr." key)}}</button>
+        <button type="button" class="tat-attr-key" data-action="roll-attribute" data-key="{{key}}" title="{{localize labelKey}}">{{localize (concat "pf2e.sheets.abbr." key)}}</button>
         <input class="tat-in tat-attr-mod" type="number" name="sd:abilities.{{key}}.value" value="{{mod}}" title="{{localize labelKey}}" />
       </div>
       {{/each}}
@@ -54,26 +54,26 @@
   </section>
 
   <section class="tat-block tat-strikes">
-    <h3 class="tat-label">{{localize "sdr-tatic.sheets.strikes"}}</h3>
+    <h3 class="tat-label">{{localize "pf2e.sheets.strikes"}}</h3>
     {{#each weapons}}
     <div class="tat-strike" data-id="{{id}}">
       <div class="tat-strike-head">
         <button type="button" class="tat-strike-name" data-action="item-open" data-id="{{id}}">{{name}}</button>
-        {{#if agile}}<span class="tat-tag">{{localize "sdr-tatic.sheets.agile"}}</span>{{/if}}
+        {{#if agile}}<span class="tat-tag">{{localize "pf2e.sheets.agile"}}</span>{{/if}}
         <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="×"><i class="fa-solid fa-trash"></i></button>
       </div>
       <div class="tat-ladder">
-        <button type="button" class="tat-rung" data-action="roll-attack" data-id="{{id}}" data-index="0" title="{{localize "sdr-tatic.sheets.attackN.0"}}">{{atk.[0]}}</button>
-        <button type="button" class="tat-rung" data-action="roll-attack" data-id="{{id}}" data-index="1" title="{{localize "sdr-tatic.sheets.attackN.1"}}">{{atk.[1]}}</button>
-        <button type="button" class="tat-rung" data-action="roll-attack" data-id="{{id}}" data-index="2" title="{{localize "sdr-tatic.sheets.attackN.2"}}">{{atk.[2]}}</button>
+        <button type="button" class="tat-rung" data-action="roll-attack" data-id="{{id}}" data-index="0" title="{{localize "pf2e.sheets.attackN.0"}}">{{atk.[0]}}</button>
+        <button type="button" class="tat-rung" data-action="roll-attack" data-id="{{id}}" data-index="1" title="{{localize "pf2e.sheets.attackN.1"}}">{{atk.[1]}}</button>
+        <button type="button" class="tat-rung" data-action="roll-attack" data-id="{{id}}" data-index="2" title="{{localize "pf2e.sheets.attackN.2"}}">{{atk.[2]}}</button>
       </div>
       <div class="tat-strike-damage">
-        <button type="button" class="tat-roll" data-action="roll-damage" data-id="{{id}}" title="{{localize "sdr-tatic.sheets.damage"}}"><i class="fa-solid fa-burst"></i> {{#if damage}}{{damage}}{{else}}{{localize "sdr-tatic.sheets.damage"}}{{/if}}</button>
-        <button type="button" class="tat-roll tat-crit" data-action="roll-damage-crit" data-id="{{id}}" title="{{localize "sdr-tatic.sheets.crit"}}">×2</button>
+        <button type="button" class="tat-roll" data-action="roll-damage" data-id="{{id}}" title="{{localize "pf2e.sheets.damage"}}"><i class="fa-solid fa-burst"></i> {{#if damage}}{{damage}}{{else}}{{localize "pf2e.sheets.damage"}}{{/if}}</button>
+        <button type="button" class="tat-roll tat-crit" data-action="roll-damage-crit" data-id="{{id}}" title="{{localize "pf2e.sheets.crit"}}">×2</button>
       </div>
     </div>
     {{else}}
-    <p class="tat-empty">{{localize "sdr-tatic.sheets.noWeapons"}}</p>
+    <p class="tat-empty">{{localize "pf2e.sheets.noWeapons"}}</p>
     {{/each}}
     {{#each actionItems}}
     <div class="tat-actionrow" data-id="{{id}}">
@@ -83,18 +83,18 @@
     </div>
     {{/each}}
     <div class="tat-adds">
-      <button type="button" class="tat-add" data-action="item-create" data-type="weapon"><i class="fa-solid fa-plus"></i> {{localize "sdr-tatic.sheets.addWeapon"}}</button>
-      <button type="button" class="tat-add" data-action="item-create" data-type="action"><i class="fa-solid fa-plus"></i> {{localize "sdr-tatic.sheets.addAction"}}</button>
+      <button type="button" class="tat-add" data-action="item-create" data-type="weapon"><i class="fa-solid fa-plus"></i> {{localize "pf2e.sheets.addWeapon"}}</button>
+      <button type="button" class="tat-add" data-action="item-create" data-type="action"><i class="fa-solid fa-plus"></i> {{localize "pf2e.sheets.addAction"}}</button>
     </div>
   </section>
 
   {{#if skills}}
   <section class="tat-block">
-    <h3 class="tat-label">{{localize "sdr-tatic.sheets.tabs.skills"}}</h3>
+    <h3 class="tat-label">{{localize "pf2e.sheets.tabs.skills"}}</h3>
     <div class="tat-skill-list">
       {{#each skills}}
       <div class="tat-skill">
-        <span class="tat-rank rank-{{rank}}"><span class="tat-seal" title="{{localize (concat "sdr-tatic.ranks." rank)}}">{{rank}}</span></span>
+        <span class="tat-rank rank-{{rank}}"><span class="tat-seal" title="{{localize (concat "pf2e.ranks." rank)}}">{{rank}}</span></span>
         <button type="button" class="tat-skill-roll" data-action="roll-skill" data-key="{{key}}">
           <span class="tat-skill-name">{{localize labelKey}}</span><b>{{total}}</b>
         </button>
@@ -104,5 +104,5 @@
   </section>
   {{/if}}
 
-  <textarea class="tat-in tat-notes" name="sd:details.biography" placeholder="{{localize "sdr-tatic.sheets.notesPlaceholder"}}">{{biography}}</textarea>
+  <textarea class="tat-in tat-notes" name="sd:details.biography" placeholder="{{localize "pf2e.sheets.notesPlaceholder"}}">{{biography}}</textarea>
 </div>

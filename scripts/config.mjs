@@ -1,8 +1,8 @@
-// SDR TATIC — scripts/config.mjs
+// PF2E — scripts/config.mjs
 // System constants: id, attributes, skills, ranks, conditions, item labels.
 // Short rule names only; no rule text is copied here.
 
-export const SYSTEM_ID = 'sdr-tatic';
+export const SYSTEM_ID = 'pf2e';
 
 export const ATTRIBUTE_KEYS = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 

@@ -1,0 +1,932 @@
+/* PF2E — painel tático: ardósia, cantos de 4px, acento âmbar só no ativo/rolável (hover). */
+.pf2e-sheet {
+  --pf2e-bg: #1c2128;
+  --pf2e-surface: #252c35;
+  --pf2e-line: #3a4452;
+  --pf2e-text: #dde3ea;
+  --pf2e-dim: #8b97a6;
+  --pf2e-accent: #e8a33d;
+  --pf2e-danger: #d9534f;
+  --pf2e-rank-u: #8b97a6;
+  --pf2e-rank-t: #dde3ea;
+  --pf2e-rank-e: #5cb85c;
+  --pf2e-rank-m: #5bc0de;
+  --pf2e-rank-l: #e8a33d;
+  background: var(--pf2e-bg);
+  color: var(--pf2e-text);
+  border-radius: 4px;
+  font-family: var(--font-body);
+}
+
+.pf2e-sheet h4 {
+  font-family: var(--font-display);
+  color: var(--pf2e-dim);
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--pf2e-line);
+  margin: 10px 0 4px;
+}
+
+.pf2e-sheet button {
+  background: var(--pf2e-surface);
+  color: var(--pf2e-text);
+  border: 1px solid var(--pf2e-line);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pf2e-sheet button:hover {
+  border-color: var(--pf2e-accent);
+  color: var(--pf2e-accent);
+}
+
+.pf2e-panel { display: flex; flex-direction: column; gap: 8px; padding: 10px; height: 100%; box-sizing: border-box; overflow-y: auto; }
+
+/* Cabeçalho */
+.pf2e-header { display: flex; gap: 10px; align-items: center; }
+.pf2e-portrait { width: 56px; height: 56px; border-radius: 4px; object-fit: cover; border: 1px solid var(--pf2e-line); }
+.pf2e-title { flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.pf2e-name { font-family: var(--font-display); font-size: 20px; width: 100%; box-sizing: border-box; }
+.pf2e-sub { display: flex; gap: 8px; align-items: center; color: var(--pf2e-dim); }
+.pf2e-sub input { width: 56px; }
+.pf2e-turn { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+.pf2e-pips { display: flex; gap: 4px; font-size: 18px; }
+.pf2e-pips button { font-size: 18px; padding: 2px 6px; }
+.pf2e-pips button.spent { opacity: 0.3; }
+.pf2e-new-turn { font-size: 11px; }
+
+/* Corpo: trilho + principal */
+.pf2e-body { display: flex; gap: 10px; flex: 1; min-height: 0; }
+.pf2e-rail { width: 140px; flex: none; display: flex; flex-direction: column; gap: 6px; overflow-y: auto; }
+.pf2e-attr { display: flex; flex-direction: column; align-items: center; background: var(--pf2e-surface); border: 1px solid var(--pf2e-line); border-radius: 4px; padding: 4px; }
+.pf2e-attr-key { text-transform: uppercase; font-size: 11px; color: var(--pf2e-dim); border: none; background: none; font-family: var(--font-display); }
+.pf2e-attr input { width: 64px; text-align: center; font-family: var(--font-display); font-size: 22px; }
+.pf2e-conditions { display: flex; flex-wrap: wrap; gap: 4px; }
+.pf2e-chip { background: var(--pf2e-surface); border: 1px solid var(--pf2e-line); border-radius: 4px; padding: 2px 6px; font-size: 12px; display: inline-flex; gap: 4px; align-items: center; }
+.pf2e-chip button { border: none; background: none; padding: 0 3px; }
+
+.pf2e-main { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; overflow-y: auto; }
+.pf2e-turnbar { display: flex; flex-direction: column; gap: 6px; background: var(--pf2e-surface); border: 1px solid var(--pf2e-line); border-radius: 4px; padding: 8px; }
+.pf2e-hp { display: flex; gap: 6px; align-items: center; }
+.pf2e-hp-bar { flex: 1; height: 14px; background: var(--pf2e-bg); border: 1px solid var(--pf2e-line); border-radius: 4px; overflow: hidden; min-width: 60px; }
+.pf2e-hp-bar span { display: block; height: 100%; background: var(--pf2e-rank-e); }
+.pf2e-hp-bar.low span { background: var(--pf2e-danger); }
+.pf2e-hp input { width: 56px; }
+.pf2e-points { display: flex; gap: 16px; font-size: 13px; color: var(--pf2e-dim); }
+.pf2e-dot { border: none; background: none; color: var(--pf2e-line); font-size: 14px; padding: 0 1px; }
+.pf2e-dot.on { color: var(--pf2e-accent); }
+.pf2e-defenses { display: flex; gap: 6px; flex-wrap: wrap; }
+.pf2e-def { font-family: var(--font-display); font-size: 14px; padding: 3px 8px; white-space: nowrap; }
+span.pf2e-def { background: var(--pf2e-bg); border: 1px solid var(--pf2e-line); border-radius: 4px; }
+
+.pf2e-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.pf2e-tab-btn { padding: 5px 10px; }
+.pf2e-tab-btn.active { border-color: var(--pf2e-accent); color: var(--pf2e-accent); }
+
+/* Selos de posto */
+.pf2e-rank button { border-radius: 4px; font-family: var(--font-display); font-weight: bold; width: 26px; }
+.pf2e-rank.rank-U button { color: var(--pf2e-rank-u); }
+.pf2e-rank.rank-T button { color: var(--pf2e-rank-t); }
+.pf2e-rank.rank-E button { color: var(--pf2e-rank-e); }
+.pf2e-rank.rank-M button { color: var(--pf2e-rank-m); }
+.pf2e-rank.rank-L button { color: var(--pf2e-rank-l); }
+
+/* Linhas de conteúdo */
+.pf2e-weapon, .pf2e-actionrow { display: flex; gap: 4px; align-items: center; margin: 3px 0; flex-wrap: wrap; }
+.pf2e-cost { color: var(--pf2e-accent); font-family: var(--font-display); }
+.pf2e-skillgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.pf2e-skill { display: flex; gap: 6px; align-items: center; background: var(--pf2e-surface); border: 1px solid var(--pf2e-line); border-radius: 4px; padding: 3px 6px; min-width: 0; }
+.pf2e-lore { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.pf2e-spellrank { margin: 6px 0; padding: 4px 6px; background: var(--pf2e-surface); border: 1px solid var(--pf2e-line); border-radius: 4px; }
+.pf2e-casting { display: flex; gap: 10px; align-items: center; }
+.pf2e-defranks { border: 1px solid var(--pf2e-line); border-radius: 4px; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; }
+.pf2e-defranks label { display: flex; gap: 4px; align-items: center; font-size: 12px; color: var(--pf2e-dim); }
+
+/* NPC */
+.pf2e-attrstrip { display: flex; gap: 4px; flex-wrap: wrap; }
+.pf2e-attrstrip .pf2e-attr { font-size: 13px; padding: 3px 8px; text-transform: uppercase; }
+.pf2e-npc-attacks, .pf2e-npc-items { display: flex; flex-direction: column; gap: 3px; }
+.pf2e-typename { color: var(--pf2e-dim); font-size: 12px; }
+.pf2e-npc textarea, [data-tab-content="notes"] textarea { min-height: 80px; width: 100%; box-sizing: border-box; }
+
+/* Ficha de item */
+.pf2e-item { display: flex; flex-direction: column; gap: 8px; padding: 10px; height: 100%; box-sizing: border-box; overflow-y: auto; }
+.pf2e-item-head { display: flex; gap: 8px; align-items: center; }
+.pf2e-item-icon { width: 44px; height: 44px; font-size: 20px; flex: none; }
+.pf2e-item-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
+.pf2e-item-title { flex: 1; min-width: 0; }
+.pf2e-item-title input { width: 100%; box-sizing: border-box; font-family: var(--font-display); font-size: 16px; }
+.pf2e-item-sub { color: var(--pf2e-dim); font-size: 12px; display: flex; gap: 8px; }
+.pf2e-item-tabs { display: flex; gap: 4px; }
+.pf2e-item-tab-btn { padding: 4px 10px; }
+.pf2e-item-tab-btn.active { border-color: var(--pf2e-accent); color: var(--pf2e-accent); }
+.pf2e-form2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.pf2e-form2 label { display: flex; flex-direction: column; gap: 2px; font-size: 12px; color: var(--pf2e-dim); }
+.pf2e-traits { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.pf2e-item textarea { min-height: 120px; width: 100%; box-sizing: border-box; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   Character sheet v2 — "tactical HUD": slate console, amber readouts,
+   bracketed tiles. Scoped to .pf2e-ui (added to the window classes).
+   Engine input rules use !important, so the scoped overrides do too.
+   ══════════════════════════════════════════════════════════════════════ */
+@font-face {
+  font-family: 'PF2E Condensed';
+  src: url('/marketplace/rulesets/pf2e/assets/fonts/barlow-condensed-500.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'PF2E Condensed';
+  src: url('/marketplace/rulesets/pf2e/assets/fonts/barlow-condensed-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+.pf2e-ui {
+  --tat-bg: #12161c;
+  --tat-panel: #1a2029;
+  --tat-panel-2: #202834;
+  --tat-line: #2f3a48;
+  --tat-line-hi: #465466;
+  --tat-text: #dfe5ec;
+  --tat-dim: #8391a3;
+  --tat-amber: #e8a33d;
+  --tat-amber-dim: rgba(232, 163, 61, 0.14);
+  --tat-danger: #d9534f;
+  --tat-cond: #5bc0de;
+  --tat-cond-font: 'PF2E Condensed', 'Arial Narrow', sans-serif;
+}
+.loom-window.pf2e-ui {
+  padding: 0;
+  overflow: hidden;
+  color: var(--tat-text);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px) 0 0 / 100% 24px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px) 0 0 / 24px 100%,
+    var(--tat-bg);
+}
+.loom-window.pf2e-ui > .loom-window-header { background: transparent; border-bottom: 1px solid var(--tat-line); box-shadow: none; }
+.loom-window.pf2e-ui .loom-window-title {
+  font-family: var(--tat-cond-font); font-weight: 700; font-size: 0.85rem;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--tat-dim);
+}
+.loom-window.pf2e-ui .loom-window-controls button { color: var(--tat-dim); }
+.loom-window.pf2e-ui .loom-window-controls button:hover { color: var(--tat-amber); }
+.loom-window.pf2e-ui > .loom-window-body { background: transparent; padding: 14px; overflow-y: auto; }
+
+.pf2e-ui .tat-hud {
+  display: grid;
+  grid-template-columns: 188px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  font-family: var(--font-body);
+}
+.pf2e-ui .tat-hud button { font: inherit; color: inherit; background: none; border: none; padding: 0; cursor: pointer; }
+.pf2e-ui .tat-hud button:focus-visible { outline: 2px solid var(--tat-amber); outline-offset: 1px; }
+
+/* inputs: bare readouts with an amber focus line */
+.pf2e-ui .tat-hud input.tat-in,
+.pf2e-ui .tat-hud select.tat-in,
+.pf2e-ui .tat-hud textarea.tat-in {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: var(--tat-text) !important;
+  border: none !important;
+  border-bottom: 1px solid var(--tat-line) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 2px !important;
+  font: inherit;
+  font-size: inherit !important;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+.pf2e-ui .tat-hud input.tat-in::-webkit-outer-spin-button,
+.pf2e-ui .tat-hud input.tat-in::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.pf2e-ui .tat-hud .tat-in:hover { border-bottom-color: var(--tat-line-hi) !important; }
+.pf2e-ui .tat-hud .tat-in:focus { border-bottom-color: var(--tat-amber) !important; background-color: var(--tat-amber-dim) !important; outline: none; }
+.pf2e-ui .tat-hud .tat-in::placeholder { color: var(--tat-dim) !important; opacity: 0.6; }
+.pf2e-ui .tat-hud select.tat-in option { color: #111; }
+.pf2e-ui .tat-in-sm { width: 2.8em; }
+
+/* type */
+.pf2e-ui .tat-label {
+  margin: 0;
+  font-family: var(--tat-cond-font);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--tat-dim);
+}
+.pf2e-ui .tat-empty { margin: 4px 0; font-size: 0.8rem; color: var(--tat-dim); font-style: italic; }
+
+/* bracketed tile: the HUD's building block */
+.pf2e-ui .tat-tile,
+.pf2e-ui .tat-block {
+  position: relative;
+  background: linear-gradient(180deg, var(--tat-panel-2), var(--tat-panel));
+  border: 1px solid var(--tat-line);
+  padding: 10px 12px;
+}
+.pf2e-ui .tat-tile::before,
+.pf2e-ui .tat-tile::after {
+  content: "";
+  position: absolute;
+  width: 8px; height: 8px;
+  border-color: var(--tat-amber);
+  border-style: solid;
+  opacity: 0.55;
+  pointer-events: none;
+}
+.pf2e-ui .tat-tile::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+.pf2e-ui .tat-tile::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+.pf2e-ui .tat-block > .tat-label {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin: -2px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--tat-line);
+}
+
+/* ── rail ─────────────────────────────────────────────────────────── */
+.pf2e-ui .tat-rail { display: flex; flex-direction: column; gap: 12px; }
+.pf2e-ui .tat-hud .tat-portrait {
+  width: 100%; aspect-ratio: 4 / 5;
+  display: grid; place-items: center;
+  border: 1px solid var(--tat-line);
+  background: linear-gradient(160deg, #222b37, #141920);
+  color: #3b4757; font-size: 3rem; overflow: hidden;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+}
+.pf2e-ui .tat-portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pf2e-ui .tat-hud .tat-portrait:hover { border-color: var(--tat-amber); }
+
+.pf2e-ui .tat-attr {
+  display: grid; grid-template-columns: 1fr 3em; align-items: center;
+  padding: 4px 0; border-bottom: 1px solid rgba(47, 58, 72, 0.6);
+}
+.pf2e-ui .tat-attr:last-child { border-bottom: none; }
+.pf2e-ui .tat-hud .tat-attr-key {
+  text-align: left;
+  font-family: var(--tat-cond-font); font-weight: 700; font-size: 0.95rem; letter-spacing: 0.12em;
+  color: var(--tat-dim);
+}
+.pf2e-ui .tat-hud .tat-attr-key:hover { color: var(--tat-amber); }
+.pf2e-ui .tat-hud input.tat-attr-mod {
+  font-family: var(--tat-cond-font); font-weight: 700; font-size: 1.35rem !important; text-align: right;
+}
+
+.pf2e-ui .tat-cond {
+  display: flex; align-items: center; gap: 6px;
+  margin: 0 0 4px; padding: 3px 6px;
+  border-left: 2px solid var(--tat-cond);
+  background: rgba(91, 192, 222, 0.08);
+  font-size: 0.8rem;
+}
+.pf2e-ui .tat-cond-name { flex: 1; }
+.pf2e-ui .tat-cond b { font-family: var(--tat-cond-font); min-width: 1ch; text-align: center; color: var(--tat-cond); }
+.pf2e-ui .tat-hud .tat-cond button { color: var(--tat-dim); padding: 0 3px; }
+.pf2e-ui .tat-hud .tat-cond button:hover { color: var(--tat-amber); }
+.pf2e-ui .tat-hud select.tat-cond-add { width: 100%; text-align: left; margin-top: 4px; color: var(--tat-dim) !important; cursor: pointer; }
+
+/* ── header / turn console ────────────────────────────────────────── */
+.pf2e-ui .tat-main { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.pf2e-ui .tat-head {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 16px; align-items: center;
+  padding-bottom: 10px; border-bottom: 1px solid var(--tat-line);
+}
+.pf2e-ui .tat-hud input.tat-name {
+  width: 100%; text-align: left;
+  font-family: var(--tat-cond-font); font-weight: 700; font-size: 2rem !important;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  border-bottom-color: transparent !important;
+}
+.pf2e-ui .tat-id-line { margin-top: 2px; font-size: 0.82rem; color: var(--tat-dim); display: flex; gap: 8px; }
+.pf2e-ui .tat-id-line em { font-style: italic; opacity: 0.7; }
+.pf2e-ui .tat-sep { color: var(--tat-line-hi); }
+.pf2e-ui .tat-level {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 4px 10px; border: 1px solid var(--tat-line);
+  font-family: var(--tat-cond-font); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--tat-dim);
+}
+.pf2e-ui .tat-hud .tat-level input.tat-in {
+  width: 2.2em; font-family: var(--tat-cond-font); font-weight: 700; font-size: 1.6rem !important;
+  color: var(--tat-amber) !important; border-bottom: none !important;
+}
+
+/* Signature: three diamond action pips + reaction, spent state dims them */
+.pf2e-ui .tat-console { display: flex; align-items: center; gap: 10px; }
+.pf2e-ui .tat-pips { display: flex; gap: 6px; align-items: center; }
+.pf2e-ui .tat-hud .tat-pip {
+  width: 22px; height: 22px;
+  background: var(--tat-amber);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  transition: background 120ms, transform 120ms;
+}
+.pf2e-ui .tat-hud .tat-pip:hover { transform: scale(1.12); }
+.pf2e-ui .tat-hud .tat-pip.spent { background: var(--tat-line-hi); }
+.pf2e-ui .tat-hud .tat-pip-react {
+  clip-path: none; background: none; width: 24px; height: 24px; border-radius: 50%;
+  border: 2px solid var(--tat-amber); color: var(--tat-amber); font-size: 0.7rem;
+}
+.pf2e-ui .tat-hud .tat-pip-react.spent { border-color: var(--tat-line-hi); color: var(--tat-line-hi); }
+.pf2e-ui .tat-hud .tat-newturn {
+  width: 28px; height: 28px; border: 1px solid var(--tat-line); color: var(--tat-dim);
+}
+.pf2e-ui .tat-hud .tat-newturn:hover { color: var(--tat-amber); border-color: var(--tat-amber); }
+
+/* tabs */
+.pf2e-ui .tat-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--tat-line); }
+.pf2e-ui .tat-hud .pf2e-tab-btn {
+  padding: 7px 16px;
+  font-family: var(--tat-cond-font); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--tat-dim); border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.pf2e-ui .tat-hud .pf2e-tab-btn:hover { color: var(--tat-text); }
+.pf2e-ui .tat-hud .pf2e-tab-btn.active { color: var(--tat-amber); border-bottom-color: var(--tat-amber); }
+
+.pf2e-ui .tat-panel { display: flex; flex-direction: column; gap: 10px; }
+.pf2e-ui .tat-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
+
+/* ── overview ─────────────────────────────────────────────────────── */
+.pf2e-ui .tat-vitals { display: grid; grid-template-columns: 1.6fr 1fr; gap: 10px; }
+.pf2e-ui .tat-hp-read { display: flex; align-items: baseline; gap: 8px; margin-top: 4px; }
+.pf2e-ui .tat-hud input.tat-hp-cur {
+  width: 2.4em; text-align: right;
+  font-family: var(--tat-cond-font); font-weight: 700; font-size: 2.2rem !important; border-bottom: none !important;
+}
+.pf2e-ui .tat-hp-max { font-family: var(--tat-cond-font); font-size: 1.2rem; color: var(--tat-dim); }
+.pf2e-ui .tat-hp-max input.tat-in { font-size: 1.2rem !important; }
+.pf2e-ui .tat-hp-temp { margin-left: auto; font-size: 0.75rem; color: var(--tat-dim); }
+.pf2e-ui .tat-meter { height: 5px; margin-top: 8px; background: rgba(255, 255, 255, 0.06); }
+.pf2e-ui .tat-meter span { display: block; height: 100%; background: #5cb85c; }
+.pf2e-ui .tat-hp.is-low .tat-meter span { background: var(--tat-danger); }
+.pf2e-ui .tat-hp.is-low .tat-hp-cur { color: var(--tat-danger) !important; }
+
+.pf2e-ui .tat-points { display: flex; flex-direction: column; gap: 6px; justify-content: center; }
+.pf2e-ui .tat-points-row { display: flex; align-items: center; justify-content: space-between; }
+.pf2e-ui .tat-dots { display: flex; gap: 5px; }
+.pf2e-ui .tat-hud .tat-dot {
+  width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--tat-amber);
+}
+.pf2e-ui .tat-hud .tat-dot.on { background: var(--tat-amber); }
+.pf2e-ui .tat-hud .tat-dot-focus { border-color: var(--tat-cond); }
+.pf2e-ui .tat-hud .tat-dot-focus.on { background: var(--tat-cond); }
+.pf2e-ui .tat-hud .tat-init {
+  margin-top: 2px; padding: 4px 0; border: 1px solid var(--tat-line);
+  font-family: var(--tat-cond-font); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.78rem;
+}
+.pf2e-ui .tat-hud .tat-init:hover { border-color: var(--tat-amber); color: var(--tat-amber); }
+
+.pf2e-ui .tat-defenses { display: grid; grid-template-columns: 1.3fr repeat(5, 1fr); gap: 8px; }
+.pf2e-ui .tat-def { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 12px 6px 8px; text-align: center; }
+.pf2e-ui .tat-def-value {
+  font-family: var(--tat-cond-font); font-weight: 700; font-size: 1.7rem; line-height: 1; color: var(--tat-text);
+}
+.pf2e-ui .tat-def-ac .tat-def-value { font-size: 2.3rem; color: var(--tat-amber); }
+.pf2e-ui .tat-hud .tat-roll:hover,
+.pf2e-ui .tat-hud .tat-def-value.tat-roll:hover { color: var(--tat-amber); }
+.pf2e-ui .tat-def-name {
+  font-family: var(--tat-cond-font); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.2em; color: var(--tat-dim);
+}
+.pf2e-ui .tat-def .tat-rank { position: absolute; top: 5px; right: 5px; }
+
+/* proficiency seals: one letter, color per rank */
+.pf2e-ui .tat-rank { display: inline-flex; align-items: center; }
+.pf2e-ui .tat-hud .tat-seal {
+  display: inline-grid; place-items: center;
+  width: 18px; height: 18px;
+  font-family: var(--tat-cond-font); font-weight: 700; font-size: 0.72rem;
+  border: 1px solid currentColor; border-radius: 2px;
+}
+.pf2e-ui .rank-U .tat-seal { color: #5d6a7a; }
+.pf2e-ui .rank-T .tat-seal { color: #dfe5ec; }
+.pf2e-ui .rank-E .tat-seal { color: #5cb85c; }
+.pf2e-ui .rank-M .tat-seal { color: #5bc0de; }
+.pf2e-ui .rank-L .tat-seal { color: var(--tat-amber); background: var(--tat-amber-dim); }
+.pf2e-ui .tat-hud select.rank-select { width: 3.4em; margin-left: 4px; font-size: 0.75rem !important; }
+
+.pf2e-ui .tat-split { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 10px; align-items: start; }
+
+/* Strikes with the multiple-attack ladder */
+.pf2e-ui .tat-strike { padding: 8px 0; border-bottom: 1px solid rgba(47, 58, 72, 0.7); }
+.pf2e-ui .tat-strike-head { display: flex; align-items: center; gap: 8px; }
+.pf2e-ui .tat-hud .tat-strike-name { flex: 1; text-align: left; font-weight: 600; font-size: 0.92rem; }
+.pf2e-ui .tat-hud .tat-strike-name:hover { color: var(--tat-amber); }
+.pf2e-ui .tat-tag {
+  padding: 0 6px; border: 1px solid var(--tat-line-hi);
+  font-family: var(--tat-cond-font); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tat-dim);
+}
+.pf2e-ui .tat-ladder { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 6px; }
+.pf2e-ui .tat-hud .tat-rung {
+  padding: 5px 0;
+  font-family: var(--tat-cond-font); font-weight: 700; font-size: 1.1rem;
+  border: 1px solid var(--tat-line);
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%, 8px 50%);
+  background: var(--tat-panel-2);
+}
+.pf2e-ui .tat-hud .tat-rung:first-child { clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%); color: var(--tat-amber); }
+.pf2e-ui .tat-hud .tat-rung:nth-child(2) { opacity: 0.8; }
+.pf2e-ui .tat-hud .tat-rung:nth-child(3) { opacity: 0.6; }
+.pf2e-ui .tat-hud .tat-rung:hover { opacity: 1; background: var(--tat-amber-dim); color: var(--tat-amber); }
+.pf2e-ui .tat-strike-damage { display: flex; gap: 12px; margin-top: 6px; font-size: 0.85rem; color: var(--tat-dim); }
+.pf2e-ui .tat-hud .tat-crit { font-family: var(--tat-cond-font); font-weight: 700; }
+
+.pf2e-ui .tat-actionrow { display: flex; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px solid rgba(47, 58, 72, 0.6); font-size: 0.88rem; }
+.pf2e-ui .tat-cost { min-width: 1.4em; font-family: var(--tat-cond-font); font-weight: 700; color: var(--tat-amber); text-align: center; }
+.pf2e-ui .tat-hud .tat-link { flex: 1; text-align: left; }
+.pf2e-ui .tat-hud .tat-link:hover { color: var(--tat-amber); }
+.pf2e-ui .tat-sub { font-size: 0.75rem; color: var(--tat-dim); }
+.pf2e-ui .tat-hud .tat-icon { color: var(--tat-dim); font-size: 0.75rem; }
+.pf2e-ui .tat-hud .tat-icon:hover { color: var(--tat-danger); }
+.pf2e-ui .tat-adds { display: flex; gap: 14px; }
+.pf2e-ui .tat-hud .tat-add {
+  margin-top: 8px; font-family: var(--tat-cond-font); font-weight: 700; font-size: 0.8rem;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--tat-amber);
+}
+.pf2e-ui .tat-hud .tat-add:hover { text-decoration: underline; }
+
+/* skills */
+.pf2e-ui .tat-skill-list { display: flex; flex-direction: column; }
+.pf2e-ui .tat-skill { display: flex; align-items: center; gap: 8px; padding: 3px 0; border-bottom: 1px solid rgba(47, 58, 72, 0.5); }
+.pf2e-ui .tat-hud .tat-skill-roll { flex: 1; display: flex; justify-content: space-between; align-items: baseline; font-size: 0.86rem; }
+.pf2e-ui .tat-skill-roll b { font-family: var(--tat-cond-font); font-weight: 700; font-size: 1rem; }
+.pf2e-ui .tat-hud .tat-skill-roll:hover { color: var(--tat-amber); }
+.pf2e-ui .tat-lore .tat-skill-name { font-style: italic; }
+.pf2e-ui .tat-lore-add { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
+.pf2e-ui .tat-lore-add input.tat-in { flex: 1; text-align: left; font-size: 0.82rem !important; }
+.pf2e-ui .tat-lore-add .tat-add { margin-top: 0; }
+
+/* spells / notes */
+.pf2e-ui .tat-casting { display: grid; grid-template-columns: repeat(2, 140px); gap: 10px; }
+.pf2e-ui .tat-label-row .tat-slots { font-family: var(--font-body); letter-spacing: 0; color: var(--tat-text); }
+.pf2e-ui .tat-hud textarea.tat-notes {
+  min-height: 460px; resize: vertical; text-align: left; line-height: 1.6;
+  border: 1px solid var(--tat-line) !important; padding: 12px !important;
+  background: var(--tat-panel) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf2e-ui * { transition: none !important; }
+}
+.pf2e-ui .tat-hud .tat-def-value { font-family: var(--tat-cond-font); font-weight: 700; font-size: 1.7rem; line-height: 1; }
+.pf2e-ui .tat-hud .tat-def-ac .tat-def-value { font-size: 2.3rem; }
+.pf2e-ui .tat-hud .tat-crit { font-family: var(--font-body); }
+.pf2e-ui .tat-hud select.tat-cond-add { font-size: 0.8rem !important; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   v3 — "heraldic armory": bottle-green leather, wrought iron, aged brass.
+   Same structure as v2; only materials and type change. Deliberately NOT
+   crimson + cream (the reference game's own trade dress).
+   ══════════════════════════════════════════════════════════════════════ */
+@font-face {
+  font-family: 'PF2E Engraved';
+  src: url('/marketplace/rulesets/pf2e/assets/fonts/im-fell-english-sc-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+
+.pf2e-ui {
+  --tat-bg: #121a15;
+  --tat-panel: #1b261f;
+  --tat-panel-2: #223127;
+  --tat-line: #3a4a3e;
+  --tat-line-hi: #56695a;
+  --tat-text: #e7e1cf;
+  --tat-dim: #a39c86;
+  --tat-amber: #c9a45c;            /* aged brass */
+  --tat-amber-dim: rgba(201, 164, 92, 0.14);
+  --tat-iron: #2a2d2e;
+  --tat-iron-hi: #5d6264;
+  --tat-danger: #b8453c;
+  --tat-cond: #7fb0c9;
+  --tat-engraved: 'PF2E Engraved', 'Times New Roman', serif;
+}
+
+.loom-window.pf2e-ui {
+  background:
+    radial-gradient(130% 90% at 50% 0%, rgba(58, 84, 64, 0.35) 0%, transparent 60%),
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.05) 0 2px, transparent 2px 5px),
+    var(--tat-bg);
+}
+.loom-window.pf2e-ui .loom-window-title { font-family: var(--tat-engraved); font-weight: 400; letter-spacing: 0.16em; color: var(--tat-amber); }
+
+/* Iron-framed panels with brass rivets in the corners (replaces HUD brackets) */
+.pf2e-ui .tat-tile,
+.pf2e-ui .tat-block {
+  background:
+    radial-gradient(circle at 7px 7px, var(--tat-amber) 0 2px, #5a4a2a 2.5px, transparent 3.5px),
+    radial-gradient(circle at calc(100% - 7px) 7px, var(--tat-amber) 0 2px, #5a4a2a 2.5px, transparent 3.5px),
+    radial-gradient(circle at 7px calc(100% - 7px), var(--tat-amber) 0 2px, #5a4a2a 2.5px, transparent 3.5px),
+    radial-gradient(circle at calc(100% - 7px) calc(100% - 7px), var(--tat-amber) 0 2px, #5a4a2a 2.5px, transparent 3.5px),
+    linear-gradient(180deg, var(--tat-panel-2), var(--tat-panel));
+  border: 2px solid var(--tat-iron);
+  box-shadow: inset 0 0 0 1px var(--tat-iron-hi), inset 0 10px 18px rgba(0, 0, 0, 0.25), 0 4px 10px rgba(0, 0, 0, 0.45);
+  border-radius: 3px;
+}
+.pf2e-ui .tat-tile::before,
+.pf2e-ui .tat-tile::after { display: none; }
+
+/* Section titles hang as brass-trimmed pennants */
+.pf2e-ui .tat-block > .tat-label {
+  position: relative;
+  display: inline-flex;
+  margin: -10px 0 10px -14px;
+  padding: 5px 26px 5px 14px;
+  border: none;
+  background: linear-gradient(180deg, #2f4535, #24372a);
+  box-shadow: inset 0 -1px 0 var(--tat-amber), inset 0 1px 0 rgba(201, 164, 92, 0.5);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 50%, 100% 100%, 0 100%);
+}
+.pf2e-ui .tat-label {
+  font-family: var(--tat-engraved);
+  font-weight: 400;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  color: var(--tat-amber);
+}
+.pf2e-ui .tat-hud .pf2e-tab-btn,
+.pf2e-ui .tat-level,
+.pf2e-ui .tat-def-name,
+.pf2e-ui .tat-hud .tat-init,
+.pf2e-ui .tat-hud .tat-add {
+  font-family: var(--tat-engraved);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+.pf2e-ui .tat-hud .pf2e-tab-btn { font-size: 0.95rem; }
+.pf2e-ui .tat-def-name { font-size: 0.85rem; }
+.pf2e-ui .tat-hud input.tat-name {
+  font-family: var(--tat-engraved) !important;
+  font-weight: 400;
+  font-size: 2.1rem !important;
+  letter-spacing: 0.05em;
+  text-transform: none;
+  color: #efe6cc !important;
+}
+.pf2e-ui .tat-hud .tat-attr-key { font-family: var(--tat-engraved); font-weight: 400; font-size: 1.05rem; letter-spacing: 0.08em; }
+
+/* Portrait in an iron frame instead of the chamfered sci-fi cut */
+.pf2e-ui .tat-hud .tat-portrait {
+  clip-path: none;
+  border: 3px solid var(--tat-iron);
+  box-shadow: inset 0 0 0 1px var(--tat-amber), 0 6px 14px rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
+  background: linear-gradient(160deg, #2a3a2e, #141c16);
+  color: #4a5c4e;
+}
+.pf2e-ui .tat-hud .tat-portrait:hover { box-shadow: inset 0 0 0 1px #e8c983, 0 6px 14px rgba(0, 0, 0, 0.5); }
+
+/* Level as a brass plate */
+.pf2e-ui .tat-level {
+  border: 2px solid var(--tat-iron);
+  background: linear-gradient(180deg, #3a3222, #2a2418);
+  box-shadow: inset 0 0 0 1px var(--tat-amber);
+  color: #cdb88a;
+}
+.pf2e-ui .tat-hud .tat-level input.tat-in { color: #f0d898 !important; }
+
+/* Action pips: brass diamonds; reaction a brass ring */
+.pf2e-ui .tat-hud .tat-pip { background: linear-gradient(135deg, #f0d898, var(--tat-amber) 55%, #8a6a30); }
+.pf2e-ui .tat-hud .tat-pip.spent { background: var(--tat-iron-hi); }
+
+/* Rank seals as struck metal medallions */
+.pf2e-ui .tat-hud .tat-seal {
+  width: 20px; height: 20px; border-radius: 50%;
+  font-family: var(--tat-engraved); font-weight: 400; font-size: 0.78rem;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.35), inset 0 -1px 2px rgba(0, 0, 0, 0.4);
+  color: #1a140a;
+}
+.pf2e-ui .rank-U .tat-seal { background: #4a4f4c; color: #b9b3a3; }
+.pf2e-ui .rank-T .tat-seal { background: #b9b8b0; }
+.pf2e-ui .rank-E .tat-seal { background: #8fb07a; }
+.pf2e-ui .rank-M .tat-seal { background: #7fa6c4; }
+.pf2e-ui .rank-L .tat-seal { background: linear-gradient(135deg, #f0d898, #c9a45c); }
+
+/* Strike ladder rungs as brass-edged plates */
+.pf2e-ui .tat-hud .tat-rung { background: #2a3a2e; border: none; }
+.pf2e-ui .tat-hud .tat-rung:first-child { color: #f0d898; background: #34473a; }
+.pf2e-ui .tat-hud .tat-rung:hover { background: rgba(201, 164, 92, 0.22); color: #f0d898; }
+
+.pf2e-ui .tat-meter { background: rgba(0, 0, 0, 0.35); box-shadow: inset 0 0 0 1px var(--tat-iron); height: 7px; }
+.pf2e-ui .tat-meter span { background: linear-gradient(90deg, #4f7a44, #7fae5c); }
+.pf2e-ui .tat-def-ac .tat-def-value,
+.pf2e-ui .tat-hud .tat-def-ac .tat-def-value { color: #f0d898; }
+.pf2e-ui .tat-cond { border-left-color: var(--tat-amber); background: rgba(201, 164, 92, 0.08); }
+.pf2e-ui .tat-cond b { color: var(--tat-amber); }
+.pf2e-ui .tat-hud textarea.tat-notes { background: var(--tat-panel) !important; border: 2px solid var(--tat-iron) !important; }
+.pf2e-ui .tat-hud .tat-pip.tat-pip-react { background: none; border-color: var(--tat-amber); color: var(--tat-amber); }
+.pf2e-ui .tat-hud .tat-pip.tat-pip-react.spent { background: none; border-color: var(--tat-iron-hi); color: var(--tat-iron-hi); }
+.pf2e-ui .tat-def .tat-rank { top: 9px; right: 14px; }
+
+/* ── v4: gunmetal steel instead of green; skills in the centre column ── */
+.pf2e-ui {
+  --tat-bg: #15181d;
+  --tat-panel: #1d2127;
+  --tat-panel-2: #252a31;
+  --tat-line: #3a4049;
+  --tat-line-hi: #59616c;
+  --tat-text: #e6e1d3;
+  --tat-dim: #a09a8b;
+}
+.loom-window.pf2e-ui {
+  background:
+    radial-gradient(130% 90% at 50% 0%, rgba(90, 104, 122, 0.22) 0%, transparent 60%),
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.06) 0 2px, transparent 2px 5px),
+    var(--tat-bg);
+}
+.pf2e-ui .tat-block > .tat-label {
+  margin: -10px 0 10px -12px;
+  background: linear-gradient(180deg, #353c46, #2a3038);
+}
+.pf2e-ui .tat-hud .tat-portrait { background: linear-gradient(160deg, #2d333c, #16191e); color: #4c545f; }
+.pf2e-ui .tat-hud .tat-rung { background: #2a3038; }
+.pf2e-ui .tat-hud .tat-rung:first-child { background: #333a44; }
+.pf2e-ui .rank-E .tat-seal { background: #9fbf86; }
+
+.pf2e-ui .tat-split {
+  grid-template-columns: minmax(0, 1fr) 360px;
+  align-items: stretch;
+}
+.pf2e-ui .tat-stack { display: flex; flex-direction: column; gap: 10px; min-width: 0; align-self: start; }
+.pf2e-ui .tat-stack .tat-vitals { grid-template-columns: 1fr; }
+.pf2e-ui .tat-stack .tat-points { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.pf2e-ui .tat-stack .tat-points-row { gap: 8px; }
+.pf2e-ui .tat-stack .tat-hud .tat-init,
+.pf2e-ui .tat-stack .tat-init { margin-left: auto; padding: 4px 12px; }
+.pf2e-ui .tat-stack .tat-defenses { grid-template-columns: repeat(3, 1fr); }
+.pf2e-ui .tat-split > .tat-skills {
+  display: flex; flex-direction: column;
+  height: 0; min-height: max(100%, 420px); box-sizing: border-box;
+}
+.pf2e-ui .tat-split > .tat-skills .tat-skill-list { flex: 1 1 0; min-height: 0; overflow-y: auto; padding-right: 4px; }
+.pf2e-ui .tat-block > .tat-label { align-self: flex-start; }
+.pf2e-ui .tat-stack .tat-points { justify-content: flex-start; }
+.pf2e-ui .tat-hud select.tat-in option { background: #252a31 !important; color: #e6e1d3 !important; }
+/* Pennant hangs from the top edge of the frame: flush with the inner border,
+   covering the top-left rivet, instead of floating between the rivets. */
+.pf2e-ui .tat-block:has(> .tat-label) { padding-top: 0; }
+.pf2e-ui .tat-hud .tat-block > .tat-label {
+  margin: 0 0 10px -12px !important;
+  padding-top: 6px;
+  border-top: none;
+}
+
+/* ── v5: pennants pinned absolutely to the frame corner. The engine's own
+   heading margins/padding kept pushing them below the top rivets. ── */
+.pf2e-ui .tat-hud .tat-block:has(> .tat-label) { position: relative; padding-top: 42px; }
+.pf2e-ui .tat-hud .tat-block > .tat-label {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 1;
+  margin: 0 !important;
+  padding: 6px 28px 6px 14px !important;
+  line-height: 1.2 !important;
+  min-height: 0;
+  max-width: calc(100% - 16px);
+  box-sizing: border-box;
+}
+.pf2e-ui .tat-casting { display: grid; grid-template-columns: repeat(2, 170px); gap: 10px; }
+.pf2e-ui .tat-hud .tat-skill-list { scrollbar-width: thin; scrollbar-color: var(--tat-line-hi) transparent; }
+
+/* XP track under the name: brass bar in an iron groove, glows when a level is ready */
+.pf2e-ui .tat-xp { display: flex; align-items: center; gap: 8px; margin-top: 6px; max-width: 420px; }
+.pf2e-ui .tat-xp .tat-label { font-size: 0.8rem; }
+.pf2e-ui .tat-xp-bar { flex: 1; height: 7px; background: rgba(0, 0, 0, 0.4); box-shadow: inset 0 0 0 1px var(--tat-iron-hi); }
+.pf2e-ui .tat-xp-bar span { display: block; height: 100%; background: linear-gradient(90deg, #8a6a30, var(--tat-amber), #f0d898); }
+.pf2e-ui .tat-xp.is-ready .tat-xp-bar { box-shadow: inset 0 0 0 1px var(--tat-amber), 0 0 8px rgba(201, 164, 92, 0.6); }
+.pf2e-ui .tat-xp-read { font-family: var(--tat-cond-font); font-size: 0.9rem; color: var(--tat-dim); white-space: nowrap; }
+.pf2e-ui .tat-hud .tat-xp-read input.tat-in { width: 3.4em; color: var(--tat-text) !important; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   r2 — NPC e item no mesmo "arsenal heráldico" da ficha de personagem.
+   Só acréscimos, escopados em .tat-npc / .tat-item; nada acima foi tocado.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── NPC: coluna única ─────────────────────────────────────────────── */
+.pf2e-ui .tat-npc { display: flex; flex-direction: column; gap: 12px; }
+.pf2e-ui .tat-npc .tat-top { display: flex; align-items: center; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--tat-line); }
+.pf2e-ui .tat-npc .tat-top .tat-portrait { flex: none; width: 96px; height: 96px; aspect-ratio: auto; }
+.pf2e-ui .tat-npc .tat-top .tat-id { flex: 1; min-width: 0; }
+.pf2e-ui .tat-npc input.tat-name { font-size: 1.5rem !important; }
+.pf2e-ui .tat-npc .tat-defenses { grid-template-columns: repeat(6, 1fr); }
+.pf2e-ui .tat-npc .tat-attrs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.pf2e-ui .tat-npc .tat-attr-cell { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 4px; border: 1px solid var(--tat-line); background: rgba(0, 0, 0, 0.2); }
+.pf2e-ui .tat-npc .tat-attr-cell .tat-attr-key { font-family: var(--tat-engraved); font-size: 0.95rem; letter-spacing: 0.08em; color: var(--tat-dim); }
+.pf2e-ui .tat-npc .tat-attr-cell .tat-attr-key:hover { color: var(--tat-amber); }
+.pf2e-ui .tat-npc .tat-attr-cell input.tat-attr-mod { width: 100%; font-family: var(--tat-cond-font); font-weight: 700; font-size: 1.3rem !important; }
+
+/* ── Item: coluna única, cabeçalho com ícone ───────────────────────── */
+.pf2e-ui .tat-item { display: flex; flex-direction: column; gap: 10px; }
+.pf2e-ui .tat-item .tat-item-head { display: flex; align-items: center; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--tat-line); }
+.pf2e-ui .tat-item .tat-item-icon {
+  flex: none; width: 56px; height: 56px;
+  display: grid; place-items: center;
+  border: 3px solid var(--tat-iron);
+  box-shadow: inset 0 0 0 1px var(--tat-amber), 0 6px 14px rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
+  background: linear-gradient(160deg, #2d333c, #16191e);
+  color: var(--tat-amber); font-size: 1.5rem; overflow: hidden;
+}
+.pf2e-ui .tat-item .tat-item-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pf2e-ui .tat-item .tat-item-icon:hover { box-shadow: inset 0 0 0 1px #e8c983, 0 6px 14px rgba(0, 0, 0, 0.5); }
+.pf2e-ui .tat-item .tat-id { flex: 1; min-width: 0; }
+.pf2e-ui .tat-item input.tat-name { font-size: 1.4rem !important; }
+.pf2e-ui .tat-item .tat-pips { display: inline-flex; align-items: center; gap: 5px; }
+.pf2e-ui .tat-item .tat-pip { display: inline-block; width: 16px; height: 16px; }
+.pf2e-ui .tat-item .tat-fieldgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
+.pf2e-ui .tat-item .tat-field { display: flex; flex-direction: column; gap: 2px; font-size: 0.8rem; color: var(--tat-dim); }
+.pf2e-ui .tat-item .tat-field .tat-in { text-align: left; }
+.pf2e-ui .tat-item .tat-traits { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; }
+.pf2e-ui .tat-item .tat-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 2px 8px; border: 1px solid var(--tat-line-hi);
+  font-size: 0.78rem; color: var(--tat-text); background: rgba(0, 0, 0, 0.25);
+}
+.pf2e-ui .tat-item .tat-chip button { color: var(--tat-dim); }
+.pf2e-ui .tat-item .tat-chip button:hover { color: var(--tat-danger); }
+.pf2e-ui .tat-item .tat-traits input.tat-in { flex: 1; min-width: 8em; text-align: left; font-size: 0.82rem !important; }
+.pf2e-ui .tat-item .tat-traits .tat-add { margin-top: 0; }
+.pf2e-ui .tat-item textarea.tat-notes { min-height: 220px; }
+
+/* ── v6: the window is an illuminated parchment page (user art); the iron
+   plaques stay dark on top of it. Loose text on the page switches to ink. ── */
+.loom-window.pf2e-ui {
+  background:
+    url('/marketplace/rulesets/pf2e/assets/images/parchment-illuminated.webp') center / 100% 100% no-repeat,
+    #e3cfa4;
+}
+.loom-window.pf2e-ui > .loom-window-header { border-bottom-color: rgba(92, 64, 30, 0.35); }
+.loom-window.pf2e-ui .loom-window-title,
+.loom-window.pf2e-ui .loom-window-controls button { color: #5a3f1e; }
+.pf2e-ui .tat-head { border-bottom-color: rgba(92, 64, 30, 0.35); }
+.pf2e-ui .tat-hud input.tat-name { color: #2b1c0c !important; text-shadow: 0 1px 0 rgba(255, 240, 210, 0.5); }
+.pf2e-ui .tat-id-line { color: #5a4630; }
+.pf2e-ui .tat-sep { color: #8a6a44; }
+.pf2e-ui .tat-console > .tat-label { color: #5a3f1e; }
+.pf2e-ui .tat-xp .tat-label,
+.pf2e-ui .tat-xp-read { color: #5a3f1e; }
+.pf2e-ui .tat-hud .tat-xp-read input.tat-in { color: #2b1c0c !important; border-bottom-color: rgba(92, 64, 30, 0.45) !important; }
+.pf2e-ui .tat-xp-bar { background: rgba(60, 40, 15, 0.18); box-shadow: inset 0 0 0 1px rgba(60, 40, 15, 0.5); }
+.pf2e-ui .tat-tabs { border-bottom-color: rgba(92, 64, 30, 0.35); }
+.pf2e-ui .tat-hud .pf2e-tab-btn { color: #6b5234; }
+.pf2e-ui .tat-hud .pf2e-tab-btn:hover { color: #2b1c0c; }
+.pf2e-ui .tat-hud .pf2e-tab-btn.active { color: #2b1c0c; border-bottom-color: #8a5a1a; }
+.pf2e-ui .tat-hud .tat-newturn { color: #5a3f1e; border-color: rgba(92, 64, 30, 0.5); }
+.pf2e-ui .tat-hud .tat-pip.spent { background: rgba(92, 64, 30, 0.35); }
+.pf2e-ui .tat-panel > .tat-add { color: #7a4f14; }
+/* Clean parchment page: the illuminated variant's top ornament collided with the name. */
+.loom-window.pf2e-ui {
+  background:
+    url('/marketplace/rulesets/pf2e/assets/images/parchment-clean.webp') center / 100% 100% no-repeat,
+    #e3cfa4;
+}
+/* Heraldic pennants: oxblood cloth, white lettering, gilt edge (only the pennants are red). */
+.pf2e-ui .tat-hud .tat-block > .tat-label {
+  background: linear-gradient(180deg, #8a1f1b, #6e1512);
+  color: #fbf4e6;
+  box-shadow: inset 0 -1px 0 #d8b46a, inset 0 1px 0 rgba(216, 180, 106, 0.6), 0 2px 4px rgba(0, 0, 0, 0.35);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+}
+.pf2e-ui .tat-hud .tat-pip { background: linear-gradient(135deg, #c9a45c, #8a5a1a 60%, #5a3a10); filter: drop-shadow(0 0 1px rgba(40, 25, 5, 0.9)); }
+.pf2e-ui .tat-hud .tat-pip.tat-pip-react { border-color: #7a4f14; color: #7a4f14; filter: none; }
+
+/* ── v7: warm leather plaques on the parchment page. Gunmetal read as cold
+   holes on warm paper; leather + bronze keeps one temperature and more contrast. ── */
+.pf2e-ui {
+  --tat-panel: #2a1f16;
+  --tat-panel-2: #37291c;
+  --tat-line: #5a4530;
+  --tat-line-hi: #7f6443;
+  --tat-text: #f3e8d0;
+  --tat-dim: #c9b48d;
+  --tat-iron: #1c140d;
+  --tat-iron-hi: #6b5236;
+  --tat-amber: #d6ad5f;
+}
+.pf2e-ui .tat-tile,
+.pf2e-ui .tat-block {
+  box-shadow:
+    inset 0 0 0 1px var(--tat-iron-hi),
+    inset 0 12px 20px rgba(0, 0, 0, 0.22),
+    0 3px 0 rgba(60, 38, 14, 0.35),
+    0 8px 16px rgba(40, 24, 8, 0.35);
+}
+.pf2e-ui .tat-hud .tat-rung { background: #3a2c1e; }
+.pf2e-ui .tat-hud .tat-rung:first-child { background: #47362a; color: #f3d990; }
+.pf2e-ui .tat-hud .tat-portrait { border-color: #1c140d; background: linear-gradient(160deg, #3a2c1e, #1c140d); }
+.pf2e-ui .tat-skill,
+.pf2e-ui .tat-attr,
+.pf2e-ui .tat-strike,
+.pf2e-ui .tat-actionrow { border-bottom-color: rgba(127, 100, 67, 0.35); }
+.pf2e-ui .tat-def-name,
+.pf2e-ui .tat-skill-roll,
+.pf2e-ui .tat-hud .tat-attr-key { color: var(--tat-text); }
+.pf2e-ui .tat-hud .tat-attr-key { color: var(--tat-dim); }
+.pf2e-ui .tat-hud input.tat-attr-mod,
+.pf2e-ui .tat-hud .tat-def-value { color: #fbf3e0 !important; }
+.pf2e-ui .tat-hud .tat-def-ac .tat-def-value { color: #f3d990 !important; }
+.pf2e-ui .rank-U .tat-seal { background: #5a4a38; color: #e2d2b2; }
+
+/* title bar controls on the page */
+.loom-window.pf2e-ui .loom-window-controls button {
+  background: rgba(60, 40, 15, 0.12) !important;
+  border: 1px solid rgba(92, 64, 30, 0.45) !important;
+  color: #4a3218 !important;
+}
+.loom-window.pf2e-ui .loom-window-controls button:hover { background: rgba(138, 90, 26, 0.2) !important; color: #2b1c0c !important; }
+/* Title-bar controls: out-rank theme rules (seen as dark filled squares on the page). */
+.loom-window.pf2e-ui > .loom-window-header .loom-window-controls button.header-control,
+.loom-window.pf2e-ui > .loom-window-header .loom-window-controls .loom-window-control-btn,
+.loom-window.pf2e-ui > .loom-window-header .loom-window-controls .loom-window-close {
+  background: rgba(255, 244, 220, 0.35) !important;
+  background-image: none !important;
+  border: 1px solid rgba(92, 64, 30, 0.55) !important;
+  border-radius: 3px !important;
+  box-shadow: none !important;
+  color: #4a3218 !important;
+  text-shadow: none !important;
+}
+.loom-window.pf2e-ui > .loom-window-header .loom-window-controls button.header-control i,
+.loom-window.pf2e-ui > .loom-window-header .loom-window-controls button.header-control svg { color: #4a3218 !important; fill: currentColor; }
+.loom-window.pf2e-ui > .loom-window-header .loom-window-controls button.header-control:hover {
+  background: rgba(138, 31, 27, 0.85) !important;
+  border-color: #6e1512 !important;
+  color: #fbf4e6 !important;
+}
+.loom-window.pf2e-ui > .loom-window-header .loom-window-controls button.header-control:hover i { color: #fbf4e6 !important; }
+
+/* ── v8: crimson plaques, navy pennants/tabs, cream value windows, gold trim.
+   Palette only; layout, ornaments and components stay our own. ── */
+.pf2e-ui {
+  --tat-panel: #6a1a17;
+  --tat-panel-2: #7f221d;
+  --tat-line: #9b4a3c;
+  --tat-line-hi: #c07a5c;
+  --tat-text: #fbf1dc;
+  --tat-dim: #f0cfa8;
+  --tat-iron: #3e0f0d;
+  --tat-iron-hi: #d4ac62;
+  --tat-amber: #e8c77a;
+  --tat-navy: #1f2d5c;
+  --tat-navy-2: #283a73;
+  --tat-cream: #f4ead3;
+  --tat-ink: #2b1c0c;
+}
+.pf2e-ui .tat-tile,
+.pf2e-ui .tat-block {
+  background:
+    radial-gradient(circle at 7px 7px, #f0d898 0 2px, #7a5a20 2.5px, transparent 3.5px),
+    radial-gradient(circle at calc(100% - 7px) 7px, #f0d898 0 2px, #7a5a20 2.5px, transparent 3.5px),
+    radial-gradient(circle at 7px calc(100% - 7px), #f0d898 0 2px, #7a5a20 2.5px, transparent 3.5px),
+    radial-gradient(circle at calc(100% - 7px) calc(100% - 7px), #f0d898 0 2px, #7a5a20 2.5px, transparent 3.5px),
+    linear-gradient(180deg, var(--tat-panel-2), var(--tat-panel));
+}
+
+/* pennants and tabs in navy with gold edge */
+.pf2e-ui .tat-hud .tat-block > .tat-label {
+  background: linear-gradient(180deg, var(--tat-navy-2), var(--tat-navy));
+  color: #fbf4e6;
+  box-shadow: inset 0 -1px 0 #d8b46a, inset 0 1px 0 rgba(216, 180, 106, 0.6), 0 2px 4px rgba(0, 0, 0, 0.35);
+}
+.pf2e-ui .tat-tabs {
+  background: linear-gradient(180deg, var(--tat-navy-2), var(--tat-navy));
+  border: 1px solid #d8b46a;
+  border-radius: 3px;
+  padding: 0 4px;
+}
+.pf2e-ui .tat-hud .pf2e-tab-btn { color: #c9d2ee; margin-bottom: 0; }
+.pf2e-ui .tat-hud .pf2e-tab-btn:hover { color: #fff; }
+.pf2e-ui .tat-hud .pf2e-tab-btn.active { color: #fff; border-bottom-color: #e8c77a; }
+
+/* cream windows for the numbers that matter */
+.pf2e-ui .tat-hud .tat-def-value,
+.pf2e-ui .tat-hud input.tat-attr-mod,
+.pf2e-ui .tat-hud input.tat-hp-cur {
+  background: var(--tat-cream) !important;
+  color: var(--tat-ink) !important;
+  border: 1px solid #d8b46a !important;
+  border-radius: 3px !important;
+  padding: 2px 8px !important;
+  box-shadow: inset 0 1px 3px rgba(60, 30, 10, 0.35) !important;
+}
+.pf2e-ui .tat-hud .tat-def-ac .tat-def-value { color: #6a1a17 !important; }
+.pf2e-ui .tat-hud input.tat-attr-mod { width: 2.4em; padding: 1px 4px !important; }
+.pf2e-ui .tat-hud input.tat-hp-cur { width: 2.2em; text-align: center; }
+.pf2e-ui .tat-hud .tat-hp-max input.tat-in,
+.pf2e-ui .tat-hud .tat-hp-temp input.tat-in { color: var(--tat-text) !important; border-bottom-color: var(--tat-line-hi) !important; }
+
+.pf2e-ui .tat-hud .tat-rung { background: #52120f; color: var(--tat-dim); }
+.pf2e-ui .tat-hud .tat-rung:first-child { background: var(--tat-cream); color: #6a1a17; }
+.pf2e-ui .tat-hud .tat-rung:hover { background: var(--tat-navy-2); color: #fff; }
+.pf2e-ui .tat-skill,
+.pf2e-ui .tat-attr,
+.pf2e-ui .tat-strike,
+.pf2e-ui .tat-actionrow { border-bottom-color: rgba(240, 207, 168, 0.22); }
+.pf2e-ui .rank-U .tat-seal { background: #8a4a3a; color: #fbf1dc; }
+.pf2e-ui .tat-meter { background: rgba(0, 0, 0, 0.35); box-shadow: inset 0 0 0 1px #3e0f0d; }
+.pf2e-ui .tat-hud .tat-add { color: var(--tat-amber); }
+.pf2e-ui .tat-hud .tat-portrait { border-color: #3e0f0d; box-shadow: inset 0 0 0 1px #d8b46a, 0 6px 14px rgba(0, 0, 0, 0.5); }
+.pf2e-ui .tat-level { background: linear-gradient(180deg, var(--tat-navy-2), var(--tat-navy)); border-color: #d8b46a; color: #c9d2ee; }
+.pf2e-ui .tat-hud .tat-level input.tat-in { color: #fff !important; }
+.pf2e-ui .tat-attr { grid-template-columns: 1fr 3.2em; }
+.pf2e-ui .tat-hud input.tat-attr-mod { width: 100% !important; box-sizing: border-box !important; text-align: center !important; }

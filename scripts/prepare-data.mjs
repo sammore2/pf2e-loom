@@ -1,4 +1,4 @@
-// SDR TATIC — scripts/prepare-data.mjs
+// PF2E — scripts/prepare-data.mjs
 // Derived-data pass for one actor row: merge defaults, then compute totals
 // through the pure functions in rules.mjs.
 import { mergeDefaults } from './utils.mjs';

@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════════════════
-// SDR_TATIC — scripts/effects.mjs
+// PF2E — scripts/effects.mjs
 // Component Version: 0.1.0
 //
 // Equivalent to the original ActiveEffectHelper/EffectAutomation, but built on
