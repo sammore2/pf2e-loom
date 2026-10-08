@@ -1,0 +1,152 @@
+[
+  {
+    "id": "sp-electric-arc",
+    "name": "Arco Elétrico (Electric Arc)",
+    "type": "spell",
+    "data": {
+      "rank": 1,
+      "isCantrip": true,
+      "traditions": ["arcana", "primal"],
+      "actions": "2",
+      "traits": ["eletricidade", "evocação", "truque"],
+      "save": "Reflexos",
+      "damage": "1d4",
+      "description": "Um arco de eletricidade salta entre uma ou duas criaturas a até 9 metros, causando 1d4 de dano de eletricidade com salvaguarda básica de Reflexos."
+    }
+  },
+  {
+    "id": "sp-telekinetic-projectile",
+    "name": "Projétil Telecinético (Telekinetic Projectile)",
+    "type": "spell",
+    "data": {
+      "rank": 1,
+      "isCantrip": true,
+      "traditions": ["arcana", "oculta", "primal"],
+      "actions": "2",
+      "traits": ["ataque", "evocação", "truque"],
+      "save": "",
+      "damage": "1d6",
+      "description": "Você arremessa telecineticamente um objeto solto a até 9 metros com um ataque de magia, causando 1d6 de dano de concussão, perfurante ou cortante."
+    }
+  },
+  {
+    "id": "sp-shield",
+    "name": "Escudo Arcano (Shield)",
+    "type": "spell",
+    "data": {
+      "rank": 1,
+      "isCantrip": true,
+      "traditions": ["arcana", "divina", "oculta", "primal"],
+      "actions": "1",
+      "traits": ["força", "truque"],
+      "save": "",
+      "damage": "",
+      "description": "Você ergue uma barreira de força mágica que concede +1 de bônus de circunstância na CA até o início do seu próximo turno e permite usar a reação Bloqueio com Escudo (Dureza 5)."
+    }
+  },
+  {
+    "id": "sp-heal",
+    "name": "Curar (Heal)",
+    "type": "spell",
+    "data": {
+      "rank": 1,
+      "isCantrip": false,
+      "traditions": ["divina", "primal"],
+      "actions": "1 a 3",
+      "traits": ["cura", "vitalidade", "necromancia"],
+      "save": "",
+      "damage": "1d8",
+      "description": "Você canaliza energia positiva para curar vivos ou ferir mortos-vivos. 1 ação: toque 1d8; 2 ações: alcance 9m 1d8+8; 3 ações: emanação de 9m curando todos os aliados."
+    }
+  },
+  {
+    "id": "sp-harm",
+    "name": "Ferir (Harm)",
+    "type": "spell",
+    "data": {
+      "rank": 1,
+      "isCantrip": false,
+      "traditions": ["divina"],
+      "actions": "1 a 3",
+      "traits": ["vazio", "necromancia"],
+      "save": "Fortitude",
+      "damage": "1d8",
+      "description": "Você canaliza energia negativa para ferir vivos com teste básico de Fortitude ou curar mortos-vivos."
+    }
+  },
+  {
+    "id": "sp-force-barrage",
+    "name": "Barragem de Força (Force Barrage)",
+    "type": "spell",
+    "data": {
+      "rank": 1,
+      "isCantrip": false,
+      "traditions": ["arcana", "oculta"],
+      "actions": "1 a 3",
+      "traits": ["força", "evocação"],
+      "save": "",
+      "damage": "1d4+1",
+      "description": "Você dispara 1, 2 ou 3 dardos de força automática que acertam sem necessidade de teste de ataque, causando 1d4+1 de dano de força cada a até 36 metros."
+    }
+  },
+  {
+    "id": "sp-fear",
+    "name": "Medo (Fear)",
+    "type": "spell",
+    "data": {
+      "rank": 1,
+      "isCantrip": false,
+      "traditions": ["arcana", "divina", "oculta", "primal"],
+      "actions": "2",
+      "traits": ["emocional", "medo", "mental"],
+      "save": "Vontade",
+      "damage": "",
+      "description": "Você planta pavor na mente de uma criatura a até 9 metros. Falha: Assustado 2; Falha Crítica: Assustado 3 e Em Fuga 1 rodada."
+    }
+  },
+  {
+    "id": "sp-fireball",
+    "name": "Bola de Fogo (Fireball)",
+    "type": "spell",
+    "data": {
+      "rank": 3,
+      "isCantrip": false,
+      "traditions": ["arcana", "primal"],
+      "actions": "2",
+      "traits": ["fogo", "evocação"],
+      "save": "Reflexos",
+      "damage": "6d6",
+      "description": "Um projétil de chamas explode em uma área de 6 metros de raio a até 150 metros, causando 6d6 de dano de fogo com salvaguarda básica de Reflexos."
+    }
+  },
+  {
+    "id": "sp-haste",
+    "name": "Velocidade (Haste)",
+    "type": "spell",
+    "data": {
+      "rank": 3,
+      "isCantrip": false,
+      "traditions": ["arcana", "oculta", "primal"],
+      "actions": "2",
+      "traits": ["transmutação"],
+      "save": "",
+      "damage": "",
+      "description": "Você acelera uma criatura a até 9 metros por 1 minuto. Ela ganha a condição Acelerado 1, podendo usar a ação extra apenas para Andar ou Golpear."
+    }
+  },
+  {
+    "id": "sp-slow",
+    "name": "Lentidão (Slow)",
+    "type": "spell",
+    "data": {
+      "rank": 3,
+      "isCantrip": false,
+      "traditions": ["arcana", "oculta", "primal"],
+      "actions": "2",
+      "traits": ["transmutação"],
+      "save": "Fortitude",
+      "damage": "",
+      "description": "Você desacelera os movimentos de um alvo a até 9 metros. Em uma falha, o alvo fica Sobrecarga / Lentidão 1 por 1 minuto."
+    }
+  }
+]

@@ -9,6 +9,7 @@ import { fmtMod, setPathValue } from './utils.mjs';
 import { getDefaultData } from './schema.mjs';
 import { prepareActorRow } from './prepare-data.mjs';
 import { proficiencyBonus, multipleAttackPenalty } from './rules.mjs';
+import { buildStrike } from './checks.mjs';
 import { rollCheck, rollSkill, rollSave, rollPerception, rollAttack, rollDamage } from './roll-engine.mjs';
 import { Pf2eItemSheet } from './item-sheet.mjs';
 
@@ -181,17 +182,15 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     return 'str';
   }
 
-  _weaponRow(sd, item, level, withoutLevel) {
+  _weaponRow(preparedDoc, item) {
     const idata = item.system || item.data || {};
-    const attrKey = this._attackAttr(sd, idata);
-    const attrMod = num(sd.abilities?.[attrKey]?.value);
-    const prof = proficiencyBonus(idata.rank, level, withoutLevel);
-    const bonus = num(idata.attackBonus);
-    const mods = [0, 1, 2].map((i) => attrMod + prof + bonus + multipleAttackPenalty(i, !!idata.agile));
+    const strike0 = buildStrike(preparedDoc, item, { attackIndex: 0 });
+    const strike1 = buildStrike(preparedDoc, item, { attackIndex: 1 });
+    const strike2 = buildStrike(preparedDoc, item, { attackIndex: 2 });
     return {
       id: item.id,
       name: item.name,
-      atk: mods.map((m) => fmtMod(m)),
+      atk: [fmtMod(strike0.total), fmtMod(strike1.total), fmtMod(strike2.total)],
       damage: String(idata.damage || ''),
       agile: !!idata.agile,
     };
@@ -248,7 +247,7 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     }));
 
     const weapons = items.filter((i) => i.type === 'weapon')
-      .map((i) => this._weaponRow(sd, i, level, false));
+      .map((i) => this._weaponRow(row, i));
     const actionItems = items.filter((i) => i.type === 'action').map((i) => ({
       id: i.id, name: i.name, actions: String((i.system || i.data || {}).actions || ''),
     }));

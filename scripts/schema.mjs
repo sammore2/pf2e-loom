@@ -56,11 +56,41 @@ function defaultActor() {
   };
 }
 
+function defaultParty() {
+  return {
+    members: [],
+    stash: { pp: 0, gp: 0, sp: 0, cp: 0 },
+    notes: '',
+    explorationState: {},
+  };
+}
+
+function defaultHazard() {
+  return {
+    level: 1,
+    complexity: 'simple',
+    stealth: { dc: 15, extra: 0 },
+    disable: '',
+    ac: 10,
+    hp: { value: 10, max: 10 },
+    hardness: 0,
+    saves: { fortitude: defaultSave(), reflex: defaultSave(), will: defaultSave() },
+    routine: '',
+    reset: '',
+  };
+}
+
 export function getDefaultData(type) {
   switch (type) {
     case 'character':
     case 'npc':
       return defaultActor();
+
+    case 'party':
+      return defaultParty();
+
+    case 'hazard':
+      return defaultHazard();
 
     case 'ancestry':
       return { ...defaultBaseItem(), hp: 0, size: 'med', speed: 0, boosts: '' };

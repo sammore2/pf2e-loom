@@ -26,14 +26,11 @@ export function bonusesToChanges(bonuses) {
   for (const [abl, v] of Object.entries(bonuses.abilities || {})) push(`abilities.${abl}.value`, v);
   for (const [abl, v] of Object.entries(bonuses.saves || {})) {
     if (abl === 'all') continue;
-    push(`saves.${abl}.misc`, v);
+    push(`saves.${abl}.extra`, v);
   }
-  push('attributes.da.bonus', bonuses.da);
-  push('attributes.prof.bonus', bonuses.prof);
-  push('attributes.initiative.bonus', bonuses.initiative);
-  push('attributes.meleeBonus', bonuses.attack?.melee);
-  push('attributes.rangedBonus', bonuses.attack?.ranged);
-  push('resources.health.bonus', bonuses.hp);
+  push('armor.extra', bonuses.ac);
+  push('initiative.extra', bonuses.initiative);
+  push('hp.extra', bonuses.hp);
   return changes;
 }
 

@@ -20,7 +20,35 @@
   ],
   "actorTypes": [
     "character",
-    "npc"
+    "npc",
+    "party",
+    "hazard"
+  ],
+  "packs": [
+    {
+      "name": "actions",
+      "label": "Ações e Manobras",
+      "type": "action",
+      "path": "packs/actions.json"
+    },
+    {
+      "name": "equipment",
+      "label": "Equipamentos e Armas",
+      "type": "equipment",
+      "path": "packs/equipment.json"
+    },
+    {
+      "name": "spells",
+      "label": "Magias e Truques",
+      "type": "spell",
+      "path": "packs/spells.json"
+    },
+    {
+      "name": "feats",
+      "label": "Talentos",
+      "type": "feat",
+      "path": "packs/feats.json"
+    }
   ],
   "itemTypes": [
     "ancestry",

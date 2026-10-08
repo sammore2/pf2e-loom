@@ -1,0 +1,164 @@
+{{!-- PF2E — Party Sheet: Hub Tático do Grupo & Roster de Integrantes --}}
+<div class="pf2e-panel tat-hud pf2e-party-sheet">
+
+  {{!-- Top Header: Party Name, Level Avg, Shared Stash --}}
+  <header class="pf2e-party-header">
+    <div class="pf2e-party-id-card tat-block">
+      <span class="tat-label"><i class="fa-solid fa-users"></i> {{localize "pf2e.sheets.partyName"}}</span>
+      <div class="party-name-row">
+        <input class="tat-in tat-party-name-input" type="text" name="name" value="{{name}}" placeholder="Nome do Grupo (Ex: Os Desbravadores)" title="Clique para renomear o grupo" />
+      </div>
+      <div class="tat-id-line">
+        <span><i class="fa-solid fa-user-group"></i> {{memberCount}} Integrantes</span>
+        <span class="tat-sep">·</span>
+        <span>Nível Médio: <b>{{averageLevel}}</b></span>
+      </div>
+    </div>
+
+    {{!-- Shared Party Wealth Stash --}}
+    <div class="pf2e-party-stash tat-block" title="Tesouro e Moedas Compartilhadas do Grupo">
+      <span class="tat-label"><i class="fa-solid fa-coins"></i> Tesouro do Grupo</span>
+      <div class="pf2e-stash-coins">
+        <label class="coin-field" title="Platina">
+          <span class="coin-tag coin-pp">PP</span>
+          <input class="tat-in" type="number" name="sd:stash.pp" value="{{stash.pp}}" min="0" />
+        </label>
+        <label class="coin-field" title="Ouro">
+          <span class="coin-tag coin-gp">PO</span>
+          <input class="tat-in" type="number" name="sd:stash.gp" value="{{stash.gp}}" min="0" />
+        </label>
+        <label class="coin-field" title="Prata">
+          <span class="coin-tag coin-sp">PE</span>
+          <input class="tat-in" type="number" name="sd:stash.sp" value="{{stash.sp}}" min="0" />
+        </label>
+        <label class="coin-field" title="Cobre">
+          <span class="coin-tag coin-cp">PC</span>
+          <input class="tat-in" type="number" name="sd:stash.cp" value="{{stash.cp}}" min="0" />
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tat-tabs">
+    <button type="button" class="pf2e-tab-btn active" data-action="tab" data-tab="roster" title="Integrantes e Atividades de Exploração">
+      <i class="fa-solid fa-users-viewfinder"></i> Integrantes
+    </button>
+    <button type="button" class="pf2e-tab-btn" data-action="tab" data-tab="inventory" title="Baú Compartilhado">
+      <i class="fa-solid fa-box-archive"></i> Baú do Grupo
+    </button>
+    <button type="button" class="pf2e-tab-btn" data-action="tab" data-tab="notes" title="Anotações da Campanha">
+      <i class="fa-solid fa-feather-pointed"></i> Diário de Bordo
+    </button>
+  </nav>
+
+  {{!-- ═══ Roster Tab ═══ --}}
+  <div class="tat-panel tat-party-roster" data-tab-content="roster">
+    <div class="pf2e-party-roster-head">
+      <h3 class="tat-label">Fichas Integradas ao Grupo</h3>
+      <div class="pf2e-party-add-wrap">
+        {{#if availableActors.length}}
+        <select class="tat-in pf2e-party-actor-select" data-action="member-add-select">
+          <option value="">+ Vincular Personagem ao Grupo...</option>
+          {{#each availableActors}}
+          <option value="{{id}}">{{name}} (Nvl {{systemData.level}})</option>
+          {{/each}}
+        </select>
+        {{/if}}
+      </div>
+    </div>
+
+    <div class="pf2e-party-members-grid">
+      {{#each members}}
+      <div class="pf2e-party-member-card tat-block" data-id="{{id}}">
+        <div class="member-card-main">
+          <button type="button" class="member-portrait" data-action="open-actor-sheet" data-id="{{id}}" title="Abrir Ficha de {{name}}">
+            <img src="{{avatarUrl}}" alt="{{name}}" />
+          </button>
+          <div class="member-info">
+            <div class="member-name-row">
+              <button type="button" class="member-name-btn" data-action="open-actor-sheet" data-id="{{id}}">{{name}}</button>
+              <span class="member-lvl">Nvl {{level}}</span>
+            </div>
+            <div class="member-class-line">{{ancestryClass}}</div>
+            
+            {{!-- Member HP Bar --}}
+            <div class="member-vitals">
+              <div class="member-hp-row">
+                <span class="tat-label">PV</span>
+                <span class="member-hp-vals"><b>{{hp.value}}</b> / {{hp.max}}{{#if hp.temp}} (+{{hp.temp}}){{/if}}</span>
+              </div>
+              <div class="tat-meter"><span style="width: {{hp.pct}}%"></span></div>
+            </div>
+          </div>
+        </div>
+
+        {{!-- Quick Passive Defenses --}}
+        <div class="member-defenses-strip">
+          <div class="member-def-tile" title="Classe de Armadura">
+            <span class="tat-label">CA</span>
+            <b>{{ac}}</b>
+          </div>
+          <div class="member-def-tile" title="Percepção Passiva">
+            <span class="tat-label">PERC</span>
+            <b>{{perception}}</b>
+          </div>
+          <div class="member-def-tile" title="Fortitude">
+            <span class="tat-label">FORT</span>
+            <b>{{saves.fortitude}}</b>
+          </div>
+          <div class="member-def-tile" title="Reflexos">
+            <span class="tat-label">REF</span>
+            <b>{{saves.reflex}}</b>
+          </div>
+          <div class="member-def-tile" title="Vontade">
+            <span class="tat-label">VONT</span>
+            <b>{{saves.will}}</b>
+          </div>
+        </div>
+
+        {{!-- Exploration Activity & Controls --}}
+        <div class="member-exploration-bar">
+          <label class="member-activity-label">
+            <span class="tat-label"><i class="fa-solid fa-compass"></i> Exploração:</span>
+            <select class="tat-in member-activity-select" data-action="set-exploration-activity" data-id="{{id}}">
+              {{#each explorationOptions}}
+              <option value="{{value}}"{{#if selected}} selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </label>
+          <button type="button" class="tat-icon member-remove-btn" data-action="member-remove" data-id="{{id}}" title="Remover do Grupo">
+            <i class="fa-solid fa-user-minus"></i>
+          </button>
+        </div>
+      </div>
+      {{else}}
+      <div class="tat-empty pf2e-party-empty">
+        <i class="fa-solid fa-users-slash"></i>
+        <p>Nenhum personagem vinculado ao grupo ainda. Selecione um personagem no menu acima ou arraste uma ficha para cá.</p>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+
+  {{!-- ═══ Party Inventory Tab ═══ --}}
+  <div class="tat-panel" data-tab-content="inventory">
+    <section class="tat-block">
+      <h3 class="tat-label">Itens e Tesouro Coletivo</h3>
+      {{#each items}}
+      <div class="tat-actionrow" data-id="{{id}}">
+        <button type="button" class="tat-link" data-action="item-open" data-id="{{id}}">{{name}}</button>
+        <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="×"><i class="fa-solid fa-trash"></i></button>
+      </div>
+      {{else}}
+      <p class="tat-empty">O baú do grupo está vazio no momento.</p>
+      {{/each}}
+      <button type="button" class="tat-add" data-action="item-create" data-type="equipment"><i class="fa-solid fa-plus"></i> Adicionar Item ao Baú</button>
+    </section>
+  </div>
+
+  {{!-- ═══ Notes Tab ═══ --}}
+  <div class="tat-panel" data-tab-content="notes">
+    <textarea class="tat-in tat-notes" name="sd:notes" placeholder="Missões ativas, rumores, pistas, acordos e diário de bordo do grupo...">{{notes}}</textarea>
+  </div>
+
+</div>

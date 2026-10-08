@@ -4,5 +4,9 @@
   "private": true,
   "type": "module",
   "license": "MIT AND ORC",
-  "author": "Rob Sammore"
+  "author": "Rob Sammore",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs tests/**/*.test.mjs",
+    "check": "node --check pf2e.mjs scripts/*.mjs"
+  }
 }

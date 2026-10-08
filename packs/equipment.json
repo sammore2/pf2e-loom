@@ -1,0 +1,224 @@
+[
+  {
+    "id": "eq-dagger",
+    "name": "Adaga (Dagger)",
+    "type": "weapon",
+    "data": {
+      "damage": "1d4",
+      "damageType": "perfurante",
+      "group": "knife",
+      "range": "10ft",
+      "agile": true,
+      "finesse": true,
+      "traits": ["agile", "finesse", "thrown", "versatile S"],
+      "bulk": "L",
+      "price": "2 sp",
+      "description": "Uma lâmina curta de dois gumes para combate corpo a corpo ou arremesso."
+    }
+  },
+  {
+    "id": "eq-shortsword",
+    "name": "Espada Curta (Shortsword)",
+    "type": "weapon",
+    "data": {
+      "damage": "1d6",
+      "damageType": "perfurante",
+      "group": "sword",
+      "range": "",
+      "agile": true,
+      "finesse": true,
+      "traits": ["agile", "finesse", "versatile S"],
+      "bulk": "L",
+      "price": "9 sp",
+      "description": "Uma lâmina leve e equilibrada, adequada para esgrima ágil."
+    }
+  },
+  {
+    "id": "eq-longsword",
+    "name": "Espada Longa (Longsword)",
+    "type": "weapon",
+    "data": {
+      "damage": "1d8",
+      "damageType": "cortante",
+      "group": "sword",
+      "range": "",
+      "agile": false,
+      "finesse": false,
+      "traits": ["versatile P"],
+      "bulk": "1",
+      "price": "1 gp",
+      "description": "A arma marcial tradicional de uma mão, confiável e letal."
+    }
+  },
+  {
+    "id": "eq-greatsword",
+    "name": "Montante (Greatsword)",
+    "type": "weapon",
+    "data": {
+      "damage": "1d12",
+      "damageType": "cortante",
+      "group": "sword",
+      "range": "",
+      "agile": false,
+      "finesse": false,
+      "traits": ["versatile P", "two-handed"],
+      "bulk": "2",
+      "price": "2 gp",
+      "description": "Uma espada imensa de duas mãos capaz de desferir golpes devastadores."
+    }
+  },
+  {
+    "id": "eq-rapier",
+    "name": "Rapieira (Rapier)",
+    "type": "weapon",
+    "data": {
+      "damage": "1d6",
+      "damageType": "perfurante",
+      "group": "sword",
+      "range": "",
+      "agile": false,
+      "finesse": true,
+      "traits": ["deadly d8", "disarm", "finesse"],
+      "bulk": "1",
+      "price": "2 gp",
+      "description": "Uma lâmina longa e estreita para estocadas precisas e críticas."
+    }
+  },
+  {
+    "id": "eq-shortbow",
+    "name": "Arco Curto (Shortbow)",
+    "type": "weapon",
+    "data": {
+      "damage": "1d6",
+      "damageType": "perfurante",
+      "group": "bow",
+      "range": "60ft",
+      "agile": false,
+      "finesse": false,
+      "traits": ["deadly d10"],
+      "bulk": "1",
+      "price": "3 gp",
+      "description": "Um arco portátil e rápido disparado com duas mãos sem recarga."
+    }
+  },
+  {
+    "id": "eq-longbow",
+    "name": "Arco Longo (Longbow)",
+    "type": "weapon",
+    "data": {
+      "damage": "1d8",
+      "damageType": "perfurante",
+      "group": "bow",
+      "range": "100ft",
+      "agile": false,
+      "finesse": false,
+      "traits": ["deadly d10", "volley 30ft"],
+      "bulk": "2",
+      "price": "6 gp",
+      "description": "Um arco maciço para combate a longa distância com enorme impacto crítico."
+    }
+  },
+  {
+    "id": "eq-warhammer",
+    "name": "Martelo de Guerra (Warhammer)",
+    "type": "weapon",
+    "data": {
+      "damage": "1d8",
+      "damageType": "concussão",
+      "group": "hammer",
+      "range": "",
+      "agile": false,
+      "finesse": false,
+      "traits": ["shove"],
+      "bulk": "1",
+      "price": "1 gp",
+      "description": "Uma cabeça de metal pesada para esmagar armaduras e empurrar inimigos."
+    }
+  },
+  {
+    "id": "eq-leather-armor",
+    "name": "Armadura de Couro (Leather Armor)",
+    "type": "armor",
+    "data": {
+      "acBonus": 1,
+      "dexCap": 4,
+      "checkPenalty": 0,
+      "speedPenalty": 0,
+      "category": "light",
+      "bulk": "1",
+      "price": "2 gp",
+      "description": "Couro tratado para proteção leve sem restringir agilidade."
+    }
+  },
+  {
+    "id": "eq-chain-shirt",
+    "name": "Camisão de Cota de Malha (Chain Shirt)",
+    "type": "armor",
+    "data": {
+      "acBonus": 2,
+      "dexCap": 3,
+      "checkPenalty": 1,
+      "speedPenalty": 0,
+      "category": "light",
+      "bulk": "1",
+      "price": "5 gp",
+      "description": "Uma cota de malha leve usada sob roupas ou sobre acolchoamento."
+    }
+  },
+  {
+    "id": "eq-breastplate",
+    "name": "Peitoral de Aço (Breastplate)",
+    "type": "armor",
+    "data": {
+      "acBonus": 4,
+      "dexCap": 1,
+      "checkPenalty": 2,
+      "speedPenalty": 5,
+      "category": "medium",
+      "bulk": "2",
+      "price": "8 gp",
+      "description": "Uma couraça sólida que protege o torso com excelente defesa contra golpes."
+    }
+  },
+  {
+    "id": "eq-full-plate",
+    "name": "Armadura Completa (Full Plate)",
+    "type": "armor",
+    "data": {
+      "acBonus": 6,
+      "dexCap": 0,
+      "checkPenalty": 3,
+      "speedPenalty": 10,
+      "category": "heavy",
+      "bulk": "4",
+      "price": "30 gp",
+      "description": "Placas de metal articuladas cobrindo o corpo inteiro com proteção máxima e Bulwark (+3 em saves de Reflexos contra efeitos de área)."
+    }
+  },
+  {
+    "id": "eq-wooden-shield",
+    "name": "Escudo de Madeira (Wooden Shield)",
+    "type": "shield",
+    "data": {
+      "acBonus": 2,
+      "hardness": 3,
+      "hp": { "value": 12, "max": 12 },
+      "bulk": "1",
+      "price": "1 gp",
+      "description": "Um escudo básico de carvalho reforçado. Concede +2 na CA ao Erguer o Escudo."
+    }
+  },
+  {
+    "id": "eq-steel-shield",
+    "name": "Escudo de Aço (Steel Shield)",
+    "type": "shield",
+    "data": {
+      "acBonus": 2,
+      "hardness": 5,
+      "hp": { "value": 20, "max": 20 },
+      "bulk": "1",
+      "price": "2 gp",
+      "description": "Um escudo metálico robusto para Bloqueio com Escudo (Dureza 5)."
+    }
+  }
+]

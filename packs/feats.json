@@ -1,0 +1,98 @@
+[
+  {
+    "id": "ft-vicious-swing",
+    "name": "Golpe Feroz (Vicious Swing / Power Attack)",
+    "type": "feat",
+    "data": {
+      "level": 1,
+      "category": "class",
+      "actions": "2",
+      "traits": ["guerreiro", "floresio"],
+      "description": "Você desfere um golpe com toda a sua força. Faça um Golpe corpo a corpo. Se acertar, você adiciona um dado extra de dano da arma (ou dois dados no 10º nível, três no 18º nível)."
+    }
+  },
+  {
+    "id": "ft-sudden-charge",
+    "name": "Investida Súbita (Sudden Charge)",
+    "type": "feat",
+    "data": {
+      "level": 1,
+      "category": "class",
+      "actions": "2",
+      "traits": ["guerreiro", "abertura"],
+      "description": "Com um ímpeto veloz, você Anda duas vezes e desfere um Golpe corpo a corpo se terminar o movimento em alcance do alvo."
+    }
+  },
+  {
+    "id": "ft-double-slice",
+    "name": "Talho Duplo (Double Slice)",
+    "type": "feat",
+    "data": {
+      "level": 1,
+      "category": "class",
+      "actions": "2",
+      "traits": ["guerreiro", "floresio"],
+      "description": "Empunhando duas armas corpo a corpo, você Golpea com ambas no mesmo alvo. O segundo ataque não sofre penalidade cumulativa por ataques múltiplos até que ambos sejam resolvidos."
+    }
+  },
+  {
+    "id": "ft-reactive-strike",
+    "name": "Ataque Reativo (Reactive Strike)",
+    "type": "feat",
+    "data": {
+      "level": 1,
+      "category": "class",
+      "actions": "R",
+      "traits": ["guerreiro"],
+      "description": "Gatilho: Uma criatura em seu alcance usa uma ação de manipulação ou movimento, faz um ataque à distância ou sai de um quadrado durante uma ação de movimento. Efeito: Você desfere um Golpe corpo a corpo contra a criatura desencadeadora."
+    }
+  },
+  {
+    "id": "ft-toughness",
+    "name": "Robustez (Toughness)",
+    "type": "feat",
+    "data": {
+      "level": 1,
+      "category": "general",
+      "actions": "0",
+      "traits": ["geral"],
+      "description": "Você ganha PV máximos adicionais iguais ao seu nível. Além disso, a CD para seus testes de recuperação passa a ser 9 + seu valor atual de Moribundo em vez de 10 + Moribundo."
+    }
+  },
+  {
+    "id": "ft-diehard",
+    "name": "Duro de Matar (Diehard)",
+    "type": "feat",
+    "data": {
+      "level": 1,
+      "category": "general",
+      "actions": "0",
+      "traits": ["geral"],
+      "description": "Seu limiar para a morte aumenta: você só morre ao atingir a condição Moribundo 5, em vez de Moribundo 4."
+    }
+  },
+  {
+    "id": "ft-fleet",
+    "name": "Pés Ligeiros (Fleet)",
+    "type": "feat",
+    "data": {
+      "level": 1,
+      "category": "general",
+      "actions": "0",
+      "traits": ["geral"],
+      "description": "Seu Deslocamento terrestre aumenta em 1,5 metro (5 pés)."
+    }
+  },
+  {
+    "id": "ft-battle-medicine",
+    "name": "Medicina de Batalha (Battle Medicine)",
+    "type": "feat",
+    "data": {
+      "level": 1,
+      "category": "skill",
+      "actions": "1",
+      "traits": ["cura", "manipulação", "perícia"],
+      "description": "Você aplica curativos emergenciais em um aliado adjacente (ou em si mesmo) com 1 ação única, usando a CD de Tratar Ferimentos para restaurar PV imediatamente durante o combate."
+    }
+  }
+]

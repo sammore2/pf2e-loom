@@ -109,13 +109,43 @@
       "addCondition": "Condition",
       "tabs": {
         "attacks": "Strikes",
+        "combat": "Combat",
+        "actions": "Actions",
         "skills": "Skills",
         "spells": "Spells",
+        "crafting": "Crafting",
         "feats": "Feats",
         "inventory": "Inventory",
         "notes": "Notes",
         "overview": "Overview"
       },
+      "saves": "Saving Throws",
+      "unarmedStrike": "Unarmed Strike",
+      "crafting": "Crafting",
+      "formulas": "Formulas",
+      "knownFormulas": "Known Formulas",
+      "craftingRank": "Crafting Rank",
+      "craftingDC": "Crafting DC",
+      "infusedReagents": "Infused Reagents",
+      "singleActions": "Single Actions (◆)",
+      "activities": "Activities (◆◆ / ◆◆◆)",
+      "reactions": "Reactions (↺)",
+      "freeActions": "Free Actions (◇)",
+      "senses": "Senses",
+      "immunities": "Immunities",
+      "weaknesses": "Weaknesses",
+      "resistances": "Resistances",
+      "languages": "Languages",
+      "speeds": "Speeds",
+      "encounter": "Encounter",
+      "exploration": "Exploration",
+      "downtime": "Downtime",
+      "searchActions": "Search or filter actions...",
+      "createAction": "CREATE ACTION",
+      "createReaction": "CREATE REACTION",
+      "createFreeAction": "CREATE FREE ACTION",
+      "browse": "BROWSE",
+      "partyName": "Party Name",
       "addWeapon": "Weapon",
       "addSpell": "Spell",
       "addFeat": "Feat",
@@ -158,6 +188,7 @@
       "save": "Save",
       "traits": "Traits",
       "notes": "Notes",
+      "notesPlaceholder": "Character notes, biography, and background...",
       "short": {
         "ac": "AC",
         "fortitude": "FORT",
@@ -191,8 +222,20 @@
       "actions": "Actions",
       "noRace": "No ancestry",
       "noClass": "No class",
-      "notesPlaceholder": "Backstory, allies, goals...",
       "xpHint": "Experience: 1000 per level; the bar glows when you can level up"
+    },
+    "degrees": {
+      "critSuccess": "Critical Success",
+      "success": "Success",
+      "failure": "Failure",
+      "critFailure": "Critical Failure"
+    },
+    "rolls": {
+      "fortune": "Fortune",
+      "normal": "Normal",
+      "misfortune": "Misfortune",
+      "situational": "Situational",
+      "dc": "DC"
     }
   }
 }

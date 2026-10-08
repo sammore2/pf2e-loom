@@ -109,13 +109,43 @@
       "addCondition": "Condição",
       "tabs": {
         "attacks": "Ataques",
+        "combat": "Combate",
+        "actions": "Ações",
         "skills": "Perícias",
         "spells": "Magias",
+        "crafting": "Manufatura",
         "feats": "Talentos",
         "inventory": "Inventário",
         "notes": "Notas",
         "overview": "Visão geral"
       },
+      "saves": "Salvaguardas",
+      "unarmedStrike": "Ataque Desarmado",
+      "crafting": "Manufatura",
+      "formulas": "Fórmulas",
+      "knownFormulas": "Fórmulas Conhecidas",
+      "craftingRank": "Posto de Manufatura",
+      "craftingDC": "CD de Manufatura",
+      "infusedReagents": "Reagentes Infundidos",
+      "singleActions": "Ações Únicas (◆)",
+      "activities": "Atividades (◆◆ / ◆◆◆)",
+      "reactions": "Reações (↺)",
+      "freeActions": "Ações Livres (◇)",
+      "senses": "Sentidos",
+      "immunities": "Imunidades",
+      "weaknesses": "Fraquezas",
+      "resistances": "Resistências",
+      "languages": "Idiomas",
+      "speeds": "Deslocamento",
+      "encounter": "Encontro",
+      "exploration": "Exploração",
+      "downtime": "Tempo Livre",
+      "searchActions": "Buscar ou filtrar ações...",
+      "createAction": "CRIAR AÇÃO",
+      "createReaction": "CRIAR REAÇÃO",
+      "createFreeAction": "CRIAR AÇÃO LIVRE",
+      "browse": "BUSCAR",
+      "partyName": "Nome do Grupo",
       "addWeapon": "Arma",
       "addSpell": "Magia",
       "addFeat": "Talento",
@@ -158,6 +188,7 @@
       "save": "Proteção",
       "traits": "Traços",
       "notes": "Notas",
+      "notesPlaceholder": "Anotações, biografia e histórico do personagem...",
       "short": {
         "ac": "CA",
         "fortitude": "FORT",
@@ -191,8 +222,20 @@
       "actions": "Ações",
       "noRace": "Sem ancestralidade",
       "noClass": "Sem classe",
-      "notesPlaceholder": "História, aliados, objetivos...",
       "xpHint": "Experiência: 1000 por nível; a barra acende quando dá pra subir"
+    },
+    "degrees": {
+      "critSuccess": "Sucesso Crítico",
+      "success": "Sucesso",
+      "failure": "Falha",
+      "critFailure": "Falha Crítica"
+    },
+    "rolls": {
+      "fortune": "Fortuna",
+      "normal": "Normal",
+      "misfortune": "Revés",
+      "situational": "Situacional",
+      "dc": "CD"
     }
   }
 }

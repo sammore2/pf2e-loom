@@ -1,0 +1,172 @@
+[
+  {
+    "id": "act-strike",
+    "name": "Golpear (Strike)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": ["ataque"],
+      "description": "Você ataca com uma arma que está empunhando ou com um ataque desarmado, aplicando sua penalidade por ataques múltiplos (MAP) normalmente."
+    }
+  },
+  {
+    "id": "act-stride",
+    "name": "Andar (Stride)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": ["movimento"],
+      "description": "Você se move a uma distância até seu Deslocamento."
+    }
+  },
+  {
+    "id": "act-step",
+    "name": "Passo Ajustado (Step)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": ["movimento"],
+      "description": "Você se move cuidadosamente 1,5 metro (1 quadrado) sem disparar reações como Ataque Reativo."
+    }
+  },
+  {
+    "id": "act-raise-shield",
+    "name": "Erguer Escudo (Raise a Shield)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": [],
+      "description": "Você posiciona seu escudo para se defender. Você ganha seu bônus de circunstância na CA até o início do seu próximo turno e pode usar a reação Bloqueio com Escudo."
+    }
+  },
+  {
+    "id": "act-take-cover",
+    "name": "Buscar Cobertura (Take Cover)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": [],
+      "description": "Você se abaixa atrás de um obstáculo. Se você tiver cobertura menor, ganha cobertura padrão (+2 CA). Se tiver cobertura padrão, ganha cobertura maior (+4 CA)."
+    }
+  },
+  {
+    "id": "act-escape",
+    "name": "Escapar (Escape)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": ["ataque"],
+      "description": "Você tenta se libertar de estar Agarrado, Imobilizado ou Contido usando Atletismo, Acrobacia ou Desarmado contra a CD da criatura ou efeito."
+    }
+  },
+  {
+    "id": "act-grapple",
+    "name": "Agarrar (Grapple)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": ["ataque"],
+      "description": "Com uma mão livre, você faz um teste de Atletismo contra a CD de Fortitude do alvo para agarrá-lo."
+    }
+  },
+  {
+    "id": "act-trip",
+    "name": "Derrubar (Trip)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": ["ataque"],
+      "description": "Você tenta derrubar um oponente no chão com um teste de Atletismo contra a CD de Reflexos dele."
+    }
+  },
+  {
+    "id": "act-shove",
+    "name": "Empurrar (Shove)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": ["ataque"],
+      "description": "Você empurra uma criatura para longe com um teste de Atletismo contra a CD de Fortitude dela."
+    }
+  },
+  {
+    "id": "act-disarm",
+    "name": "Desarmar (Disarm)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": ["ataque"],
+      "description": "Você tenta tirar um item da posse de uma criatura com um teste de Atletismo contra a CD de Reflexos dela."
+    }
+  },
+  {
+    "id": "act-demoralize",
+    "name": "Desmoralizar (Demoralize)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": ["auditivo", "mental", "emocional"],
+      "description": "Com um rugido ou olhar ameaçador, você faz um teste de Intimidação contra a CD de Vontade do alvo. Em um sucesso, o alvo fica Assustado 1 (Assustado 2 em sucesso crítico)."
+    }
+  },
+  {
+    "id": "act-feint",
+    "name": "Fintar (Feint)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": ["mental"],
+      "description": "Você finge um ataque para enganar o inimigo. Faça um teste de Dissimulação contra a CD de Percepção do alvo para deixá-lo Desprevenido."
+    }
+  },
+  {
+    "id": "act-recall-knowledge",
+    "name": "Recordar Conhecimento (Recall Knowledge)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": ["concentração", "secreto"],
+      "description": "Você tenta lembrar informações sobre um tópico usando uma perícia de conhecimento correspondente (Arcanismo, Natureza, Ocultismo, Religião, Sociedade ou Saber)."
+    }
+  },
+  {
+    "id": "act-seek",
+    "name": "Procurar (Seek)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": ["concentração", "secreto"],
+      "description": "Você vasculha uma área com Percepção para localizar criaturas ou objetos escondidos ou furtivos."
+    }
+  },
+  {
+    "id": "act-treat-wounds",
+    "name": "Tratar Ferimentos (Treat Wounds)",
+    "type": "action",
+    "data": {
+      "actions": "10 min",
+      "traits": ["cura", "manipulação"],
+      "description": "Você gasta 10 minutos tratando uma criatura ferida com Medicina. CD 15 restaura 2d8 PV em um sucesso; graus de CD maiores conferem cura adicional."
+    }
+  },
+  {
+    "id": "act-aid",
+    "name": "Ajudar (Aid)",
+    "type": "action",
+    "data": {
+      "actions": "R",
+      "traits": [],
+      "description": "Você prepara para ajudar um aliado durante seu turno e gasta sua reação para conceder um bônus de circunstância +1 (ou +2/+3/+4 com proficiência maior) na jogada dele."
+    }
+  },
+  {
+    "id": "act-delay",
+    "name": "Atrasar (Delay)",
+    "type": "action",
+    "data": {
+      "actions": "F",
+      "traits": [],
+      "description": "Você aguarda o momento certo para agir, pausando seu turno e reposicionando sua ordem de iniciativa mais tarde na rodada."
+    }
+  }
+]

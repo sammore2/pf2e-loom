@@ -9,7 +9,11 @@ import { SYSTEM_ID, CONDITIONS } from './scripts/config.mjs';
 import { Pf2eApi } from './scripts/api.mjs';
 import { Pf2eCharacterSheet } from './scripts/character-sheet.mjs';
 import { Pf2eNpcSheet } from './scripts/npc-sheet.mjs';
+import { Pf2ePartySheet } from './scripts/party-sheet.mjs';
 import { Pf2eItemSheet } from './scripts/item-sheet.mjs';
+import { Pf2eCompendiumBrowser } from './scripts/compendium-browser.mjs';
+import { registerChatWrapper } from './scripts/chat-card.mjs';
+import { Pf2eActorDirectory } from './scripts/actor-directory.mjs';
 
 function prepareData(row) {
   return prepareActorRow(row);
@@ -21,7 +25,7 @@ SystemRegistry.register(defineSystem({
   id: SYSTEM_ID,
   title: 'PF2E',
   version: '0.1.0',
-  actorTypes: ['character', 'npc'],
+  actorTypes: ['character', 'npc', 'party', 'hazard'],
   itemTypes: ['ancestry', 'heritage', 'background', 'class', 'feat', 'action', 'weapon', 'armor', 'shield', 'equipment', 'consumable', 'spell'],
   getDefaultData,
   getSheetSchema,
@@ -35,6 +39,18 @@ for (const cond of CONDITIONS) {
 
 sheets.catalog('actor', 'character', Pf2eCharacterSheet);
 sheets.catalog('actor', 'npc', Pf2eNpcSheet);
+sheets.catalog('actor', 'party', Pf2ePartySheet);
+sheets.catalog('actor', 'hazard', Pf2eNpcSheet);
 sheets.catalog('item', '*', Pf2eItemSheet);
 
+registerChatWrapper();
+
+Pf2eApi.compendiumBrowser = Pf2eCompendiumBrowser;
+Pf2eApi.openCompendiumBrowser = () => Pf2eCompendiumBrowser.open();
+
+if (typeof CONFIG !== 'undefined' && CONFIG.ui) {
+  CONFIG.ui.actors = Pf2eActorDirectory;
+}
+
 window.PF2E = Pf2eApi;
+
