@@ -1,0 +1,13 @@
+{
+  "name": "pf2e-pack-builder",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Converts LevelDB compendium packs into SQLite packs for the pf2e ruleset",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "dependencies": {
+    "classic-level": "^1.4.1"
+  }
+}
