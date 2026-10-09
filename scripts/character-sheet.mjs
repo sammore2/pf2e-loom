@@ -4,7 +4,7 @@
 // delegação via onAction) segue o molde da ficha de referência do motor;
 // layout, classes e template são próprios.
 import { xpProgress } from './rules.mjs';
-import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager } from '/_loom/sdk/index.js';
+import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager, LoomDialog } from '/_loom/sdk/index.js';
 import { ATTRIBUTE_KEYS, SKILL_ABILITIES, SAVE_KEYS, CONDITIONS, RANK_KEYS, ITEM_TYPE_ICON } from './config.mjs';
 import { fmtMod, setPathValue } from './utils.mjs';
 import { getDefaultData } from './schema.mjs';
@@ -23,6 +23,10 @@ import {
 } from './roll-engine.mjs';
 import { Pf2eItemSheet } from './item-sheet.mjs';
 import { Pf2eCompendiumBrowser } from './compendium-browser.mjs';
+import { sendChatCard } from './chat-card.mjs';
+import { localize } from './i18n.mjs';
+
+export { sendChatCard };
 
 function num(v) {
   const n = Number(v);
@@ -38,6 +42,15 @@ export function itemsArray(items) {
 
 function rankOptions(selected) {
   return RANK_KEYS.map((r) => ({ value: r, selected: r === selected }));
+}
+
+function attrOptions(selected, allowAuto = false) {
+  const base = allowAuto ? [{ value: '', label: '—', selected: !selected }] : [];
+  return base.concat(ATTRIBUTE_KEYS.map((k) => ({
+    value: k,
+    label: k.toUpperCase(),
+    selected: k === selected,
+  })));
 }
 
 function rankPips(rank) {
@@ -56,8 +69,43 @@ function formatActionGlyph(cost) {
   return str || '◆';
 }
 
-function attrOptions(selected) {
-  return ATTRIBUTE_KEYS.map((k) => ({ value: k, selected: k === selected }));
+async function promptLoomInput({ title, label, defaultValue = '' }) {
+  if (typeof LoomDialog !== 'undefined' && LoomDialog.wait) {
+    const container = document.createElement('div');
+    container.className = 'pf2e-prompt-dialog-body';
+    container.style.cssText = 'padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;';
+    container.innerHTML = `
+      <label style="font-family: var(--tat-engraved, serif); font-size: 0.85rem; font-weight: 700; color: #5c1412; text-transform: uppercase;">${label}</label>
+      <input type="text" class="tat-in pf2e-prompt-input" value="${defaultValue}" style="width: 100%; box-sizing: border-box; padding: 6px 10px; background: #fffdf8; border: 1.5px solid #7c6853; border-radius: 4px; color: #2b1c0c; font-size: 0.95rem; font-weight: 600;" />
+    `;
+    const inputEl = container.querySelector('.pf2e-prompt-input');
+    setTimeout(() => {
+      inputEl?.focus();
+      inputEl?.select();
+    }, 50);
+
+    const result = await LoomDialog.wait({
+      window: { title },
+      content: container,
+      width: 400,
+      buttons: [
+        {
+          action: 'cancel',
+          label: 'Cancelar',
+          variant: 'ghost',
+          callback: () => null,
+        },
+        {
+          action: 'save',
+          label: 'Salvar',
+          variant: 'primary',
+          callback: () => inputEl?.value ?? null,
+        },
+      ],
+    });
+    return result;
+  }
+  return typeof prompt === 'function' ? prompt(label, defaultValue) : defaultValue;
 }
 
 export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
@@ -387,7 +435,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (!hasUnarmed) {
       const unarmedSynthetic = {
         id: '__unarmed__',
-        name: 'Ataque Desarmado',
+        name: localize('pf2e.sheets.unarmedStrike', 'Ataque Desarmado'),
         type: 'weapon',
         system: {
           category: 'unarmed',
@@ -430,38 +478,50 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     });
 
     const standardTacticalActions = [
-      { id: 'stride', name: 'Andar (Stride)', glyph: '◆', actions: '◆', type: 'movement', desc: 'Move até seu Deslocamento.' },
-      { id: 'step', name: 'Passo Ajustado (Step)', glyph: '◆', actions: '◆', type: 'movement', desc: 'Move 1,5m sem provocar reações.' },
-      { id: 'strike', name: 'Golpear (Strike)', glyph: '◆', actions: '◆', type: 'attack', desc: 'Ataca com arma empunhada ou desarmado.' },
-      { id: 'raise-shield', name: 'Erguer Escudo (Raise a Shield)', glyph: '◆', actions: '◆', type: 'defensive', desc: '+2 CA de circunstância até seu próximo turno.' },
-      { id: 'take-cover', name: 'Buscar Cobertura (Take Cover)', glyph: '◆', actions: '◆', type: 'defensive', desc: '+2 ou +4 CA de cobertura.' },
-      { id: 'escape', name: 'Escapar (Escape)', glyph: '◆', actions: '◆', type: 'attack', desc: 'Tenta se livrar de agarrado ou imobilizado.' },
-      { id: 'interact', name: 'Interagir (Interact)', glyph: '◆', actions: '◆', type: 'manipulate', desc: 'Manipula, saca ou guarda um item.' },
+      { id: 'stride', name: localize('pf2e.actions.stride', 'Stride'), glyph: '◆', actions: '◆', type: 'movement', desc: localize('pf2e.actions.strideDesc', 'Move up to your Speed.') },
+      { id: 'step', name: localize('pf2e.actions.step', 'Step'), glyph: '◆', actions: '◆', type: 'movement', desc: localize('pf2e.actions.stepDesc', 'Move 5 feet without triggering reactions.') },
+      { id: 'strike', name: localize('pf2e.actions.strike', 'Strike'), glyph: '◆', actions: '◆', type: 'attack', desc: localize('pf2e.actions.strikeDesc', 'Attack with a weapon or unarmed.') },
+      { id: 'raise-shield', name: localize('pf2e.actions.raiseShield', 'Raise a Shield'), glyph: '◆', actions: '◆', type: 'defensive', desc: localize('pf2e.actions.raiseShieldDesc', 'Gain circumstance bonus from your shield until your next turn.') },
+      { id: 'take-cover', name: localize('pf2e.actions.takeCover', 'Take Cover'), glyph: '◆', actions: '◆', type: 'defensive', desc: localize('pf2e.actions.takeCoverDesc', 'Gain cover (+2 or +4 to AC/Reflex).') },
+      { id: 'escape', name: localize('pf2e.actions.escape', 'Escape'), glyph: '◆', actions: '◆', type: 'attack', desc: localize('pf2e.actions.escapeDesc', 'Attempt to escape from being grabbed, immobilized, or restrained.') },
+      { id: 'interact', name: localize('pf2e.actions.interact', 'Interact'), glyph: '◆', actions: '◆', type: 'manipulate', desc: localize('pf2e.actions.interactDesc', 'Draw, stow, or manipulate an object or environment.') },
     ];
     const standardReactions = [
-      { id: 'reactive-strike', name: 'Golpe Reativo (Reactive Strike)', glyph: '↺', actions: '↺', trigger: 'Inimigo usa ação de manipulação ou movimento.', desc: 'Ataca inimigo corpo a corpo.' },
-      { id: 'shield-block', name: 'Bloqueio com Escudo (Shield Block)', glyph: '↺', actions: '↺', trigger: 'Recebe dano físico com escudo erguido.', desc: 'Escudo e você reduzem o dano pela Dureza.' },
+      { id: 'reactive-strike', name: localize('pf2e.actions.reactiveStrike', 'Reactive Strike'), glyph: '↺', actions: '↺', trigger: 'Move or manipulate action', desc: localize('pf2e.actions.reactiveStrikeDesc', 'Make a melee Strike against an enemy that used a manipulate or move action.') },
+      { id: 'shield-block', name: localize('pf2e.sheets.shield', 'Shield Block'), glyph: '↺', actions: '↺', trigger: 'Physical damage with shield raised', desc: localize('pf2e.sheets.hardness', 'Hardness') },
     ];
     const standardFreeActions = [
-      { id: 'delay', name: 'Atrasar (Delay)', glyph: '◇', actions: '◇', trigger: 'Início do turno.', desc: 'Aguarda seu turno para agir mais tarde.' },
-      { id: 'drop-item', name: 'Largar Item (Drop)', glyph: '◇', actions: '◇', desc: 'Solta um item empunhado no chão.' },
+      { id: 'delay', name: localize('pf2e.actions.delay', 'Delay'), glyph: '◇', actions: '◇', trigger: 'Start of turn', desc: localize('pf2e.actions.delayDesc', 'Delay your turn in initiative order.') },
+      { id: 'drop-item', name: 'Drop', glyph: '◇', actions: '◇', desc: 'Drop an item in hand to the ground.' },
     ];
     const explorationActivities = [
-      { id: 'investigate', name: 'Investigar (Investigate)', glyph: '◆◆', desc: 'Recordar Conhecimento ao viajar para identificar pistas e lore.' },
-      { id: 'search', name: 'Buscar (Search)', glyph: '◆◆', desc: 'Usa Percepção para localizar portas ocultas e armadilhas.' },
-      { id: 'scout', name: 'Batedor (Scout)', glyph: '◆◆', desc: 'Concede bônus de circunstância +1 na iniciativa para todo o grupo.' },
-      { id: 'avoid-notice', name: 'Evitar Detecção (Avoid Notice)', glyph: '◆◆', desc: 'Rola Furtividade para determinar a iniciativa no combate.' },
-      { id: 'defend', name: 'Defender (Defend)', glyph: '◆◆', desc: 'Move com escudo erguido, iniciando combate já com bônus de CA.' },
-      { id: 'repeat-spell', name: 'Repetir Magia (Repeat a Spell)', glyph: '◆◆', desc: 'Mantém conjuração constante de um truque mágico útil.' },
-      { id: 'hustle', name: 'Apressar (Hustle)', glyph: '◆◆', desc: 'Dobra a velocidade de marcha por tempo determinado.' },
+      { id: 'investigate', name: localize('pf2e.exploration.investigate', 'Investigate (Recall Knowledge)'), glyph: '◆◆', desc: localize('pf2e.exploration.investigate', 'Investigate') },
+      { id: 'search', name: localize('pf2e.exploration.search', 'Search (Seek Hazards)'), glyph: '◆◆', desc: localize('pf2e.exploration.search', 'Search') },
+      { id: 'scout', name: localize('pf2e.exploration.scout', 'Scout (+1 Party Initiative)'), glyph: '◆◆', desc: localize('pf2e.exploration.scout', 'Scout') },
+      { id: 'avoid-notice', name: localize('pf2e.exploration.avoidNotice', 'Avoid Notice (Stealth)'), glyph: '◆◆', desc: localize('pf2e.exploration.avoidNotice', 'Avoid Notice') },
+      { id: 'defend', name: localize('pf2e.exploration.defend', 'Defend (Shield Raised)'), glyph: '◆◆', desc: localize('pf2e.exploration.defend', 'Defend') },
+      { id: 'repeat-spell', name: localize('pf2e.exploration.repeatSpell', 'Repeat a Spell'), glyph: '◆◆', desc: localize('pf2e.exploration.repeatSpell', 'Repeat a Spell') },
+      { id: 'hustle', name: localize('pf2e.exploration.hustle', 'Hustle (Double Speed)'), glyph: '◆◆', desc: localize('pf2e.exploration.hustle', 'Hustle') },
     ];
     const downtimeActivities = [
-      { id: 'craft', name: 'Manufaturar (Craft)', glyph: '◆', desc: 'Cria itens, elixires ou armas usando a perícia Manufatura.' },
-      { id: 'earn-income', name: 'Obter Renda (Earn Income)', glyph: '◆', desc: 'Trabalha na cidade usando Manufatura, Saber ou Atuação.' },
-      { id: 'treat-disease', name: 'Tratar Doença (Treat Disease)', glyph: '◆', desc: 'Gasta 8 horas para dar bônus de circunstância +2 a um aliado.' },
-      { id: 'retrain', name: 'Retreinar (Retrain)', glyph: '◆', desc: 'Dedica 1 semana para trocar talento, perícia ou magia.' },
-      { id: 'subsist', name: 'Subsistir (Subsist)', glyph: '◆', desc: 'Garante abrigo e sustento básico sem custos em moedas.' },
+      { id: 'craft', name: localize('pf2e.skills.crafting', 'Crafting'), glyph: '◆', desc: localize('pf2e.skills.crafting', 'Crafting') },
+      { id: 'earn-income', name: localize('pf2e.actions.earnIncome', 'Earn Income'), glyph: '◆', desc: localize('pf2e.actions.earnIncomeDesc', 'Earn income during downtime.') },
+      { id: 'treat-disease', name: 'Treat Disease', glyph: '◆', desc: 'Treat Disease' },
+      { id: 'retrain', name: 'Retrain', glyph: '◆', desc: 'Retrain feat, skill, or spell.' },
+      { id: 'subsist', name: 'Subsist', glyph: '◆', desc: 'Provide shelter and basic food.' },
     ];
+    const activeExploration = sd.explorationActivity || 'none';
+    const explorationOptions = [
+      { value: 'none', label: localize('pf2e.exploration.none', '— None —'), selected: activeExploration === 'none' },
+      { value: 'avoid_notice', label: localize('pf2e.exploration.avoidNotice', 'Avoid Notice (Stealth)'), selected: activeExploration === 'avoid_notice' },
+      { value: 'defend', label: localize('pf2e.exploration.defend', 'Defend (Shield Raised)'), selected: activeExploration === 'defend' },
+      { value: 'scout', label: localize('pf2e.exploration.scout', 'Scout (+1 Party Initiative)'), selected: activeExploration === 'scout' },
+      { value: 'search', label: localize('pf2e.exploration.search', 'Search (Seek Hazards)'), selected: activeExploration === 'search' },
+      { value: 'investigate', label: localize('pf2e.exploration.investigate', 'Investigate (Recall Knowledge)'), selected: activeExploration === 'investigate' },
+      { value: 'repeat_spell', label: localize('pf2e.exploration.repeatSpell', 'Repeat a Spell'), selected: activeExploration === 'repeat_spell' },
+      { value: 'hustle', label: localize('pf2e.exploration.hustle', 'Hustle (Double Speed)'), selected: activeExploration === 'hustle' },
+    ];
+
     const standardActions = [
       ...standardTacticalActions,
       ...standardReactions,
@@ -606,13 +666,13 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     // Initiative skills selector & total
     const currentInitSkill = sd.initiative?.skill || 'perception';
     const initiativeSkills = [
-      { key: 'perception', label: 'Percepção', selected: currentInitSkill === 'perception' },
-      { key: 'stealth', label: 'Furtividade', selected: currentInitSkill === 'stealth' },
-      { key: 'survival', label: 'Sobrevivência', selected: currentInitSkill === 'survival' },
-      { key: 'deception', label: 'Enganação', selected: currentInitSkill === 'deception' },
-      { key: 'athletics', label: 'Atletismo', selected: currentInitSkill === 'athletics' },
-      { key: 'intimidation', label: 'Intimidação', selected: currentInitSkill === 'intimidation' },
-      { key: 'acrobatics', label: 'Acrobacia', selected: currentInitSkill === 'acrobatics' },
+      { key: 'perception', label: localize('pf2e.defenses.perception', 'Perception'), selected: currentInitSkill === 'perception' },
+      { key: 'stealth', label: localize('pf2e.skills.stealth', 'Stealth'), selected: currentInitSkill === 'stealth' },
+      { key: 'survival', label: localize('pf2e.skills.survival', 'Survival'), selected: currentInitSkill === 'survival' },
+      { key: 'deception', label: localize('pf2e.skills.deception', 'Deception'), selected: currentInitSkill === 'deception' },
+      { key: 'athletics', label: localize('pf2e.skills.athletics', 'Athletics'), selected: currentInitSkill === 'athletics' },
+      { key: 'intimidation', label: localize('pf2e.skills.intimidation', 'Intimidation'), selected: currentInitSkill === 'intimidation' },
+      { key: 'acrobatics', label: localize('pf2e.skills.acrobatics', 'Acrobatics'), selected: currentInitSkill === 'acrobatics' },
     ];
     const initiativeTotal = fmtMod(num(sd.derived?.initiative));
 
@@ -662,17 +722,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       doomedDots,
       xp: xpProgress(sd.xp?.value),
       activeTab: this._activeTab || 'overview',
-      currentTabLabel: {
-        overview: 'Personagem',
-        actions: 'Ações & Atividades',
-        combat: 'Combate & Turno',
-        skills: 'Perícias & Saberes',
-        spells: 'Magias',
-        crafting: 'Manufatura & Fórmulas',
-        feats: 'Talentos',
-        inventory: 'Inventário',
-        notes: 'Anotações & Diário',
-      }[this._activeTab || 'overview'] || 'Personagem',
+      currentTabLabel: localize(`pf2e.sheets.tabsLong.${this._activeTab || 'overview'}`),
       details: {
         gender: sd.details?.gender || '',
         age: sd.details?.age || '',
@@ -680,21 +730,33 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         nationality: sd.details?.nationality || '',
         deity: sd.details?.deity || '',
       },
-      traitsList: [
-        (sd.traits?.size || 'Médio').toUpperCase(),
-        (firstName('ancestry') || 'Humano').toUpperCase(),
-        'HUMANOIDE',
-      ],
+      traitsList: (() => {
+        const list = [];
+        const size = (typeof sd.traits?.size === 'object' ? sd.traits?.size?.value : sd.traits?.size);
+        if (size) list.push(String(size).toUpperCase());
+        const ancestry = firstName('ancestry');
+        if (ancestry) list.push(String(ancestry).toUpperCase());
+        if (Array.isArray(sd.traits?.value)) {
+          for (const t of sd.traits.value) {
+            if (t && !list.some((x) => x.toLowerCase() === String(t).toLowerCase())) {
+              list.push(String(t).toUpperCase());
+            }
+          }
+        }
+        return list;
+      })(),
       ancestryName: firstName('ancestry'),
       heritageName: firstName('heritage'),
       className: firstName('class'),
       name: (this.document?.name && this.document.name !== 'undefined') ? this.document.name : '',
-      avatarUrl: this.document?.avatarUrl || this.document?.imgUrl || this.document?.img || '/icons/svg/adventurer.svg',
+      avatarUrl: (this.document?.avatarUrl && this.document.avatarUrl !== '/icons/svg/adventurer.svg')
+        ? this.document.avatarUrl
+        : (this.document?.imgUrl || (this.document?.img && this.document.img !== '/icons/svg/adventurer.svg') || '/marketplace/rulesets/pf2e/assets/images/default-avatar.svg'),
       level,
       abilities,
       conditionsActive,
       conditionOptions,
-      hp: { value: num(sd.hp?.value), max: num(sd.hp?.max), temp: num(sd.hp?.temp), pct: hpPct, low: hpPct < 25 },
+      hp: { value: num(sd.hp?.value), max: num(sd.hp?.max), temp: num(sd.hp?.temp), pct: hpPct, low: hpPct < 25, pips: Array.from({ length: 20 }, (_, i) => hpPct >= (i + 1) * 5) },
       heroDots: dots(num(sd.heroPoints?.value), num(sd.heroPoints?.max)),
       heroMax: num(sd.heroPoints?.max),
       focusDots: dots(num(sd.focus?.value), num(sd.focus?.max)),
@@ -727,6 +789,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       standardReactions,
       standardFreeActions,
       explorationActivities,
+      explorationOptions,
       downtimeActivities,
       crafting: {
         rank: craftingRank,
@@ -786,15 +849,17 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const defaultData = getDefaultData(type);
     const data = { ...defaultData, ...extraData };
     const defaultNames = {
-      action: extraData.actions === 'reaction' ? 'Nova Reação' : (extraData.actions === 'free' ? 'Nova Ação Livre' : 'Nova Ação'),
-      weapon: 'Novo Golpe',
-      spell: 'Nova Magia',
-      feat: 'Novo Talento',
-      equipment: 'Novo Equipamento',
+      action: extraData.actions === 'reaction'
+        ? localize('pf2e.actions.newReaction', 'New Reaction')
+        : (extraData.actions === 'free' ? localize('pf2e.actions.newFreeAction', 'New Free Action') : localize('pf2e.actions.newAction', 'New Action')),
+      weapon: localize('pf2e.itemTypes.weapon', 'Weapon'),
+      spell: localize('pf2e.itemTypes.spell', 'Spell'),
+      feat: localize('pf2e.itemTypes.feat', 'Feat'),
+      equipment: localize('pf2e.itemTypes.equipment', 'Equipment'),
     };
     await api.post('/items', {
       worldId: window.Loom?.world?.id || this.document.worldId,
-      name: defaultNames[type] || 'Novo Item',
+      name: defaultNames[type] || localize('pf2e.itemTypes.equipment', 'Item'),
       type,
       data,
       actorId: this.document.id,
@@ -802,7 +867,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     await this._reloadDocument();
   }
 
-  onAction(action, id, target) {
+  async onAction(action, id, target) {
     if (action === 'open-compendium') {
       Pf2eCompendiumBrowser.open();
       return;
@@ -828,30 +893,56 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       void this._createItem(type, extra);
       return;
     }
-    if (action === 'action-chat') {
-      const item = id ? this._findItem(id) : null;
+    if (action === 'action-chat' || action === 'item-chat') {
+      const itemId = id || target?.dataset?.id || target?.closest?.('[data-id]')?.dataset?.id;
+      const item = itemId === '__unarmed__' ? {
+        id: '__unarmed__',
+        name: localize('pf2e.sheets.unarmedStrike', 'Ataque Desarmado'),
+        type: 'weapon',
+        system: {
+          category: 'unarmed',
+          damage: '1d4',
+          damageType: 'bludgeoning',
+          actions: '1',
+          traits: ['agile', 'finesse', 'unarmed'],
+          description: '',
+        },
+      } : (itemId ? this._findItem(itemId) : null);
       if (!item) return;
       const sys = item.system || item.data || {};
       const desc = sys.description || '';
-      const glyph = formatActionGlyph(sys.actions || '1');
-      const traitsStr = Array.isArray(sys.traits) && sys.traits.length ? `[${sys.traits.join(', ')}]` : '';
-      if (window.Loom?.sendMessage) {
-        window.Loom.sendMessage({
-          content: `**${item.name}** ${glyph} ${traitsStr}\n${desc}`,
-          actorId: this.document?.id,
-        });
-      }
+      const glyph = formatActionGlyph(sys.actions || sys.cost || '1');
+      const traits = Array.isArray(sys.traits) ? sys.traits : (sys.traits ? [sys.traits] : []);
+      const typeLabel = item.type === 'spell'
+        ? localize('pf2e.itemTypes.spell', 'Spell')
+        : (item.type === 'feat'
+          ? localize('pf2e.itemTypes.feat', 'Feat')
+          : (item.type === 'weapon' ? localize('pf2e.rolls.strike', 'Strike') : localize('pf2e.itemTypes.action', 'Action')));
+      void sendChatCard(this.document, {
+        name: item.name,
+        glyph,
+        traits,
+        desc,
+        type: typeLabel,
+      });
       return;
     }
     if (action === 'standard-action-chat') {
-      const actionKey = target?.dataset?.actionKey || target?.closest?.('[data-action-key]')?.dataset?.actionKey;
+      const actionKey = target?.dataset?.actionKey || target?.closest?.('[data-action-key]')?.dataset?.actionKey || id;
       const doc = this._prepared();
-      const allActs = [...(doc?.standardActions || []), ...(doc?.explorationActivities || []), ...(doc?.downtimeActivities || [])];
+      const allActs = [
+        ...(doc?.standardActions || []),
+        ...(doc?.explorationActivities || []),
+        ...(doc?.downtimeActivities || []),
+      ];
       const found = allActs.find((a) => a.id === actionKey);
-      if (found && window.Loom?.sendMessage) {
-        window.Loom.sendMessage({
-          content: `**${found.name || found.id}** (${found.glyph || '◆'})\n${found.desc || ''}`,
-          actorId: this.document?.id,
+      if (found) {
+        void sendChatCard(this.document, {
+          name: found.name || found.id,
+          glyph: found.glyph || '◆',
+          traits: found.type ? [found.type] : [],
+          desc: found.desc || '',
+          type: localize('pf2e.itemTypes.action', 'Action'),
         });
       }
       return;
@@ -860,8 +951,12 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const mitType = target?.dataset?.type || 'resistances';
       const sd = this.document?.systemData || {};
       const curList = Array.isArray(sd.traits?.[mitType]) ? sd.traits[mitType].join(', ') : (sd.traits?.[mitType] || '');
-      const input = prompt(`Editar ${mitType} (separados por vírgula):`, curList);
-      if (input !== null) {
+      const input = await promptLoomInput({
+        title: `Editar ${mitType}`,
+        label: `${mitType} (separados por vírgula):`,
+        defaultValue: curList,
+      });
+      if (input !== null && input !== undefined) {
         const nextList = input.split(',').map((s) => s.trim()).filter(Boolean);
         const next = JSON.parse(JSON.stringify(sd));
         if (!next.traits) next.traits = {};
@@ -873,8 +968,12 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (action === 'edit-languages') {
       const sd = this.document?.systemData || {};
       const curList = Array.isArray(sd.details?.languages) ? sd.details.languages.join(', ') : (sd.details?.languages || 'Comum');
-      const input = prompt('Editar idiomas (separados por vírgula):', curList);
-      if (input !== null) {
+      const input = await promptLoomInput({
+        title: 'Editar Idiomas',
+        label: 'Idiomas (separados por vírgula):',
+        defaultValue: curList,
+      });
+      if (input !== null && input !== undefined) {
         const nextList = input.split(',').map((s) => s.trim()).filter(Boolean);
         const next = JSON.parse(JSON.stringify(sd));
         if (!next.details) next.details = {};
@@ -886,8 +985,12 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (action === 'edit-senses') {
       const sd = this.document?.systemData || {};
       const curList = Array.isArray(sd.traits?.senses) ? sd.traits.senses.join(', ') : (sd.traits?.senses || 'Visão no Escuro');
-      const input = prompt('Editar sentidos (separados por vírgula):', curList);
-      if (input !== null) {
+      const input = await promptLoomInput({
+        title: 'Editar Sentidos',
+        label: 'Sentidos (separados por vírgula):',
+        defaultValue: curList,
+      });
+      if (input !== null && input !== undefined) {
         const nextList = input.split(',').map((s) => s.trim()).filter(Boolean);
         const next = JSON.parse(JSON.stringify(sd));
         if (!next.traits) next.traits = {};
@@ -973,7 +1076,10 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     }
     if (action === 'roll-attribute') {
       const sd = this.document?.systemData || {};
-      void rollCheck(this.document, { label: target?.dataset?.key || 'check', modifier: num(sd.abilities?.[target?.dataset?.key]?.value) });
+      const key = target?.dataset?.key || 'check';
+      const attrName = localize(`pf2e.attributes.${key}`, key.toUpperCase());
+      const label = `${localize('pf2e.rolls.check', 'Check')} (${attrName})`;
+      void rollCheck(this.document, { label, modifier: num(sd.abilities?.[key]?.value), extraMeta: { ability: key, checkType: 'ability' } });
       return;
     }
     if (action === 'roll-save') {
@@ -1007,7 +1113,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (action === 'roll-attack') {
       const item = id === '__unarmed__' ? {
         id: '__unarmed__',
-        name: 'Ataque Desarmado',
+        name: localize('pf2e.sheets.unarmedStrike', 'Unarmed Strike'),
         type: 'weapon',
         system: {
           category: 'unarmed',
@@ -1025,7 +1131,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (action === 'roll-damage' || action === 'roll-damage-crit') {
       const item = id === '__unarmed__' ? {
         id: '__unarmed__',
-        name: 'Ataque Desarmado',
+        name: localize('pf2e.sheets.unarmedStrike', 'Unarmed Strike'),
         type: 'weapon',
         system: {
           category: 'unarmed',
