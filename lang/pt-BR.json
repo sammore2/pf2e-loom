@@ -236,6 +236,21 @@
       "misfortune": "Revés",
       "situational": "Situacional",
       "dc": "CD"
+    },
+    "combat": {
+      "initiativeTitle": "Iniciativa",
+      "turnTitle": "Turno",
+      "actionOne": "ação",
+      "actionMany": "ações",
+      "reaction": "reação",
+      "quickened": "apressado",
+      "stunned": "atordoado"
+    },
+    "speeds": {
+      "land": "Terrestre (m/ft)",
+      "fly": "Voo",
+      "swim": "Natação",
+      "burrow": "Escavação"
     }
   }
 }
