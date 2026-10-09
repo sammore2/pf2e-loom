@@ -33,42 +33,42 @@
 :root,
 .pf2e-ui {
   /* Materiais & Superfícies */
-  --tat-parchment: #e3cfa4;
-  --tat-panel: #6a1a17;
+  --tat-parchment: #f4ecdf;
+  --tat-panel: #581517;
   /* Placa Carmesim Imperial */
-  --tat-panel-2: #7f221d;
+  --tat-panel-2: #6e1c1e;
   /* Carmesim Elevado */
-  --tat-line: #9b4a3c;
+  --tat-line: #8c2a26;
   /* Borda Carmesim */
-  --tat-line-hi: #c07a5c;
-  --tat-iron: #3e0f0d;
+  --tat-line-hi: #d4a74e;
+  --tat-iron: #2b0b0d;
   /* Moldura de Ferro */
-  --tat-iron-hi: #d4ac62;
+  --tat-iron-hi: #e8c77a;
   /* Rebite de Latão */
 
-  /* Bandeirinhas & Abas Navais */
-  --tat-navy: #1f2d5c;
-  --tat-navy-2: #283a73;
-  --tat-navy-light: #3a5099;
+  /* Barras e Navegação (Carmesim Nobre em harmonia com a ficha) */
+  --tat-navy: #3d1416;
+  --tat-navy-2: #521c1f;
+  --tat-navy-light: #6e272a;
 
-  /* Janelas de Dados em Creme com Tinta Escura */
-  --tat-cream: #fbf5e6;
-  --tat-cream-border: #d8b46a;
-  --tat-ink: #2b1c0c;
+  /* Janelas de Dados em Creme com Tinta Escura Legível */
+  --tat-cream: #fffdf7;
+  --tat-cream-border: #b88a44;
+  --tat-ink: #1f140a;
   /* Nanquim Escuro (Alto Contraste) */
-  --tat-ink-dim: #5a4025;
+  --tat-ink-dim: #4a3319;
 
-  /* Textos sobre o Carmesim */
-  --tat-text: #fbf1dc;
-  /* Creme Iluminado */
-  --tat-dim: #f0cfa8;
-  /* Areia Dourada Legível */
-  --tat-muted: #d4b08c;
-  --tat-amber: #e8c77a;
-  /* Ouro Antigo */
-  --tat-gold-bright: #f5d68b;
-  --tat-danger: #ff6b6b;
-  --tat-success: #4ade80;
+  /* Textos sobre o Carmesim / Superfícies Escuras (Ultra Alto Contraste) */
+  --tat-text: #fffdf5;
+  /* Creme Iluminado 100% Legível */
+  --tat-dim: #f5eed8;
+  /* Areia Dourada Clara (Alto Contraste) */
+  --tat-muted: #e6d3b3;
+  --tat-amber: #ffd778;
+  /* Ouro Antigo Vivo */
+  --tat-gold-bright: #ffe89e;
+  --tat-danger: #ef4444;
+  --tat-success: #22c55e;
 
   /* Fontes */
   --tat-cond-font: 'PF2E Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -221,6 +221,7 @@
 .pf2e-ui input[type="number"].tat-in {
   font-variant-numeric: tabular-nums;
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .pf2e-ui input[type="number"].tat-in::-webkit-outer-spin-button,
@@ -391,25 +392,32 @@
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
-  color: #e8c77a !important;
+  color: #ffd778 !important;
   font-family: var(--tat-engraved), serif;
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.85rem !important;
+  font-weight: 800 !important;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
 }
 
 .pf2e-ui .tat-rail-tag-btn {
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(216, 180, 106, 0.4);
-  border-radius: 2px;
-  color: #d4b08c;
-  font-size: 0.65rem;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid #d4a74e;
+  border-radius: 3px;
+  color: #fff4da;
+  font-size: 0.68rem;
   font-family: var(--tat-cond-font);
-  font-weight: 700;
-  padding: 1px 5px;
+  font-weight: 800;
+  padding: 1px 6px;
   cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.pf2e-ui .tat-rail-tag-btn:hover {
+  background: #521c1f;
+  color: #ffffff;
+  border-color: #ffd778;
 }
 
 /* 7.1 Hit Points, 3 Colunas Alinhadas (TEMP / ATUAL / MÁX) */
@@ -430,9 +438,10 @@
 
 .pf2e-ui .hp-stat-lbl {
   font-family: var(--tat-engraved), serif;
-  font-size: 0.62rem;
-  letter-spacing: 0.06em;
-  color: var(--tat-dim);
+  font-size: 0.68rem !important;
+  letter-spacing: 0.08em;
+  color: #f5eed8 !important;
+  font-weight: 700 !important;
   text-transform: uppercase;
 }
 
@@ -444,24 +453,25 @@
 }
 
 .pf2e-ui input.tat-hp-cur.hp-stat-in {
-  font-size: 1.35rem !important;
+  font-size: 1.45rem !important;
   font-weight: 800;
-  color: #6a1a17 !important;
-  background: var(--tat-cream) !important;
-  border: 1.5px solid var(--tat-cream-border) !important;
+  color: #821715 !important;
+  background: #fffdf7 !important;
+  border: 2px solid #b88a44 !important;
   height: 28px;
   padding: 0 2px !important;
-  box-shadow: inset 0 1px 3px rgba(60, 30, 10, 0.35) !important;
+  box-shadow: inset 0 1px 3px rgba(60, 30, 10, 0.3) !important;
 }
 
 .pf2e-ui .hp-stat-temp .hp-stat-in,
 .pf2e-ui .hp-stat-max .hp-stat-in {
-  font-size: 0.95rem !important;
-  font-weight: 600;
-  height: 22px;
-  background: rgba(0, 0, 0, 0.35) !important;
-  color: var(--tat-text) !important;
-  border: 1px solid var(--tat-line) !important;
+  font-size: 1.05rem !important;
+  font-weight: 800;
+  height: 26px !important;
+  background: #fffdf7 !important;
+  color: #1f140a !important;
+  border: 1.5px solid #b88a44 !important;
+  box-shadow: inset 0 1px 2px rgba(60, 30, 10, 0.2) !important;
 }
 
 .pf2e-ui .tat-rest-btn {
@@ -492,12 +502,34 @@
 .pf2e-ui .tat-meter span {
   display: block;
   height: 100%;
-  background: linear-gradient(90deg, #16a34a, #22c55e);
+  background: linear-gradient(90deg, #9b2824, #c93b34);
+  box-shadow: 0 0 4px rgba(201, 59, 52, 0.4);
   transition: width 200ms ease;
 }
 
-.pf2e-ui .tat-hp-card.is-low .tat-meter span {
-  background: linear-gradient(90deg, #991b1b, #ef4444);
+.pf2e-ui .tat-pips {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  gap: 2px;
+  margin: 4px 0;
+}
+
+.pf2e-ui .tat-pip {
+  height: 8px;
+  border-radius: 1px;
+  background: rgba(0, 0, 0, 0.45);
+  box-shadow: inset 0 0 0 1px #3e0f0d;
+}
+
+.pf2e-ui .tat-pip.is-on {
+  background: #c93b34;
+  box-shadow: 0 0 3px rgba(201, 59, 52, 0.5);
+}
+
+.pf2e-ui .tat-hp-card.is-low .tat-pip.is-on,
+.pf2e-ui .tat-hp.is-low .tat-meter span {
+  background: linear-gradient(90deg, #5c0f11, #801316);
+  box-shadow: 0 0 6px rgba(128, 19, 22, 0.6);
 }
 
 /* Trilhas de Moribundo & Ferido */
@@ -578,51 +610,52 @@
   justify-content: center;
   width: 64px;
   height: 68px;
-  background: linear-gradient(180deg, #243875 0%, #152248 100%);
-  border: 2px solid #d8b46a;
+  background: linear-gradient(180deg, #4f1719 0%, #2e0d0f 100%) !important;
+  border: 2px solid #e2bc68 !important;
   border-radius: 6px 6px 50% 50%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
   position: relative;
   flex: none;
 }
 
 .pf2e-ui .tat-shield-seal-btn {
   font-family: var(--tat-cond-font);
-  font-weight: 700;
-  font-size: 0.68rem;
-  padding: 1px 5px;
-  border: 1px solid currentColor;
+  font-weight: 800;
+  font-size: 0.72rem;
+  padding: 1px 6px;
+  border: 1px solid #ffd778 !important;
   border-radius: 2px;
   line-height: 1;
   margin-bottom: 2px;
-  background: rgba(0, 0, 0, 0.35);
-  color: #ffffff;
+  background: rgba(0, 0, 0, 0.55) !important;
+  color: #ffd778 !important;
   cursor: pointer;
 }
 
 .pf2e-ui .tat-shield-ac-val {
   font-family: var(--tat-cond-font);
-  font-size: 1.55rem;
+  font-size: 1.65rem !important;
   font-weight: 800;
   line-height: 1;
-  color: #ffffff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  color: #ffffff !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 .pf2e-ui .tat-shield-ac-lbl {
   font-family: var(--tat-engraved), serif;
-  font-size: 0.65rem;
+  font-size: 0.68rem !important;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #c9d2ee;
+  color: #f5eed8 !important;
+  font-weight: 700;
   margin-top: 1px;
 }
 
 .pf2e-ui .tat-equipped-shield {
   flex: 1;
   min-width: 0;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--tat-line);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid #a67c3b;
   border-radius: 3px;
   padding: 6px 8px;
   display: flex;
@@ -634,28 +667,30 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.74rem;
-  color: var(--tat-dim);
+  font-size: 0.76rem;
+  color: #f5eed8;
 }
 
 .pf2e-ui .shield-lbl {
   font-family: var(--tat-engraved), serif;
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  color: #ffd778 !important;
+  font-weight: 700;
 }
 
 .pf2e-ui .shield-val {
   font-family: var(--tat-cond-font);
-  font-size: 0.88rem;
-  color: #ffffff;
-  font-weight: 700;
+  font-size: 0.95rem;
+  color: #ffffff !important;
+  font-weight: 800;
 }
 
 .pf2e-ui .shield-broken-tag {
-  color: var(--tat-danger);
+  color: #ef4444;
   font-weight: bold;
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   text-align: center;
 }
 
@@ -691,38 +726,41 @@
   justify-content: center;
   gap: 6px;
   padding: 4px 8px;
-  background: linear-gradient(180deg, var(--tat-navy-2), var(--tat-navy));
-  border: 1.5px solid #d8b46a;
+  background: linear-gradient(180deg, #521c1f 0%, #300e10 100%) !important;
+  border: 1.5px solid #d4a74e !important;
   border-radius: 3px;
-  color: #ffffff;
+  color: #ffffff !important;
   cursor: pointer;
   transition: all 120ms ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .pf2e-ui .stat-roll-badge:hover {
-  background: var(--tat-navy-light);
+  background: linear-gradient(180deg, #6e272a 0%, #421316 100%) !important;
+  border-color: #ffd778 !important;
   transform: translateY(-1px);
 }
 
 .pf2e-ui .stat-roll-badge i {
-  color: var(--tat-amber);
+  color: #ffd778 !important;
   font-size: 0.85rem;
 }
 
 .pf2e-ui .stat-roll-val {
   font-family: var(--tat-cond-font);
-  font-size: 1.15rem;
-  font-weight: 700;
+  font-size: 1.2rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
 }
 
 .pf2e-ui .stat-rank-tag {
   padding: 3px 8px;
   font-family: var(--tat-cond-font);
-  font-size: 0.74rem;
-  font-weight: 700;
-  color: #fbf5e6;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid var(--tat-line);
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #fff4da !important;
+  background: rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid #d4a74e !important;
   border-radius: 3px;
   cursor: pointer;
   white-space: nowrap;
@@ -731,23 +769,25 @@
 .pf2e-ui .senses-pill-group {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 2px 6px;
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(216, 180, 106, 0.2);
+  gap: 6px;
+  padding: 3px 8px;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid #a67c3b !important;
   border-radius: 3px;
-  font-size: 0.72rem;
-  color: var(--tat-dim);
+  font-size: 0.75rem;
+  color: #fffdf5 !important;
   cursor: pointer;
   margin-top: 2px;
 }
 
 .pf2e-ui .senses-tag-lbl {
-  font-weight: 600;
-  color: var(--tat-amber);
+  font-weight: 800;
+  color: #ffd778 !important;
 }
 
 .pf2e-ui .senses-tag-list {
+  color: #fffdf5 !important;
+  font-weight: 600;
   flex: 1;
   white-space: nowrap;
   overflow: hidden;
@@ -810,10 +850,10 @@
 
 .pf2e-ui .save-col-name {
   font-family: var(--tat-serif-font), serif !important;
-  font-size: 0.66rem !important;
+  font-size: 0.72rem !important;
   font-weight: 800 !important;
   letter-spacing: 0.05em !important;
-  color: #e8c77a !important;
+  color: #ffd778 !important;
   text-transform: uppercase !important;
   text-align: center !important;
   white-space: nowrap !important;
@@ -835,11 +875,11 @@
   max-width: 100% !important;
   padding: 0 !important;
   font-family: var(--tat-cond-font), sans-serif !important;
-  font-size: 0.68rem !important;
+  font-size: 0.72rem !important;
   font-weight: 800 !important;
   color: #ffffff !important;
-  background: #1e355b !important;
-  border: 1px solid #d8b46a !important;
+  background: #4f1719 !important;
+  border: 1px solid #ffd778 !important;
   border-radius: 2px !important;
   cursor: pointer !important;
   line-height: 1 !important;
@@ -847,8 +887,8 @@
 }
 
 .pf2e-ui .tat-seal-pill:hover {
-  background: #2b4c80 !important;
-  border-color: #ffd875 !important;
+  background: #6e272a !important;
+  border-color: #ffe89e !important;
 }
 
 .pf2e-ui .tat-save-badge-btn {
@@ -859,8 +899,8 @@
   width: 100% !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
-  background: rgba(0, 0, 0, 0.35) !important;
-  border: 1px solid rgba(216, 180, 106, 0.2) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid #d4a74e !important;
   border-radius: 2px !important;
   color: #ffffff !important;
   padding: 2px 0 !important;
@@ -869,19 +909,19 @@
 }
 
 .pf2e-ui .tat-save-badge-btn:hover {
-  background: #1b3860 !important;
-  border-color: #d8b46a !important;
+  background: #521c1f !important;
+  border-color: #ffd778 !important;
   transform: translateY(-1px);
 }
 
 .pf2e-ui .tat-save-badge-btn i {
-  color: #d8b46a !important;
-  font-size: 0.7rem !important;
+  color: #ffd778 !important;
+  font-size: 0.75rem !important;
 }
 
 .pf2e-ui .save-val {
   font-family: var(--tat-cond-font), sans-serif !important;
-  font-size: 1rem !important;
+  font-size: 1.1rem !important;
   font-weight: 800 !important;
   color: #ffffff !important;
   line-height: 1 !important;
@@ -895,15 +935,37 @@
   gap: 6px;
   padding: 3px 0;
   font-size: 0.76rem;
-  border-bottom: 1px solid rgba(216, 180, 106, 0.15);
+  border-bottom: 1px solid rgba(216, 180, 106, 0.2);
 }
 
 .pf2e-ui .mit-label {
   font-family: var(--tat-engraved), serif;
-  font-size: 0.7rem;
-  color: var(--tat-dim);
+  font-size: 0.72rem !important;
+  color: #ffd778 !important;
+  font-weight: 800 !important;
   text-transform: uppercase;
   min-width: 65px;
+}
+
+.pf2e-ui .mit-empty {
+  color: #f5eed8 !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+}
+
+.pf2e-ui .tat-icon-btn {
+  color: #ffd778 !important;
+  font-size: 0.9rem !important;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: all 120ms ease;
+}
+
+.pf2e-ui .tat-icon-btn:hover {
+  color: #ffffff !important;
+  transform: scale(1.15);
 }
 
 .pf2e-ui .mit-tags {
@@ -923,16 +985,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid var(--tat-line);
+  background: rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid #a67c3b !important;
   border-radius: 3px;
   padding: 2px 6px;
   font-size: 0.78rem;
+  color: #ffffff !important;
 }
 
 .pf2e-ui .tat-cond-name {
-  font-weight: 600;
-  color: var(--tat-text);
+  font-weight: 700 !important;
+  color: #fffdf5 !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -940,18 +1003,25 @@
 
 .pf2e-ui .tat-cond button {
   padding: 0 4px;
-  color: var(--tat-dim);
+  color: #ffd778 !important;
   font-weight: bold;
 }
 
 .pf2e-ui .tat-cond button:hover {
-  color: var(--tat-amber);
+  color: #ffffff !important;
 }
 
 .pf2e-ui select.tat-cond-add {
   width: 100%;
   margin-top: 6px;
   font-size: 0.78rem;
+  background: #fffdf7 !important;
+  color: #1f140a !important;
+  border: 1.5px solid #b88a44 !important;
+  font-weight: 700 !important;
+  padding: 4px 6px !important;
+  border-radius: 3px !important;
+  cursor: pointer;
 }
 
 /* 7.6 Cauda Curvada do Banner em Pergaminho (SVG) */
@@ -999,23 +1069,32 @@
   gap: 2px;
 }
 
+.pf2e-ui .tat-head input.tat-name,
 .pf2e-ui input.tat-name {
-  font-family: var(--tat-engraved), serif;
-  font-size: 1.35rem !important;
-  font-weight: 700;
+  font-family: var(--tat-engraved), serif !important;
+  font-size: 1.45rem !important;
+  font-weight: 800 !important;
   letter-spacing: 0.04em;
-  color: #fbf5e6 !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
   width: 100%;
-  padding: 1px 0;
-  background: transparent;
+  padding: 3px 8px !important;
+  background: rgba(0, 0, 0, 0.28) !important;
   border: none !important;
-  border-bottom: 1px solid rgba(216, 180, 106, 0.4) !important;
-  border-radius: 0 !important;
+  border-bottom: 2px solid #d4a74e !important;
+  border-radius: 2px !important;
+  box-shadow: none !important;
 }
 
-.pf2e-ui input.tat-name:focus {
-  border-bottom-color: var(--tat-amber) !important;
+.pf2e-ui .tat-head input.tat-name::placeholder {
+  color: #e2cca2 !important;
+  opacity: 0.85 !important;
+}
+
+.pf2e-ui .tat-head input.tat-name:focus {
+  background: rgba(0, 0, 0, 0.45) !important;
+  border-bottom-color: #ffd778 !important;
+  box-shadow: 0 1px 6px rgba(255, 215, 120, 0.4) !important;
   outline: none !important;
 }
 
@@ -1028,9 +1107,10 @@
 
 .pf2e-ui .tat-hero-lbl {
   font-family: var(--tat-engraved), serif;
-  font-size: 0.65rem;
+  font-size: 0.68rem !important;
   letter-spacing: 0.08em;
-  color: var(--tat-dim);
+  color: #ffd778 !important;
+  font-weight: 800 !important;
   text-transform: uppercase;
 }
 
@@ -1040,18 +1120,19 @@
 }
 
 .pf2e-ui .tat-hero-shield {
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.3);
+  font-size: 1rem !important;
+  color: rgba(255, 255, 255, 0.35) !important;
   background: transparent;
   border: none;
   transition: all 120ms ease;
   cursor: pointer;
   padding: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .pf2e-ui .tat-hero-shield.on {
-  color: #ef4444;
-  text-shadow: 0 0 6px #ef4444;
+  color: #ef4444 !important;
+  text-shadow: 0 0 8px #ef4444, 0 0 14px rgba(239, 68, 68, 0.8) !important;
 }
 
 .pf2e-ui .tat-head-right {
@@ -1066,31 +1147,34 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, var(--tat-navy-2), var(--tat-navy));
-  border: 1.5px solid #d8b46a;
+  background: linear-gradient(180deg, #521c1f 0%, #300e10 100%) !important;
+  border: 2px solid #d4a74e !important;
   border-radius: 4px;
   padding: 2px 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   min-width: 38px;
 }
 
 .pf2e-ui .lvl-lbl {
   font-family: var(--tat-engraved), serif;
-  font-size: 0.58rem;
+  font-size: 0.62rem !important;
   letter-spacing: 0.08em;
-  color: #c9d2ee;
+  color: #ffd778 !important;
+  font-weight: 800 !important;
   text-transform: uppercase;
 }
 
-.pf2e-ui .lvl-in {
-  width: 2.2em;
+.pf2e-ui .tat-head input.lvl-in,
+.pf2e-ui input.lvl-in {
+  width: 2.2em !important;
   text-align: center;
-  font-size: 1.15rem;
-  font-weight: 800;
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
   color: #ffffff !important;
-  background: transparent;
-  border: none;
+  background: transparent !important;
+  border: none !important;
   padding: 0;
+  box-shadow: none !important;
 }
 
 .pf2e-ui .tat-xp {
@@ -1103,9 +1187,9 @@
 
 .pf2e-ui .tat-xp-bar {
   width: 100%;
-  height: 5px;
-  background: rgba(0, 0, 0, 0.4);
-  box-shadow: inset 0 0 0 1px rgba(216, 180, 106, 0.3);
+  height: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(216, 180, 106, 0.35);
   border-radius: 3px;
   overflow: hidden;
 }
@@ -1117,82 +1201,90 @@
 }
 
 .pf2e-ui .tat-xp-read {
-  font-size: 0.68rem;
-  color: var(--tat-dim);
+  font-size: 0.72rem;
+  color: #f5eed8 !important;
+  font-weight: 700 !important;
   white-space: nowrap;
 }
 
-.pf2e-ui .tat-xp-read input.tat-in {
-  width: 2.8em;
-  text-align: right;
+.pf2e-ui .tat-head input.tat-in-sm {
+  width: 2.8em !important;
+  text-align: center;
   color: #ffffff !important;
-  background: transparent !important;
-  border: none !important;
+  background: rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid #d4a74e !important;
+  border-radius: 3px !important;
+  font-weight: 700 !important;
   padding: 0 !important;
 }
 
-/* ── 9. FAIXA DE ABAS NAVAIS COM ÍCONES CIRCULARES ── */
+/* ── 9. FAIXA DE ABAS COM ÍCONES CIRCULARES DE ALTO CONTRASTE ── */
 .pf2e-ui .tat-tabs {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(180deg, #1b2d5a 0%, #111e40 100%);
-  border: 1.5px solid #283a73;
-  border-radius: 4px;
-  padding: 3px 8px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.35);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: linear-gradient(180deg, #3d1416 0%, #25090b 100%) !important;
+  border: 1.5px solid #a67c3b !important;
+  border-radius: 4px !important;
+  padding: 4px 10px !important;
+  margin: 4px 0 8px !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4) !important;
 }
 
 .pf2e-ui .tat-active-tab-title {
-  font-family: var(--tat-engraved), serif;
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: #fbf5e6;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  font-family: var(--tat-engraved), serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important;
 }
 
 .pf2e-ui .tat-tab-icons {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
 }
 
-.pf2e-ui .pf2e-tab-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(216, 180, 106, 0.25);
-  color: #c9d2ee;
-  font-size: 0.85rem;
-  padding: 0;
-  cursor: pointer;
-  transition: all 120ms ease;
+.pf2e-ui .tat-tabs .pf2e-tab-btn,
+.pf2e-ui .tat-tab-icons .pf2e-tab-btn {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(216, 180, 106, 0.45) !important;
+  color: #fff4da !important;
+  font-size: 0.92rem !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  transition: all 120ms ease !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
 }
 
-.pf2e-ui .pf2e-tab-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border-color: var(--tat-amber);
-  transform: scale(1.08);
+.pf2e-ui .tat-tabs .pf2e-tab-btn:hover,
+.pf2e-ui .tat-tab-icons .pf2e-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  border-color: #ffd778 !important;
+  transform: scale(1.12) !important;
 }
 
-.pf2e-ui .pf2e-tab-btn.active {
-  background: #6a1a17;
-  border-color: var(--tat-amber);
-  color: #ffffff;
-  box-shadow: 0 0 8px rgba(232, 199, 122, 0.5);
-  transform: scale(1.05);
+.pf2e-ui .tat-tabs .pf2e-tab-btn.active,
+.pf2e-ui .tat-tab-icons .pf2e-tab-btn.active {
+  background: linear-gradient(180deg, #8a2420, #5c1412) !important;
+  border: 1.5px solid #ffd778 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 10px rgba(255, 215, 120, 0.7) !important;
+  transform: scale(1.12) !important;
 }
 
 .pf2e-ui .pf2e-browser-launch-btn {
-  margin-left: 6px;
-  color: var(--tat-amber);
+  margin-left: 6px !important;
+  color: #ffd778 !important;
 }
 
 /* ── 10. BLOCOS NA ÁREA PRINCIPAL EM PERGAMINHO ILUMINADO ── */
@@ -1205,10 +1297,29 @@
   margin-bottom: 6px !important;
 }
 
+.pf2e-ui .tat-main .tat-label,
+.pf2e-ui .tat-main h3.tat-label,
+.pf2e-ui .tat-main .pf2e-section-head .tat-label,
+.pf2e-ui .tat-main .pf2e-section-head h3,
+.pf2e-ui .tat-main .pf2e-block-head .tat-label,
+.pf2e-ui .tat-main .pf2e-block-head h3,
+.pf2e-ui .tat-main .tat-focus-dc-section .tat-label,
+.pf2e-ui.pf2e-party-sheet .tat-label,
+.pf2e-party-sheet-window .tat-label {
+  color: #5c1412 !important;
+  font-family: var(--tat-engraved), serif !important;
+  font-size: 0.88rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  text-shadow: none !important;
+}
+
 .pf2e-ui .tat-main .tat-block > .tat-label,
 .pf2e-ui .tat-main .tat-block > h3.tat-label,
 .pf2e-ui .tat-main .tat-block > .tat-label-row,
-.pf2e-ui .tat-main .tat-block > .pf2e-section-head {
+.pf2e-ui .tat-main .pf2e-section-head,
+.pf2e-ui .tat-main .pf2e-block-head {
   display: flex !important;
   align-items: center;
   justify-content: space-between;
@@ -1218,13 +1329,29 @@
   border: none !important;
   box-shadow: none !important;
   border-bottom: 1px solid rgba(92, 64, 30, 0.22) !important;
-  color: #5c1412 !important;
-  font-family: var(--tat-engraved), serif !important;
-  font-size: 0.88rem !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.06em !important;
-  text-transform: uppercase !important;
-  text-shadow: none !important;
+}
+
+.pf2e-ui .tat-main input.tat-in,
+.pf2e-ui .tat-main select.tat-in,
+.pf2e-ui .tat-main textarea.tat-in {
+  background: #fffdf8 !important;
+  color: #2b1c0c !important;
+  border: 1.5px solid #7c6853 !important;
+  border-radius: 3px !important;
+}
+
+.pf2e-ui .tat-main input.tat-in::placeholder,
+.pf2e-ui .tat-main textarea.tat-in::placeholder {
+  color: #7a6348 !important;
+  opacity: 0.85 !important;
+}
+
+.pf2e-ui .tat-main input.tat-in:focus,
+.pf2e-ui .tat-main select.tat-in:focus,
+.pf2e-ui .tat-main textarea.tat-in:focus {
+  background: #ffffff !important;
+  border-color: #5c1412 !important;
+  box-shadow: 0 0 5px rgba(92, 20, 18, 0.4) !important;
 }
 
 .pf2e-ui .profile-card-inner {
@@ -1237,12 +1364,23 @@
   width: 68px;
   height: 68px;
   border: 2px solid #b8860b;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-  border-radius: 4px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+  border-radius: 6px;
   overflow: hidden;
   flex: none;
   cursor: pointer;
   padding: 0;
+  background: linear-gradient(135deg, #3e0c0b 0%, #1c0605 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.pf2e-ui .tat-portrait-frame:hover {
+  border-color: #f5e1a4;
+  transform: translateY(-1px);
 }
 
 .pf2e-ui .tat-portrait-frame img {
@@ -1250,6 +1388,12 @@
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.pf2e-ui .tat-portrait-frame img[src*="default-avatar.svg"],
+.pf2e-ui .tat-portrait-frame img[src*="adventurer.svg"] {
+  object-fit: cover;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .pf2e-ui .profile-details {
@@ -1267,15 +1411,17 @@
 }
 
 .pf2e-ui .tat-trait-badge {
-  padding: 2px 8px;
-  font-family: var(--tat-cond-font);
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #ffffff;
-  background: #2d5a3d;
-  border-radius: 3px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  padding: 2px 8px !important;
+  font-family: var(--tat-cond-font) !important;
+  font-size: 0.74rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  background: #5c1412 !important;
+  border: 1px solid #b88a44 !important;
+  border-radius: 3px !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  box-shadow: 0 1px 3px rgba(60, 20, 15, 0.2) !important;
 }
 
 .pf2e-ui .profile-identity-grid {
@@ -1305,13 +1451,13 @@
 }
 
 .pf2e-ui .tat-pill-btn {
-  background: #ffffff;
-  border: 1px solid rgba(92, 64, 30, 0.3);
+  background: #fffdf8 !important;
+  border: 1.5px solid #8c6a46 !important;
   border-radius: 3px;
   padding: 2px 8px;
-  color: #2b1c0c;
-  font-weight: 600;
-  font-size: 0.82rem;
+  color: #1f140a !important;
+  font-weight: 700 !important;
+  font-size: 0.84rem !important;
   cursor: pointer;
   transition: all 120ms ease;
   white-space: nowrap;
@@ -1321,8 +1467,8 @@
 }
 
 .pf2e-ui .tat-pill-btn:hover {
-  border-color: #5c1412;
-  background: #fffcf5;
+  border-color: #5c1412 !important;
+  background: #ffffff !important;
 }
 
 .pf2e-ui .tat-pill-empty {
@@ -1333,11 +1479,47 @@
 
 .pf2e-ui .deity-in {
   flex: 1;
-  background: rgba(255, 255, 255, 0.75) !important;
-  border: 1px solid rgba(92, 64, 30, 0.28) !important;
-  color: #2b1c0c !important;
+  background: #fffdf8 !important;
+  border: 1.5px solid #8c6a46 !important;
+  color: #1f140a !important;
+  font-weight: 600 !important;
   padding: 2px 6px;
   font-size: 0.82rem;
+}
+
+/* Botões de Ação Auxiliares na Área de Pergaminho (Editar Idiomas, Rolar Atributo, etc.) */
+.pf2e-ui .tat-btn-xs {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 2px 8px !important;
+  font-family: var(--tat-engraved), serif !important;
+  font-size: 0.74rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: #5c1412 !important;
+  background: #eee1c8 !important;
+  border: 1.5px solid #9e7d56 !important;
+  border-radius: 3px !important;
+  cursor: pointer !important;
+  transition: all 120ms ease !important;
+  box-shadow: 0 1px 2px rgba(60, 40, 15, 0.12) !important;
+}
+
+.pf2e-ui .tat-btn-xs:hover {
+  background: #5c1412 !important;
+  color: #ffffff !important;
+  border-color: #3d0e0c !important;
+}
+
+.pf2e-ui .tat-btn-xs i {
+  color: #821715 !important;
+  font-size: 0.78rem !important;
+}
+
+.pf2e-ui .tat-btn-xs:hover i {
+  color: #ffd778 !important;
 }
 
 /* Demografia (4 Colunas) */
@@ -1358,20 +1540,28 @@
 
 .pf2e-ui .demo-lbl {
   font-family: var(--tat-engraved), serif;
-  font-size: 0.62rem;
-  color: #7f5539;
+  font-size: 0.65rem;
+  color: #5c1412 !important;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  height: 1.3rem;
+  display: flex;
+  align-items: flex-end;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .pf2e-ui .demo-item input.tat-in {
-  background: rgba(255, 255, 255, 0.75) !important;
-  border: 1px solid rgba(92, 64, 30, 0.28) !important;
-  color: #2b1c0c !important;
-  padding: 1px 4px;
-  font-size: 0.78rem;
-  height: 22px;
+  background: #fffdf8 !important;
+  border: 1.5px solid #8c6a46 !important;
+  color: #1f140a !important;
+  font-weight: 600 !important;
+  padding: 2px 4px;
+  font-size: 0.82rem;
+  height: 24px;
+  border-radius: 3px;
 }
 
 /* Idiomas */
@@ -1383,12 +1573,12 @@
 
 .pf2e-ui .tat-tag-lang {
   background: #fffcf5;
-  border: 1px solid #7f5539;
-  color: #2b1c0c;
-  font-weight: 600;
+  border: 1.5px solid #8c6a46;
+  color: #1f140a;
+  font-weight: 700;
   border-radius: 3px;
-  padding: 1px 6px;
-  font-size: 0.76rem;
+  padding: 2px 8px;
+  font-size: 0.78rem;
 }
 
 /* Deslocamentos */
@@ -1403,25 +1593,32 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(92, 64, 30, 0.2);
+  background: #f4ecdf !important;
+  border: 1.5px solid #b89a74 !important;
   border-radius: 3px;
-  padding: 3px 2px;
+  padding: 4px 2px;
+  transition: all 120ms ease;
+}
+
+.pf2e-ui .speed-box.is-active {
+  background: #fffdf8 !important;
+  border: 1.5px solid #5c1412 !important;
+  box-shadow: 0 1px 4px rgba(92, 20, 18, 0.12) !important;
 }
 
 .pf2e-ui .speed-type {
   font-family: var(--tat-engraved), serif;
   font-size: 0.65rem;
-  color: #7f5539;
-  font-weight: 700;
+  color: #5c1412 !important;
+  font-weight: 800 !important;
   text-transform: uppercase;
 }
 
 .pf2e-ui .speed-value {
   font-family: var(--tat-cond-font);
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #2b1c0c;
+  font-size: 0.88rem;
+  font-weight: 800 !important;
+  color: #1f140a !important;
 }
 
 /* Faixa de Atributos (6 Colunas Lado a Lado) */
@@ -1435,11 +1632,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid #7c6853;
-  border-radius: 4px;
+  background: #fffdf8 !important;
+  border: 1.5px solid #8c6a46 !important;
+  border-radius: 4px !important;
   padding: 4px 2px 5px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(60, 40, 15, 0.08) !important;
   position: relative;
 }
 
@@ -1452,9 +1649,9 @@
 
 .pf2e-ui .tat-ribbon-key-btn {
   font-family: var(--tat-engraved), serif;
-  font-size: 0.88rem;
-  font-weight: 800;
-  color: #5c1412;
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  color: #5c1412 !important;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -1480,11 +1677,11 @@
   height: 28px;
   text-align: center;
   font-family: var(--tat-cond-font);
-  font-size: 1.25rem !important;
-  font-weight: 800;
-  color: #2b1c0c !important;
-  background: #fffcf4 !important;
-  border: 1px solid #7c6853 !important;
+  font-size: 1.35rem !important;
+  font-weight: 800 !important;
+  color: #1f140a !important;
+  background: #ffffff !important;
+  border: 1.5px solid #7c6853 !important;
   border-radius: 3px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
   padding: 0 !important;
@@ -1528,7 +1725,8 @@
 }
 
 .pf2e-ui .tat-dot-focus.on {
-  color: #283a73;
+  color: #c2410c;
+  text-shadow: 0 0 6px #f97316;
 }
 
 .pf2e-ui .class-dc-value {
@@ -1810,8 +2008,8 @@
 
 /* ── 11. ABA COMBATE: CONSOLE DE TURNO & GOLPES TÁTICOS ── */
 .pf2e-ui .tat-main .tat-turn-bar {
-  background: linear-gradient(180deg, #1b2d5a 0%, #111e40 100%) !important;
-  border: 1.5px solid #283a73 !important;
+  background: linear-gradient(180deg, #3d1416 0%, #25090b 100%) !important;
+  border: 1.5px solid #a67c3b !important;
   border-radius: 4px !important;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.35) !important;
   color: #fbf5e6 !important;
@@ -2129,8 +2327,8 @@
   align-items: center !important;
   gap: 10px;
   padding: 6px 14px !important;
-  background: linear-gradient(180deg, #1b2d5a 0%, #111e40 100%) !important;
-  border: 1.5px solid #283a73 !important;
+  background: linear-gradient(180deg, #3d1416 0%, #25090b 100%) !important;
+  border: 1.5px solid #a67c3b !important;
   border-radius: 4px !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
   min-width: 0;
@@ -2196,31 +2394,31 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: linear-gradient(180deg, #1f3a60 0%, #13243d 100%);
-  border: 1px solid #d8b46a;
+  background: linear-gradient(180deg, #521c1f 0%, #300e10 100%) !important;
+  border: 1.5px solid #d4a74e !important;
   border-radius: 3px;
-  color: #ffffff;
+  color: #ffffff !important;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
   transition: all 120ms ease;
 }
 
 .pf2e-ui .stat-roll-badge:hover {
-  background: linear-gradient(180deg, #2b4e80 0%, #1a3254 100%);
-  border-color: #f7dfa5;
+  background: linear-gradient(180deg, #6e272a 0%, #421316 100%) !important;
+  border-color: #ffd778 !important;
   transform: translateY(-1px);
 }
 
 .pf2e-ui .stat-roll-badge.init-badge {
-  background: linear-gradient(180deg, #2a2015 0%, #1a140d 100%);
+  background: linear-gradient(180deg, #42181a 0%, #260a0b 100%) !important;
 }
 
 .pf2e-ui .stat-roll-badge.init-badge:hover {
-  background: linear-gradient(180deg, #3a2e1f 0%, #261c12 100%);
+  background: linear-gradient(180deg, #5c2023 0%, #360f11 100%) !important;
 }
 
 .pf2e-ui .stat-roll-badge i {
-  color: #d8b46a;
+  color: #ffd778 !important;
   font-size: 0.85rem;
 }
 
@@ -2230,14 +2428,14 @@
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #d8b46a;
+  color: #ffd778 !important;
 }
 
 .pf2e-ui .stat-roll-val {
   font-family: var(--tat-cond-font);
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #ffffff;
+  font-size: 1.15rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
 }
 
 .pf2e-ui .stat-aside-cell {
@@ -2294,13 +2492,13 @@
 .pf2e-ui .init-skill-select {
   width: 100%;
   height: 30px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(216, 180, 106, 0.4);
+  background: #fffdf7 !important;
+  border: 1.5px solid #a67c3b !important;
   border-radius: 3px;
-  color: #fbf4e6;
+  color: #1f140a !important;
   font-family: var(--tat-serif-font);
   font-size: 0.82rem;
-  font-weight: 600;
+  font-weight: 700 !important;
   padding: 0 6px;
   cursor: pointer;
   outline: none;
@@ -2309,13 +2507,13 @@
 
 .pf2e-ui .init-skill-select:focus,
 .pf2e-ui .init-skill-select:hover {
-  background: rgba(0, 0, 0, 0.55);
-  border-color: #d8b46a;
+  background: #ffffff !important;
+  border-color: #5c1412 !important;
 }
 
 .pf2e-ui .init-skill-select option {
-  background: #172d4c;
-  color: #ffffff;
+  background: #fffdf7;
+  color: #1f140a;
 }
 
 /* ── VISÃO GERAL: SEÇÕES DEDICADAS DE IDIOMAS & DESLOCAMENTOS ── */
@@ -2880,18 +3078,187 @@
   gap: 10px;
 }
 
-.pf2e-ui .tat-npc .tat-top {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(92, 64, 30, 0.35);
+.pf2e-ui .tat-npc .tat-top,
+.pf2e-ui .pf2e-familiar-sheet .tat-top,
+.pf2e-ui .pf2e-vehicle-sheet .tat-top,
+.pf2e-ui .pf2e-hazard-sheet .tat-top {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 8px 12px !important;
+  background: linear-gradient(180deg, #420f12, #290809) !important;
+  border: 1.5px solid #845c24 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
 }
 
-.pf2e-ui .tat-npc .tat-portrait {
+.pf2e-ui .tat-npc .tat-id,
+.pf2e-ui .pf2e-familiar-sheet .tat-id,
+.pf2e-ui .pf2e-vehicle-sheet .tat-id,
+.pf2e-ui .pf2e-hazard-sheet .tat-id {
+  flex: 1 !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+}
+
+.pf2e-ui .tat-npc input.tat-name,
+.pf2e-ui .pf2e-familiar-sheet input.tat-name,
+.pf2e-ui .pf2e-vehicle-sheet input.tat-name,
+.pf2e-ui .pf2e-hazard-sheet input.tat-name {
+  width: 100% !important;
+  background: #fffdf8 !important;
+  border: 1.5px solid #845c24 !important;
+  border-radius: 3px !important;
+  color: #2b1810 !important;
+  font-family: var(--tat-engraved), serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  padding: 4px 8px !important;
+  box-shadow: inset 0 1px 3px rgba(60, 30, 10, 0.25) !important;
+}
+
+.pf2e-ui .tat-npc .tat-id-line,
+.pf2e-ui .pf2e-familiar-sheet .tat-id-line,
+.pf2e-ui .pf2e-vehicle-sheet .tat-id-line,
+.pf2e-ui .pf2e-hazard-sheet .tat-id-line {
+  color: #f7e6c4 !important;
+  font-size: 0.85rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.pf2e-ui .tat-npc .tat-level,
+.pf2e-ui .pf2e-familiar-sheet .tat-level,
+.pf2e-ui .pf2e-vehicle-sheet .tat-level,
+.pf2e-ui .pf2e-hazard-sheet .tat-level {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 2px !important;
+  color: #ffd778 !important;
+  font-family: var(--tat-engraved), serif !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+}
+
+.pf2e-ui .tat-npc .tat-level input,
+.pf2e-ui .pf2e-familiar-sheet .tat-level input,
+.pf2e-ui .pf2e-vehicle-sheet .tat-level input,
+.pf2e-ui .pf2e-hazard-sheet .tat-level input {
+  width: 48px !important;
+  height: 32px !important;
+  background: #fffdf8 !important;
+  border: 1.5px solid #845c24 !important;
+  border-radius: 3px !important;
+  color: #2b1810 !important;
+  font-weight: 800 !important;
+  font-size: 1.15rem !important;
+  text-align: center !important;
+  padding: 0 !important;
+  box-shadow: inset 0 1px 3px rgba(60, 30, 10, 0.25) !important;
+}
+
+.pf2e-ui .tat-hp-read {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 4px 0 !important;
+}
+
+.pf2e-ui .tat-hp-read input.tat-hp-cur {
+  width: 60px !important;
+  height: 34px !important;
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+  background: #fffdf8 !important;
+  color: #4a1012 !important;
+  border: 1.5px solid #845c24 !important;
+  border-radius: 3px !important;
+  padding: 0 !important;
+}
+
+.pf2e-ui .tat-hp-read .tat-hp-max {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  color: #fbf5e6 !important;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+}
+
+.pf2e-ui .tat-hp-read .tat-hp-max input {
+  width: 52px !important;
+  height: 30px !important;
+  text-align: center !important;
+  background: #fffdf8 !important;
+  color: #2b1810 !important;
+  border: 1.5px solid #845c24 !important;
+  border-radius: 3px !important;
+}
+
+.pf2e-ui .tat-hp-read .tat-hp-temp {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-left: auto !important;
+  color: #f0cfa8 !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  font-family: var(--tat-engraved), serif !important;
+  text-transform: uppercase !important;
+}
+
+.pf2e-ui .tat-hp-read .tat-hp-temp input {
+  width: 48px !important;
+  height: 28px !important;
+  text-align: center !important;
+  background: #fffdf8 !important;
+  color: #2b1810 !important;
+  border: 1.5px solid #845c24 !important;
+  border-radius: 3px !important;
+}
+
+.pf2e-ui .tat-npc .tat-portrait,
+.pf2e-ui .pf2e-familiar-sheet .tat-portrait,
+.pf2e-ui .pf2e-vehicle-sheet .tat-portrait,
+.pf2e-ui .pf2e-hazard-sheet .tat-portrait {
   width: 72px;
   height: 72px;
   flex: none;
+  border: 2px solid #b8860b;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  background: linear-gradient(135deg, #3e0c0b 0%, #1c0605 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.pf2e-ui .tat-npc .tat-portrait:hover,
+.pf2e-ui .pf2e-familiar-sheet .tat-portrait:hover,
+.pf2e-ui .pf2e-vehicle-sheet .tat-portrait:hover,
+.pf2e-ui .pf2e-hazard-sheet .tat-portrait:hover {
+  border-color: #f5e1a4;
+  transform: translateY(-1px);
+}
+
+.pf2e-ui .tat-npc .tat-portrait img,
+.pf2e-ui .pf2e-familiar-sheet .tat-portrait img,
+.pf2e-ui .pf2e-vehicle-sheet .tat-portrait img,
+.pf2e-ui .pf2e-hazard-sheet .tat-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .pf2e-ui .tat-npc .tat-attrs {
@@ -2922,12 +3289,29 @@
   text-align: center;
 }
 
-.pf2e-ui .tat-npc .tat-defenses {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 6px;
+.pf2e-ui .tat-npc .tat-defenses,
+.pf2e-ui .pf2e-familiar-sheet .tat-defenses,
+.pf2e-ui .pf2e-vehicle-sheet .tat-defenses,
+.pf2e-ui .pf2e-hazard-sheet .tat-defenses {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)) !important;
+  gap: 6px !important;
 }
 
+.pf2e-ui .tat-npc .tat-defenses .tat-tile.tat-def,
+.pf2e-ui .pf2e-familiar-sheet .tat-defenses .tat-tile.tat-def,
+.pf2e-ui .pf2e-vehicle-sheet .tat-defenses .tat-tile.tat-def,
+.pf2e-ui .pf2e-hazard-sheet .tat-defenses .tat-tile.tat-def {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 6px 4px !important;
+  min-height: 72px !important;
+  grid-column: span 1 !important;
+}
+
+/* ── 14. FICHA DE GRUPO (ROSTER & TESOURO COMPARTILHADO) ── */
 /* ── 14. FICHA DE GRUPO (ROSTER & TESOURO COMPARTILHADO) ── */
 .pf2e-party-sheet {
   display: flex !important;
@@ -2942,6 +3326,19 @@
   align-items: start;
 }
 
+.pf2e-ui.pf2e-party-sheet .tat-block > .tat-label,
+.pf2e-ui.pf2e-party-sheet .pf2e-party-id-card .tat-label,
+.pf2e-ui.pf2e-party-sheet .pf2e-party-stash .tat-label {
+  color: #ffd778 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+  font-size: 0.88rem !important;
+  letter-spacing: 0.06em !important;
+  font-weight: 800 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
 .pf2e-party-id-card {
   display: flex;
   flex-direction: column;
@@ -2950,6 +3347,106 @@
 
 .pf2e-party-id-card .party-name-row {
   margin: 2px 0;
+}
+
+.pf2e-party-id-card .tat-id-line {
+  color: #f7e6c4 !important;
+  font-size: 0.85rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+/* Abas da Ficha de Grupo: Pílulas completas com texto e ícone (não circulares de 30px) */
+.pf2e-party-sheet .tat-tabs {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 8px !important;
+  background: linear-gradient(180deg, #3d1012, #240809) !important;
+  border: 1px solid #7c5820 !important;
+  border-radius: 4px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 215, 120, 0.2), 0 2px 6px rgba(0, 0, 0, 0.25) !important;
+  overflow-x: auto !important;
+}
+
+.pf2e-party-sheet .tat-tabs .pf2e-tab-btn {
+  width: auto !important;
+  min-width: 0 !important;
+  height: 32px !important;
+  border-radius: 4px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 0 14px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(216, 180, 106, 0.35) !important;
+  color: #fff4da !important;
+  font-family: var(--tat-engraved), serif !important;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  transform: none !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.pf2e-party-sheet .tat-tabs .pf2e-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: #ffd778 !important;
+  color: #ffffff !important;
+  transform: none !important;
+}
+
+.pf2e-party-sheet .tat-tabs .pf2e-tab-btn.active {
+  background: linear-gradient(180deg, #8a2420, #5c1412) !important;
+  border: 1.5px solid #ffd778 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 8px rgba(255, 215, 120, 0.5) !important;
+  transform: none !important;
+}
+
+.pf2e-party-roster-head {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 10px !important;
+  gap: 12px !important;
+}
+
+.pf2e-party-roster-head .tat-label {
+  color: #4a1012 !important;
+  font-size: 1rem !important;
+  margin: 0 !important;
+}
+
+.pf2e-party-add-wrap select.pf2e-party-actor-select {
+  background: #fffdf8 !important;
+  border: 1.5px solid #7c6853 !important;
+  border-radius: 4px !important;
+  padding: 6px 12px !important;
+  color: #2b1810 !important;
+  font-family: var(--tat-engraved), serif !important;
+  font-weight: 700 !important;
+  font-size: 0.88rem !important;
+  cursor: pointer !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.pf2e-party-roster p {
+  border: 1.5px dashed #a88a64 !important;
+  background: rgba(255, 255, 255, 0.45) !important;
+  border-radius: 6px !important;
+  padding: 24px !important;
+  text-align: center !important;
+  color: #5c3c1e !important;
+  font-style: normal !important;
+  font-size: 0.92rem !important;
+  line-height: 1.5 !important;
 }
 
 .pf2e-ui input.tat-party-name-input {
@@ -2981,33 +3478,42 @@
 .pf2e-ui .coin-field {
   display: flex;
   align-items: center;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--tat-line);
-  border-radius: 3px;
-  padding: 2px 4px;
+  background: #fffdf8 !important;
+  border: 1.5px solid #7c6853 !important;
+  border-radius: 4px;
+  padding: 3px 6px;
+}
+
+.pf2e-ui .coin-field input.tat-in {
+  background: transparent !important;
+  border: none !important;
+  color: #2b1c0c !important;
+  font-weight: 800 !important;
+  font-size: 0.95rem !important;
+  padding: 0 !important;
 }
 
 .pf2e-ui .coin-tag {
   font-family: var(--tat-cond-font);
-  font-weight: 700;
-  font-size: 0.72rem;
-  padding-right: 4px;
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding-right: 5px;
 }
 
 .pf2e-ui .coin-pp {
-  color: #d4e3fc;
+  color: #1b2d5a !important;
 }
 
 .pf2e-ui .coin-gp {
-  color: var(--tat-amber);
+  color: #8a5a00 !important;
 }
 
 .pf2e-ui .coin-sp {
-  color: #c4ccd4;
+  color: #3d4a58 !important;
 }
 
 .pf2e-ui .coin-cp {
-  color: #c88d5e;
+  color: #78391a !important;
 }
 
 .pf2e-party-members-grid {
@@ -3031,21 +3537,35 @@
 .member-portrait {
   width: 50px;
   height: 50px;
-  border: 1.5px solid var(--tat-line);
-  border-radius: 3px;
+  border: 1.5px solid #b8860b;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
   overflow: hidden;
   cursor: pointer;
   flex-shrink: 0;
+  background: linear-gradient(135deg, #3e0c0b 0%, #1c0605 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
 .member-portrait img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+}
+
+.member-portrait img[src*="default-avatar.svg"],
+.member-portrait img[src*="adventurer.svg"] {
+  object-fit: cover;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .member-portrait:hover {
-  border-color: var(--tat-amber);
+  border-color: #f5e1a4;
+  transform: translateY(-1px);
 }
 
 .member-info {
@@ -3066,7 +3586,7 @@
   font-family: var(--tat-cond-font);
   font-weight: 700;
   font-size: 1rem;
-  color: var(--tat-text);
+  color: #fbf5e6 !important;
   text-align: left;
 }
 
@@ -3076,12 +3596,12 @@
 
 .member-lvl {
   font-size: 0.75rem;
-  color: var(--tat-amber);
+  color: #f0cfa8 !important;
 }
 
 .member-class-line {
   font-size: 0.76rem;
-  color: var(--tat-dim);
+  color: rgba(251, 245, 230, 0.78) !important;
 }
 
 .member-hp-row {
@@ -3089,6 +3609,7 @@
   justify-content: space-between;
   font-size: 0.74rem;
   margin-bottom: 2px;
+  color: #fbf5e6 !important;
 }
 
 .member-defenses-strip {
@@ -3107,9 +3628,14 @@
   font-size: 0.7rem;
 }
 
+.member-def-tile .tat-label {
+  color: rgba(251, 245, 230, 0.75) !important;
+}
+
 .member-def-tile b {
-  font-size: 0.92rem;
-  color: var(--tat-amber);
+  font-size: 0.95rem;
+  color: #fbf5e6 !important;
+  font-weight: 800;
 }
 
 .member-exploration-bar {
@@ -3127,9 +3653,42 @@
   flex: 1;
 }
 
+.member-activity-label .tat-label {
+  color: #fbf5e6 !important;
+}
+
 .member-activity-select {
   flex: 1;
-  font-size: 0.78rem !important;
+  font-size: 0.82rem !important;
+  background: #fffdf8 !important;
+  border: 1.5px solid #7c6853 !important;
+  color: #2b1c0c !important;
+  border-radius: 3px !important;
+  padding: 2px 6px !important;
+}
+
+.pf2e-ui .pf2e-active-exploration-block {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1.5px solid #5c1412 !important;
+  border-radius: 4px !important;
+  padding: 6px 10px !important;
+  margin-bottom: 8px !important;
+}
+
+.pf2e-ui .pf2e-exploration-selector-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.pf2e-ui .pf2e-exploration-select {
+  flex: 1 !important;
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  background: #fffdf8 !important;
+  border: 1.5px solid #7c6853 !important;
+  color: #2b1c0c !important;
+  padding: 4px 8px !important;
 }
 
 /* ── 15. FICHA DE ITEM (MOLDURA DE FERRO & CAMPOS CLAROS) ── */
@@ -3375,48 +3934,401 @@
   box-shadow: 0 0 10px rgba(216, 180, 106, 0.5);
 }
 
-/* ── 17. CHAT ROLL CARDS & GRAUS DE SUCESSO ── */
+/* ── 17. CHAT ROLL CARDS & CARDS DE AÇÃO ── */
+.pf2e-chat-card {
+  font-family: var(--tat-sans, 'Segoe UI', Roboto, sans-serif);
+  border: 1.5px solid #5c1412;
+  border-radius: 6px;
+  background: #fffdf8;
+  color: #2b1c0c;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  margin: 6px 0;
+}
+
+.pf2e-chat-card-header {
+  background: linear-gradient(135deg, #5c1412 0%, #3e0c0b 100%);
+  color: #fbf5e6;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(200, 155, 60, 0.4);
+}
+
+.pf2e-chat-card-title {
+  margin: 0;
+  font-family: var(--tat-engraved, serif);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #fbf5e6;
+}
+
+.pf2e-chat-card-glyph {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fbf5e6;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pf2e-chat-card-body {
+  padding: 8px 10px;
+}
+
+.pf2e-card-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0 8px 0;
+}
+
+.pf2e-card-trait {
+  background: #5c1412;
+  color: #fbf5e6;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.pf2e-chat-card-desc {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #2b1c0c;
+}
+
+.pf2e-card-nodesc {
+  color: #7f5539;
+  font-style: italic;
+}
+
+.pf2e-chat-card-footer {
+  background: rgba(92, 20, 18, 0.08);
+  padding: 4px 10px;
+  border-top: 1px solid rgba(92, 20, 18, 0.18);
+  font-size: 0.75rem;
+  color: #5c1412;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .pf2e-roll-degree-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 8px;
-  border-radius: 3px;
-  margin-top: 6px;
-  font-family: var(--tat-cond-font);
+  padding: 5px 9px;
+  border-radius: 0 0 5px 5px;
+  font-family: var(--tat-cond-font, sans-serif);
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid transparent;
 }
 
 .pf2e-degree-critSuccess {
-  background: rgba(34, 197, 94, 0.25);
-  border: 1px solid #22c55e;
-  color: #86efac;
+  background: rgba(34, 197, 94, 0.22);
+  border-color: #22c55e;
+  color: #15803d;
 }
 
 .pf2e-degree-success {
-  background: rgba(56, 189, 248, 0.25);
-  border: 1px solid #38bdf8;
-  color: #7dd3fc;
+  background: rgba(56, 189, 248, 0.22);
+  border-color: #0284c7;
+  color: #0369a1;
 }
 
 .pf2e-degree-failure {
-  background: rgba(245, 158, 11, 0.25);
-  border: 1px solid #f59e0b;
-  color: #fcd34d;
+  background: rgba(245, 158, 11, 0.22);
+  border-color: #d97706;
+  color: #b45309;
 }
 
 .pf2e-degree-critFailure {
-  background: rgba(239, 68, 68, 0.25);
-  border: 1px solid #ef4444;
-  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.22);
+  border-color: #dc2626;
+  color: #b91c1c;
 }
 
 .pf2e-degree-dc {
   font-size: 0.78rem;
-  opacity: 0.85;
+  opacity: 0.9;
+  font-weight: 700;
+}
+
+/* ── 17.1 THEMATIC PF2E ROLL CARD (Loom Roll Wrapper) ── */
+.pf2e-roll-card {
+  background: transparent;
+  border: none;
+  margin: 4px 0;
+  padding: 0;
+  font-family: var(--tat-sans, 'Segoe UI', Roboto, sans-serif);
+  display: flex;
+  flex-direction: column;
+}
+
+.pf2e-roll-header {
+  background: linear-gradient(135deg, #5c1412 0%, #3e0c0b 100%);
+  color: #fbf5e6;
+  padding: 5px 9px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 5px 5px 0 0;
+  border-bottom: 1.5px solid rgba(216, 180, 106, 0.45);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.pf2e-roll-header-main {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.pf2e-roll-category-badge {
+  background: rgba(216, 180, 106, 0.22);
+  color: #f5dfa8;
+  border: 1px solid rgba(216, 180, 106, 0.4);
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1px 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.pf2e-roll-name {
+  margin: 0;
+  font-family: var(--tat-engraved, serif);
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #fbf5e6;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pf2e-roll-header-badges {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.pf2e-roll-glyph {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fbf5e6;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 1px 6px;
+  border-radius: 3px;
+  line-height: 1;
+}
+
+.pf2e-roll-mode-badge {
+  background: rgba(0, 0, 0, 0.35);
+  color: #e2e8f0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.pf2e-roll-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 5px 9px 3px 9px;
+  background: #fdfaf3;
+  border-left: 1px solid rgba(92, 20, 18, 0.25);
+  border-right: 1px solid rgba(92, 20, 18, 0.25);
+}
+
+.pf2e-roll-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, #fdfaf3 0%, #f4ebd8 100%);
+  border-left: 1px solid rgba(92, 20, 18, 0.25);
+  border-right: 1px solid rgba(92, 20, 18, 0.25);
+  border-bottom: 1px solid rgba(92, 20, 18, 0.25);
+  border-radius: 0 0 5px 5px;
+  padding: 8px 10px;
+  gap: 10px;
+}
+
+.pf2e-roll-card:has(.pf2e-roll-degree-card) .pf2e-roll-body,
+.pf2e-roll-card:has(.pf2e-roll-breakdown-note) .pf2e-roll-body {
+  border-bottom: none;
+  border-radius: 0;
+}
+
+.pf2e-roll-details-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pf2e-roll-chips {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.pf2e-die-chip {
+  background: #ffffff;
+  border: 1px solid #d4c2a5;
+  color: #2b1c0c;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.pf2e-die-chip.pf2e-nat20 {
+  background: linear-gradient(135deg, #15803d 0%, #166534 100%);
+  border: 1.5px solid #4ade80;
+  color: #ffffff;
+  font-weight: 800;
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.45);
+}
+
+.pf2e-die-chip.pf2e-nat1 {
+  background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+  border: 1.5px solid #f87171;
+  color: #ffffff;
+  font-weight: 800;
+  box-shadow: 0 0 6px rgba(248, 113, 113, 0.45);
+}
+
+.pf2e-mod-chip {
+  background: rgba(92, 20, 18, 0.08);
+  border: 1px solid rgba(92, 20, 18, 0.2);
+  color: #5c1412;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.pf2e-map-chip {
+  background: rgba(180, 83, 9, 0.12);
+  border: 1px solid rgba(180, 83, 9, 0.3);
+  color: #92400e;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.pf2e-fortune-chip {
+  background: rgba(22, 101, 52, 0.12);
+  border: 1px solid rgba(22, 101, 52, 0.3);
+  color: #166534;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.pf2e-misfortune-chip {
+  background: rgba(153, 27, 27, 0.12);
+  border: 1px solid rgba(153, 27, 27, 0.3);
+  color: #991b1b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.pf2e-roll-formula-line {
+  font-family: var(--tat-cond-font, monospace);
+  font-size: 0.74rem;
+  color: #705943;
+  letter-spacing: 0.02em;
+}
+
+.pf2e-roll-total-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  padding: 3px 8px;
+  background: #ffffff;
+  border: 1.5px solid #8c2522;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(92, 20, 18, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.pf2e-roll-total-number {
+  font-family: var(--tat-engraved, serif);
+  font-size: 1.45rem;
+  line-height: 1;
+  font-weight: 900;
+  color: #5c1412;
+}
+
+.pf2e-roll-total-caption {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #8c2522;
+  letter-spacing: 0.04em;
+  margin-top: 1px;
+}
+
+.pf2e-roll-total-block.pf2e-nat20 {
+  border-color: #16a34a;
+  background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+}
+
+.pf2e-roll-total-block.pf2e-nat20 .pf2e-roll-total-number,
+.pf2e-roll-total-block.pf2e-nat20 .pf2e-roll-total-caption {
+  color: #15803d;
+}
+
+.pf2e-roll-total-block.pf2e-nat1 {
+  border-color: #dc2626;
+  background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+}
+
+.pf2e-roll-total-block.pf2e-nat1 .pf2e-roll-total-number,
+.pf2e-roll-total-block.pf2e-nat1 .pf2e-roll-total-caption {
+  color: #b91c1c;
+}
+
+.pf2e-roll-breakdown-note {
+  background: #fdfaf3;
+  border-left: 1px solid rgba(92, 20, 18, 0.25);
+  border-right: 1px solid rgba(92, 20, 18, 0.25);
+  border-bottom: 1px solid rgba(92, 20, 18, 0.25);
+  border-radius: 0 0 5px 5px;
+  padding: 4px 9px;
+  font-size: 0.72rem;
+  color: #694827;
+  font-style: italic;
 }
 
 /* ── 18. DIÁLOGO DE CONFIGURAÇÃO DE ROLAGEM ── */
