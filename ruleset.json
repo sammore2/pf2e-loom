@@ -21,8 +21,10 @@
   "actorTypes": [
     "character",
     "npc",
-    "party",
-    "hazard"
+    "group",
+    "hazard",
+    "familiar",
+    "vehicle"
   ],
   "packs": [
     {
@@ -75,5 +77,37 @@
       "name": "Português (Brasil)",
       "path": "lang/pt-BR.json"
     }
+  ],
+  "compendiums": [
+    "packs-orc/actions.sqlite",
+    "packs-orc/ancestries.sqlite",
+    "packs-orc/ancestry-features.sqlite",
+    "packs-orc/bestiary-ability-glossary-srd.sqlite",
+    "packs-orc/bestiary-effects.sqlite",
+    "packs-orc/bestiary-family-ability-glossary.sqlite",
+    "packs-orc/campaign-effects.sqlite",
+    "packs-orc/class-features.sqlite",
+    "packs-orc/classes.sqlite",
+    "packs-orc/conditions.sqlite",
+    "packs-orc/equipment.sqlite",
+    "packs-orc/equipment-effects.sqlite",
+    "packs-orc/familiar-abilities.sqlite",
+    "packs-orc/feat-effects.sqlite",
+    "packs-orc/feats.sqlite",
+    "packs-orc/hazards.sqlite",
+    "packs-orc/heritages.sqlite",
+    "packs-orc/journals.sqlite",
+    "packs-orc/macros.sqlite",
+    "packs-orc/other-effects.sqlite",
+    "packs-orc/pathfinder-bestiary.sqlite",
+    "packs-orc/pathfinder-bestiary-2.sqlite",
+    "packs-orc/pathfinder-bestiary-3.sqlite",
+    "packs-orc/pathfinder-monster-core.sqlite",
+    "packs-orc/pathfinder-monster-core-2.sqlite",
+    "packs-orc/pathfinder-npc-core.sqlite",
+    "packs-orc/rollable-tables.sqlite",
+    "packs-orc/spell-effects.sqlite",
+    "packs-orc/spells.sqlite",
+    "packs-orc/vehicles.sqlite"
   ]
 }

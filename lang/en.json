@@ -236,6 +236,21 @@
       "misfortune": "Misfortune",
       "situational": "Situational",
       "dc": "DC"
+    },
+    "combat": {
+      "initiativeTitle": "Initiative",
+      "turnTitle": "Turn",
+      "actionOne": "action",
+      "actionMany": "actions",
+      "reaction": "reaction",
+      "quickened": "quickened",
+      "stunned": "stunned"
+    },
+    "speeds": {
+      "land": "Land (m/ft)",
+      "fly": "Fly",
+      "swim": "Swim",
+      "burrow": "Burrow"
     }
   }
 }
