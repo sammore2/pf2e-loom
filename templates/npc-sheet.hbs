@@ -2,7 +2,7 @@
 <div class="pf2e-panel tat-hud tat-npc">
   <header class="tat-top">
     <button type="button" class="tat-portrait" data-action="pick-portrait" title="{{localize "pf2e.sheets.portrait"}}">
-      {{#if avatarUrl}}<img src="{{avatarUrl}}" alt="" />{{else}}<i class="fa-solid fa-user-shield"></i>{{/if}}
+      <img src="{{avatarUrl}}" alt="{{name}}" onerror="this.src='/marketplace/rulesets/pf2e/assets/images/default-avatar.svg'" />
     </button>
     <div class="tat-id">
       <input class="tat-in tat-name" type="text" name="name" value="{{name}}" placeholder="{{localize "pf2e.sheets.name"}}" />

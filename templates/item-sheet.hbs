@@ -56,9 +56,9 @@
         <label class="tat-field">{{localize "pf2e.sheets.perceptionRank"}}
           <select class="tat-in" name="sd:perception">{{#each perceptionRankOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select>
         </label>
-        <label class="tat-field">Fort <select class="tat-in" name="sd:saves.fortitude">{{#each classSaveRanks.fortitude}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select></label>
-        <label class="tat-field">Ref <select class="tat-in" name="sd:saves.reflex">{{#each classSaveRanks.reflex}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select></label>
-        <label class="tat-field">Von <select class="tat-in" name="sd:saves.will">{{#each classSaveRanks.will}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select></label>
+        <label class="tat-field">{{localize "pf2e.saves.fortitudeAbbr"}} <select class="tat-in" name="sd:saves.fortitude">{{#each classSaveRanks.fortitude}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select></label>
+        <label class="tat-field">{{localize "pf2e.saves.reflexAbbr"}} <select class="tat-in" name="sd:saves.reflex">{{#each classSaveRanks.reflex}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select></label>
+        <label class="tat-field">{{localize "pf2e.saves.willAbbr"}} <select class="tat-in" name="sd:saves.will">{{#each classSaveRanks.will}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select></label>
         <label class="tat-field">{{localize "pf2e.sheets.attacksRank"}}
           <select class="tat-in" name="sd:attacks">{{#each attacksRankOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select>
         </label>

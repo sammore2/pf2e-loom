@@ -1,0 +1,128 @@
+{{!-- PF2E — familiar-sheet.hbs: Ficha Tática de Familiar / Minion --}}
+<div class="pf2e-panel tat-hud pf2e-familiar-sheet">
+
+  {{!-- Cabeçalho: Retrato, Nome, Mestre, Nível --}}
+  <header class="tat-top">
+    <button type="button" class="tat-portrait" data-action="pick-portrait" title="{{localize "pf2e.sheets.portrait"}}">
+      <img src="{{avatarUrl}}" alt="{{name}}" onerror="this.src='/marketplace/rulesets/pf2e/assets/images/default-avatar.svg'" />
+    </button>
+    <div class="tat-id">
+      <input class="tat-in tat-name" type="text" name="name" value="{{name}}" placeholder="{{localize "pf2e.sheets.name"}}" />
+      <div class="tat-id-line">
+        <span><i class="fa-solid fa-crown"></i> {{localize "pf2e.familiar.master"}}:</span>
+        <input class="tat-in tat-master-input" type="text" name="sd:master" value="{{master}}" placeholder="{{localize "pf2e.familiar.masterPlaceholder"}}" />
+      </div>
+    </div>
+    <label class="tat-level" title="{{localize "pf2e.sheets.level"}}">
+      <span>{{localize "pf2e.sheets.level"}}</span>
+      <input class="tat-in" type="number" name="sd:level" value="{{level}}" min="1" max="20" />
+    </label>
+  </header>
+
+  {{!-- Pontos de Vida --}}
+  <div class="tat-tile tat-hp{{#if hp.low}} is-low{{/if}}">
+    <span class="tat-label">{{localize "pf2e.sheets.hp"}}</span>
+    <div class="tat-hp-read">
+      <input class="tat-in tat-hp-cur" type="number" name="sd:hp.value" value="{{hp.value}}" />
+      <span class="tat-hp-max">/ <input class="tat-in tat-in-sm" type="number" name="sd:hp.max" value="{{hp.max}}" /></span>
+      <label class="tat-hp-temp">{{localize "pf2e.sheets.temp"}} <input class="tat-in tat-in-sm" type="number" name="sd:hp.temp" value="{{hp.temp}}" /></label>
+    </div>
+    <div class="tat-meter"><span style="width: {{hp.pct}}%"></span></div>
+  </div>
+
+  {{!-- Defesas e Salvaguardas em Linha Única --}}
+  <section class="tat-defenses">
+    <div class="tat-tile tat-def tat-def-ac" title="{{localize "pf2e.defenses.ac"}}">
+      <strong class="tat-def-value">{{ac}}</strong>
+      <span class="tat-def-name">{{localize "pf2e.sheets.short.ac"}}</span>
+    </div>
+
+    <div class="tat-tile tat-def" title="{{localize "pf2e.defenses.perception"}}">
+      <button type="button" class="tat-def-value tat-roll" data-action="roll-perception">{{perception}}</button>
+      <span class="tat-def-name">{{localize "pf2e.sheets.short.perception"}}</span>
+    </div>
+
+    <div class="tat-tile tat-def" title="{{localize "pf2e.defenses.fortitude"}}">
+      <button type="button" class="tat-def-value tat-roll" data-action="roll-save" data-key="fortitude">{{saves.fortitude}}</button>
+      <span class="tat-def-name">{{localize "pf2e.saves.fortitudeAbbr"}}</span>
+    </div>
+
+    <div class="tat-tile tat-def" title="{{localize "pf2e.defenses.reflex"}}">
+      <button type="button" class="tat-def-value tat-roll" data-action="roll-save" data-key="reflex">{{saves.reflex}}</button>
+      <span class="tat-def-name">{{localize "pf2e.saves.reflexAbbr"}}</span>
+    </div>
+
+    <div class="tat-tile tat-def" title="{{localize "pf2e.defenses.will"}}">
+      <button type="button" class="tat-def-value tat-roll" data-action="roll-save" data-key="will">{{saves.will}}</button>
+      <span class="tat-def-name">{{localize "pf2e.saves.willAbbr"}}</span>
+    </div>
+
+    <div class="tat-tile tat-def" title="{{localize "pf2e.skills.acrobatics"}}">
+      <button type="button" class="tat-def-value tat-roll" data-action="roll-skill" data-key="acrobatics">{{skills.acrobatics}}</button>
+      <span class="tat-def-name">{{localize "pf2e.skills.acrobatics"}}</span>
+    </div>
+
+    <div class="tat-tile tat-def" title="{{localize "pf2e.skills.stealth"}}">
+      <button type="button" class="tat-def-value tat-roll" data-action="roll-skill" data-key="stealth">{{skills.stealth}}</button>
+      <span class="tat-def-name">{{localize "pf2e.skills.stealth"}}</span>
+    </div>
+  </section>
+
+  {{!-- Deslocamento e Modos Especiais --}}
+  <section class="tat-block">
+    <div class="tat-label-row">
+      <h3 class="tat-label"><i class="fa-solid fa-person-running"></i> {{localize "pf2e.familiar.speed"}}</h3>
+    </div>
+    <div class="tat-speeds-row">
+      <label class="speed-field">
+        <span class="speed-lbl">{{localize "pf2e.speeds.land"}} (m/ft):</span>
+        <input class="tat-in" type="number" name="sd:speed.value" value="{{speed}}" />
+      </label>
+      <label class="speed-field">
+        <span class="speed-lbl">{{localize "pf2e.speeds.fly"}}:</span>
+        <input class="tat-in" type="number" name="sd:speed.flying" value="{{speeds.flying}}" />
+      </label>
+      <label class="speed-field">
+        <span class="speed-lbl">{{localize "pf2e.speeds.swim"}}:</span>
+        <input class="tat-in" type="number" name="sd:speed.swimming" value="{{speeds.swimming}}" />
+      </label>
+      <label class="speed-field">
+        <span class="speed-lbl">{{localize "pf2e.speeds.burrow"}}:</span>
+        <input class="tat-in" type="number" name="sd:speed.burrowing" value="{{speeds.burrowing}}" />
+      </label>
+    </div>
+  </section>
+
+  {{!-- Habilidades de Familiar e Mestre --}}
+  <section class="tat-block tat-familiar-abilities">
+    <div class="tat-label-row">
+      <h3 class="tat-label"><i class="fa-solid fa-paw"></i> {{localize "pf2e.familiar.abilities"}}</h3>
+      <div class="tat-abilities-limit">
+        <span>{{localize "pf2e.familiar.abilitiesCount"}}:</span>
+        <input class="tat-in tat-in-sm" type="number" name="sd:abilitiesCount" value="{{abilitiesCount}}" min="1" max="10" />
+        <button type="button" class="tat-btn-xs" data-action="ability-add">{{localize "pf2e.familiar.addAbility"}}</button>
+      </div>
+    </div>
+
+    <div class="tat-abilities-list">
+      {{#each abilities}}
+      <div class="tat-ability-card" data-id="{{id}}">
+        <div class="ability-card-head">
+          <strong class="ability-name">{{name}}</strong>
+          <button type="button" class="tat-icon ability-remove" data-action="ability-remove" data-id="{{id}}">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+        {{#if desc}}<p class="ability-desc">{{desc}}</p>{{/if}}
+      </div>
+      {{/each}}
+    </div>
+  </section>
+
+  {{!-- Notas e Histórico --}}
+  <section class="tat-block">
+    <h3 class="tat-label"><i class="fa-solid fa-feather-pointed"></i> {{localize "pf2e.sheets.tabs.notes"}}</h3>
+    <textarea class="tat-in tat-notes" name="sd:notes" placeholder="...">{{notes}}</textarea>
+  </section>
+
+</div>

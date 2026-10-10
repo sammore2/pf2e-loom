@@ -5,27 +5,27 @@
   <header class="pf2e-browser-header">
     <div class="pf2e-browser-search-wrap">
       <i class="fa-solid fa-magnifying-glass pf2e-search-icon"></i>
-      <input type="text" class="tat-in pf2e-browser-search" placeholder="Buscar magias, talentos, equipamentos, ações..." value="{{searchQuery}}" data-action="filter-search" />
+      <input type="text" class="tat-in pf2e-browser-search" placeholder="{{localize "pf2e.browser.searchPlaceholder"}}" value="{{searchQuery}}" data-action="filter-search" />
       {{#if searchQuery}}
-      <button type="button" class="tat-icon pf2e-search-clear" data-action="clear-search" title="Limpar busca"><i class="fa-solid fa-xmark"></i></button>
+      <button type="button" class="tat-icon pf2e-search-clear" data-action="clear-search" title="{{localize "pf2e.browser.clearSearch"}}"><i class="fa-solid fa-xmark"></i></button>
       {{/if}}
     </div>
 
     <nav class="pf2e-browser-tabs">
       <button type="button" class="pf2e-tab-btn{{#if (eq activeTab "all")}} active{{/if}}" data-action="tab" data-tab="all">
-        <i class="fa-solid fa-layer-group"></i> Todos ({{counts.all}})
+        <i class="fa-solid fa-layer-group"></i> {{localize "pf2e.browser.all"}} ({{counts.all}})
       </button>
       <button type="button" class="pf2e-tab-btn{{#if (eq activeTab "action")}} active{{/if}}" data-action="tab" data-tab="action">
-        <i class="fa-solid fa-bolt"></i> Ações ({{counts.action}})
+        <i class="fa-solid fa-bolt"></i> {{localize "pf2e.browser.action"}} ({{counts.action}})
       </button>
       <button type="button" class="pf2e-tab-btn{{#if (eq activeTab "equipment")}} active{{/if}}" data-action="tab" data-tab="equipment">
-        <i class="fa-solid fa-shield-halved"></i> Equipamentos ({{counts.equipment}})
+        <i class="fa-solid fa-shield-halved"></i> {{localize "pf2e.browser.equipment"}} ({{counts.equipment}})
       </button>
       <button type="button" class="pf2e-tab-btn{{#if (eq activeTab "spell")}} active{{/if}}" data-action="tab" data-tab="spell">
-        <i class="fa-solid fa-wand-magic-sparkles"></i> Magias ({{counts.spell}})
+        <i class="fa-solid fa-wand-magic-sparkles"></i> {{localize "pf2e.browser.spell"}} ({{counts.spell}})
       </button>
       <button type="button" class="pf2e-tab-btn{{#if (eq activeTab "feat")}} active{{/if}}" data-action="tab" data-tab="feat">
-        <i class="fa-solid fa-award"></i> Talentos ({{counts.feat}})
+        <i class="fa-solid fa-award"></i> {{localize "pf2e.browser.feat"}} ({{counts.feat}})
       </button>
     </nav>
   </header>
@@ -46,14 +46,14 @@
             {{#each traits}}<span class="tat-tag">{{this}}</span>{{/each}}
           </div>
           <span class="pf2e-row-type-badge">{{typeLabel}}</span>
-          <button type="button" class="tat-add pf2e-row-add-btn" data-action="add-to-sheet" data-id="{{id}}" title="Adicionar à ficha ativa">
+          <button type="button" class="tat-add pf2e-row-add-btn" data-action="add-to-sheet" data-id="{{id}}" title="{{localize "pf2e.browser.addToSheet"}}">
             <i class="fa-solid fa-plus"></i>
           </button>
         </div>
       </div>
       {{else}}
       <div class="tat-empty pf2e-browser-empty">
-        <i class="fa-solid fa-box-open"></i> Nenhum resultado encontrado para os filtros atuais.
+        <i class="fa-solid fa-box-open"></i> {{localize "pf2e.browser.noResults"}}
       </div>
       {{/each}}
     </div>
@@ -68,8 +68,8 @@
         </div>
         <div class="pf2e-detail-meta">
           <span class="tat-label">{{selectedItem.typeLabel}}</span>
-          {{#if selectedItem.level}}<span class="tat-tag">Nível {{selectedItem.level}}</span>{{/if}}
-          {{#if selectedItem.rank}}<span class="tat-tag">Rank {{selectedItem.rank}}</span>{{/if}}
+          {{#if selectedItem.level}}<span class="tat-tag">{{localize "pf2e.sheets.level"}} {{selectedItem.level}}</span>{{/if}}
+          {{#if selectedItem.rank}}<span class="tat-tag">{{localize "pf2e.sheets.rank"}} {{selectedItem.rank}}</span>{{/if}}
           {{#if selectedItem.price}}<span class="tat-tag">{{selectedItem.price}}</span>{{/if}}
         </div>
         <div class="pf2e-detail-traits">
@@ -82,20 +82,20 @@
       <div class="pf2e-detail-body">
         {{#if selectedItem.damage}}
         <div class="pf2e-detail-stat-row">
-          <span class="tat-label">Dano:</span>
+          <span class="tat-label">{{localize "pf2e.sheets.damage"}}:</span>
           <b>{{selectedItem.damage}} {{selectedItem.damageType}}</b>
         </div>
         {{/if}}
         {{#if selectedItem.acBonus}}
         <div class="pf2e-detail-stat-row">
-          <span class="tat-label">Bônus de CA:</span>
+          <span class="tat-label">{{localize "pf2e.sheets.acBonus"}}:</span>
           <b>+{{selectedItem.acBonus}}</b>
-          {{#if selectedItem.dexCap}}<span class="tat-dim">(Cap Des: +{{selectedItem.dexCap}})</span>{{/if}}
+          {{#if selectedItem.dexCap}}<span class="tat-dim">({{localize "pf2e.sheets.dexCap"}}: +{{selectedItem.dexCap}})</span>{{/if}}
         </div>
         {{/if}}
         {{#if selectedItem.save}}
         <div class="pf2e-detail-stat-row">
-          <span class="tat-label">Salvaguarda:</span>
+          <span class="tat-label">{{localize "pf2e.sheets.save"}}:</span>
           <b>{{selectedItem.save}}</b>
         </div>
         {{/if}}
@@ -107,13 +107,13 @@
 
       <div class="pf2e-detail-actions">
         <button type="button" class="tat-add pf2e-detail-add-btn" data-action="add-to-sheet" data-id="{{selectedItem.id}}">
-          <i class="fa-solid fa-plus"></i> Adicionar à Ficha
+          <i class="fa-solid fa-plus"></i> {{localize "pf2e.browser.addToSheet"}}
         </button>
       </div>
       {{else}}
       <div class="tat-empty pf2e-detail-placeholder">
         <i class="fa-solid fa-hand-pointer"></i>
-        <p>Selecione um item da lista para visualizar seus detalhes e estatísticas.</p>
+        <p>{{localize "pf2e.browser.selectItemPrompt"}}</p>
       </div>
       {{/if}}
     </aside>

@@ -1,0 +1,102 @@
+{{!-- PF2E — vehicle-sheet.hbs: Ficha Tática de Veículo --}}
+<div class="pf2e-panel tat-hud pf2e-vehicle-sheet">
+
+  {{!-- Cabeçalho: Retrato, Nome, Tamanho, Preço, Nível --}}
+  <header class="tat-top">
+    <button type="button" class="tat-portrait" data-action="pick-portrait" title="{{localize "pf2e.sheets.portrait"}}">
+      <img src="{{avatarUrl}}" alt="{{name}}" onerror="this.src='/marketplace/rulesets/pf2e/assets/images/default-avatar.svg'" />
+    </button>
+    <div class="tat-id">
+      <input class="tat-in tat-name" type="text" name="name" value="{{name}}" placeholder="{{localize "pf2e.sheets.name"}}" />
+      <div class="tat-id-line">
+        <span class="tat-tag">{{size}}</span>
+        <span class="tat-sep">·</span>
+        <span>{{localize "pf2e.items.price"}}:</span>
+        <input class="tat-in tat-price-input" type="text" name="sd:price" value="{{price}}" placeholder="PO" />
+      </div>
+    </div>
+    <label class="tat-level" title="{{localize "pf2e.sheets.level"}}">
+      <span>{{localize "pf2e.sheets.level"}}</span>
+      <input class="tat-in" type="number" name="sd:level" value="{{level}}" min="1" max="25" />
+    </label>
+  </header>
+
+  {{!-- Integridade Estrutural: PV, Limiar de Quebra (BT), Dureza --}}
+  <div class="tat-tile tat-hp{{#if hp.broken}} is-low{{/if}}">
+    <span class="tat-label">{{localize "pf2e.sheets.hp"}} ({{#if hp.broken}}<b style="color:var(--tat-blood)">{{localize "pf2e.sheets.broken"}}</b>{{else}}{{localize "pf2e.sheets.intact"}}{{/if}})</span>
+    <div class="tat-hp-read">
+      <input class="tat-in tat-hp-cur" type="number" name="sd:hp.value" value="{{hp.value}}" />
+      <span class="tat-hp-max">/ <input class="tat-in tat-in-sm" type="number" name="sd:hp.max" value="{{hp.max}}" /></span>
+      <label class="tat-hp-temp">{{localize "pf2e.vehicle.brokenThreshold"}} <input class="tat-in tat-in-sm" type="number" name="sd:hp.brokenThreshold" value="{{hp.brokenThreshold}}" /></label>
+    </div>
+    <div class="tat-meter"><span style="width: {{hp.pct}}%"></span></div>
+  </div>
+
+  {{!-- Defesas e Parâmetros Táticos --}}
+  <section class="tat-defenses">
+    <div class="tat-tile tat-def tat-def-ac" title="{{localize "pf2e.defenses.ac"}}">
+      <input class="tat-in tat-def-in" type="number" name="sd:ac" value="{{ac}}" />
+      <span class="tat-def-name">{{localize "pf2e.sheets.short.ac"}}</span>
+    </div>
+
+    <div class="tat-tile tat-def" title="{{localize "pf2e.vehicle.hardness"}}">
+      <input class="tat-in tat-def-in" type="number" name="sd:hardness" value="{{hardness}}" />
+      <span class="tat-def-name">{{localize "pf2e.vehicle.hardness"}}</span>
+    </div>
+
+    <div class="tat-tile tat-def" title="{{localize "pf2e.vehicle.collisionDC"}}">
+      <input class="tat-in tat-def-in" type="number" name="sd:collision.dc" value="{{collision.dc}}" />
+      <span class="tat-def-name">{{localize "pf2e.vehicle.collisionDC"}}</span>
+    </div>
+
+    <div class="tat-tile tat-def" title="{{localize "pf2e.vehicle.collisionDamage"}}">
+      <button type="button" class="tat-def-value tat-roll" data-action="roll-collision">{{collision.damage}}</button>
+      <span class="tat-def-name">{{localize "pf2e.vehicle.collision"}}</span>
+    </div>
+  </section>
+
+  {{!-- Tripulação, Passageiros e Carga --}}
+  <section class="tat-block">
+    <h3 class="tat-label"><i class="fa-solid fa-users-gear"></i> {{localize "pf2e.vehicle.crew"}} & {{localize "pf2e.vehicle.cargo"}}</h3>
+    <div class="tat-vehicle-capacity-grid">
+      <label class="cap-field">
+        <span class="cap-lbl">{{localize "pf2e.vehicle.crew"}}:</span>
+        <input class="tat-in" type="text" name="sd:crew" value="{{crew}}" />
+      </label>
+      <label class="cap-field">
+        <span class="cap-lbl">{{localize "pf2e.vehicle.passengers"}}:</span>
+        <input class="tat-in" type="number" name="sd:passengers" value="{{passengers}}" />
+      </label>
+      <label class="cap-field">
+        <span class="cap-lbl">{{localize "pf2e.vehicle.cargo"}} (Bulk):</span>
+        <input class="tat-in" type="number" name="sd:cargo" value="{{cargo}}" />
+      </label>
+      <label class="cap-field">
+        <span class="cap-lbl">{{localize "pf2e.vehicle.propulsion"}} / Speed:</span>
+        <input class="tat-in" type="number" name="sd:speed.value" value="{{speed.value}}" />
+      </label>
+    </div>
+  </section>
+
+  {{!-- Pilotagem --}}
+  <section class="tat-block">
+    <div class="tat-label-row">
+      <h3 class="tat-label"><i class="fa-solid fa-helm"></i> {{localize "pf2e.vehicle.piloting"}}</h3>
+      <button type="button" class="tat-btn-xs" data-action="roll-piloting"><i class="fa-solid fa-dice-d20"></i> {{localize "pf2e.vehicle.pilotingCheck"}}</button>
+    </div>
+    <div class="tat-piloting-row">
+      <input class="tat-in" type="text" name="sd:piloting.check" value="{{piloting.check}}" placeholder="Ex: Pilotar (Natureza ou Sobrevivência)" />
+      <label class="piloting-dc-field">
+        <span>CD:</span>
+        <input class="tat-in tat-in-sm" type="number" name="sd:piloting.dc" value="{{piloting.dc}}" />
+      </label>
+    </div>
+  </section>
+
+  {{!-- Descrição e Recursos --}}
+  <section class="tat-block">
+    <h3 class="tat-label"><i class="fa-solid fa-file-lines"></i> {{localize "pf2e.sheets.tabs.notes"}}</h3>
+    <textarea class="tat-in tat-notes" name="sd:description" placeholder="...">{{description}}</textarea>
+  </section>
+
+</div>

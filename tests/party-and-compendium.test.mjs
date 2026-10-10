@@ -33,33 +33,41 @@ test('Compendium Packs — File Existence and Schema Validity', () => {
   }
 });
 
-test('Actor Types — Party & Hazard Schemas', () => {
-  const partyData = getDefaultData('party');
-  assert.ok(Array.isArray(partyData.members), 'Party must have a members array');
-  assert.equal(typeof partyData.stash, 'object', 'Party must have a stash object');
-  assert.equal(partyData.stash.gp, 0, 'Party initial gp must be 0');
+test('Actor Types — Group & Hazard Schemas', () => {
+  const groupData = getDefaultData('group');
+  assert.ok(Array.isArray(groupData.members), 'Group must have a members array');
+  assert.equal(typeof groupData.stash, 'object', 'Group must have a stash object');
+  assert.equal(groupData.stash.gp, 0, 'Group initial gp must be 0');
 
   const hazardData = getDefaultData('hazard');
   assert.equal(hazardData.level, 1, 'Hazard default level is 1');
   assert.equal(hazardData.stealth.dc, 15, 'Hazard stealth DC default is 15');
+
+  const familiarData = getDefaultData('familiar');
+  assert.equal(familiarData.level, 1, 'Familiar default level is 1');
+  assert.equal(familiarData.abilitiesCount, 2, 'Familiar default abilities count is 2');
+
+  const vehicleData = getDefaultData('vehicle');
+  assert.equal(vehicleData.level, 1, 'Vehicle default level is 1');
+  assert.equal(vehicleData.hardness, 5, 'Vehicle default hardness is 5');
 });
 
-test('prepareActorRow — Safely passes Party and Hazard without mutating non-PC data', () => {
-  const partyActor = {
-    id: 'party-1',
+test('prepareActorRow — Safely passes Group and Hazard without mutating non-PC data', () => {
+  const groupActor = {
+    id: 'group-1',
     name: 'Os Desbravadores',
-    type: 'party',
+    type: 'group',
     systemData: {
-      ...getDefaultData('party'),
+      ...getDefaultData('group'),
       members: ['actor-1', 'actor-2'],
       stash: { pp: 2, gp: 50, sp: 20, cp: 10 },
     },
     items: [],
   };
 
-  const prepared = prepareActorRow(partyActor);
+  const prepared = prepareActorRow(groupActor);
   assert.equal(prepared.name, 'Os Desbravadores');
-  assert.equal(prepared.type, 'party');
+  assert.equal(prepared.type, 'group');
   assert.deepEqual(prepared.systemData.members, ['actor-1', 'actor-2']);
   assert.equal(prepared.systemData.stash.gp, 50);
 });
@@ -69,11 +77,14 @@ test('Character Sheet — Ergonomics Default Width is 740px', () => {
   assert.ok(content.includes('width: 740'), 'Character sheet width should be 740px for balanced tabletop layout');
 });
 
-test('Actor Directory — Pf2eActorDirectory exports and instantiates', async () => {
-  const { Pf2eActorDirectory } = await import('../scripts/actor-directory.mjs');
-  assert.equal(typeof Pf2eActorDirectory, 'function');
-  const instance = new Pf2eActorDirectory();
-  assert.ok(instance, 'Should instantiate Pf2eActorDirectory');
+test('Actor registration — native group type uses the party sheet without a DOM hook', () => {
+  const manifest = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../ruleset.json'), 'utf8'));
+  const entry = fs.readFileSync(path.resolve(__dirname, '../pf2e.mjs'), 'utf8');
+  assert.ok(manifest.actorTypes.includes('group'));
+  assert.ok(!manifest.actorTypes.includes('party'));
+  assert.match(entry, /actorTypes:\s*\[[^\]]*'group'/);
+  assert.match(entry, /sheets\.catalog\('actor', 'group', Pf2ePartySheet\)/);
+  assert.doesNotMatch(entry, /actor-directory|CONFIG\.ui\.actors/);
 });
 
 test('Character Sheet — Baseline Unarmed Strike and Crafting/Actions Context', () => {

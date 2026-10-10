@@ -1,6 +1,7 @@
 // PF2E — scripts/roll-dialog.mjs
 // Pre-roll configuration dialog: Fortune / Normal / Misfortune, Situational Bonus, DC, and Roll Mode.
 import { LoomDialog } from '/_loom/sdk/index.js';
+import { localize } from './i18n.mjs';
 
 function num(v) {
   const n = Number(v);
@@ -23,20 +24,32 @@ export function showRollDialog({ title, parts = [], dc = null }) {
 
   const initialDcVal = dc !== null && dc !== undefined && dc !== '' ? String(dc) : '';
 
+  const placeholderBonus = localize('pf2e.dialog.situationalBonus', 'Situational Bonus?');
+  const placeholderDc = localize('pf2e.dialog.targetDc', 'Target DC (optional)');
+  const labelRollMode = localize('pf2e.dialog.rollMode', 'Roll Mode');
+  const optPublic = localize('pf2e.dialog.public', 'Público como Usuário');
+  const optGm = localize('pf2e.dialog.gmroll', 'Privado para Mestres');
+  const optBlind = localize('pf2e.dialog.blindroll', 'Cego para Mestres');
+  const optSelf = localize('pf2e.dialog.selfroll', 'Somente para Si');
+
+  const labelFortune = localize('pf2e.dialog.fortuneBtn', 'Fortune (2x)');
+  const labelRoll = localize('pf2e.dialog.rollBtn', 'Roll');
+  const labelMisfortune = localize('pf2e.dialog.misfortuneBtn', 'Misfortune (2x)');
+
   container.innerHTML = `
     <div class="pf2e-roll-dialog-formula">${formulaText}</div>
     ${breakdownText ? `<div class="pf2e-roll-dialog-breakdown">${breakdownText}</div>` : ''}
     <div class="pf2e-roll-dialog-fields" style="display: flex; gap: 8px; margin: 8px 0;">
-      <input type="number" class="pf2e-roll-dialog-situational" placeholder="Situational Bonus?" value="0" style="flex: 1;" />
-      <input type="number" class="pf2e-roll-dialog-dc" placeholder="Target DC (optional)" value="${initialDcVal}" style="flex: 1;" />
+      <input type="number" class="pf2e-roll-dialog-situational" placeholder="${placeholderBonus}" value="0" style="flex: 1;" />
+      <input type="number" class="pf2e-roll-dialog-dc" placeholder="${placeholderDc}" value="${initialDcVal}" style="flex: 1;" />
     </div>
     <div class="pf2e-roll-dialog-config">
-      <label>Roll Mode</label>
+      <label>${labelRollMode}</label>
       <select class="pf2e-roll-dialog-mode">
-        <option value="public">Público como Usuário</option>
-        <option value="gmroll">Privado para Mestres</option>
-        <option value="blindroll">Cego para Mestres</option>
-        <option value="selfroll">Somente para Si</option>
+        <option value="public">${optPublic}</option>
+        <option value="gmroll">${optGm}</option>
+        <option value="blindroll">${optBlind}</option>
+        <option value="selfroll">${optSelf}</option>
       </select>
     </div>
   `;
@@ -59,19 +72,19 @@ export function showRollDialog({ title, parts = [], dc = null }) {
     buttons: [
       {
         action: 'fortune',
-        label: 'Fortune (2x)',
+        label: labelFortune,
         variant: 'ghost',
         callback: () => ({ rollType: 'fortune', situational: getSituational(), dc: getDC(), rollMode: getMode() }),
       },
       {
         action: 'normal',
-        label: 'Roll',
+        label: labelRoll,
         variant: 'primary',
         callback: () => ({ rollType: 'normal', situational: getSituational(), dc: getDC(), rollMode: getMode() }),
       },
       {
         action: 'misfortune',
-        label: 'Misfortune (2x)',
+        label: labelMisfortune,
         variant: 'ghost',
         callback: () => ({ rollType: 'misfortune', situational: getSituational(), dc: getDC(), rollMode: getMode() }),
       },
