@@ -6,22 +6,25 @@ import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager } from '/_loom/
 import { Pf2eCharacterSheet } from './character-sheet.mjs';
 import { Pf2eItemSheet } from './item-sheet.mjs';
 import { setPathValue } from './utils.mjs';
+import { localize } from './i18n.mjs';
 
 function num(v) {
   const n = Number(v);
   return Number.isFinite(n) ? n : 0;
 }
 
-const EXPLORATION_ACTIVITIES = [
-  { value: 'none', label: '— Nenhuma —' },
-  { value: 'avoid_notice', label: 'Evitar Notar (Furtividade)' },
-  { value: 'defend', label: 'Defender (Escudo Erguido)' },
-  { value: 'scout', label: 'Batedor (+1 Iniciativa Grupo)' },
-  { value: 'search', label: 'Procurar (Buscar Perigos)' },
-  { value: 'investigate', label: 'Investigar (Conhecimento)' },
-  { value: 'repeat_spell', label: 'Repetir Magia (Truques)' },
-  { value: 'hustle', label: 'Apressar-se (Dobro Vel)' },
-];
+function getExplorationActivities() {
+  return [
+    { value: 'none', label: localize('pf2e.exploration.none', '— None —') },
+    { value: 'avoid_notice', label: localize('pf2e.exploration.avoidNotice', 'Avoid Notice (Stealth)') },
+    { value: 'defend', label: localize('pf2e.exploration.defend', 'Defend (Shield Raised)') },
+    { value: 'scout', label: localize('pf2e.exploration.scout', 'Scout (+1 Party Initiative)') },
+    { value: 'search', label: localize('pf2e.exploration.search', 'Search (Seek Hazards)') },
+    { value: 'investigate', label: localize('pf2e.exploration.investigate', 'Investigate (Recall Knowledge)') },
+    { value: 'repeat_spell', label: localize('pf2e.exploration.repeatSpell', 'Repeat a Spell') },
+    { value: 'hustle', label: localize('pf2e.exploration.hustle', 'Hustle (Double Speed)') },
+  ];
+}
 
 export class Pf2ePartySheet extends LoomHandlebarsMixin(LoomActorSheet) {
   static DEFAULT_OPTIONS = {
@@ -42,7 +45,7 @@ export class Pf2ePartySheet extends LoomHandlebarsMixin(LoomActorSheet) {
       ...props,
       id: props.id || `party-sheet-${props.actorId}`,
       documentId: props.actorId,
-      title: (props.title && props.title !== 'undefined') ? props.title : 'Grupo PF2e',
+      title: (props.title && props.title !== 'undefined') ? props.title : localize('pf2e.party.title', 'PF2e Party'),
       showFooter: false,
       resizable: true,
       allowOverflow: true,
@@ -52,7 +55,7 @@ export class Pf2ePartySheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
   get title() {
     const n = this.document?.name;
-    return (n && n !== 'undefined') ? n : 'Grupo PF2e';
+    return (n && n !== 'undefined') ? n : localize('pf2e.party.title', 'PF2e Party');
   }
 
   get documentName() { return 'actor'; }
@@ -124,17 +127,20 @@ export class Pf2ePartySheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const hpPct = Math.min(100, Math.max(0, Math.round((hpVal / hpMax) * 100)));
 
       const activeAct = explorationState[actor.id] || 'none';
-      const explorationOptions = EXPLORATION_ACTIVITIES.map((opt) => ({
+      const explorationOptions = getExplorationActivities().map((opt) => ({
         ...opt,
         selected: opt.value === activeAct,
       }));
 
+      const ancestryFallback = localize('pf2e.itemTypes.ancestry', 'Ancestry');
+      const classFallback = localize('pf2e.itemTypes.class', 'Class');
       members.push({
         id: actor.id,
-        name: actor.name || 'Personagem',
-        avatarUrl: actor.avatarUrl || actor.img || '/marketplace/rulesets/pf2e/assets/icons/adventurer.svg',
+        avatarUrl: (actor.avatarUrl && actor.avatarUrl !== '/icons/svg/adventurer.svg')
+          ? actor.avatarUrl
+          : ((actor.img && actor.img !== '/icons/svg/adventurer.svg') || '/marketplace/rulesets/pf2e/assets/images/default-avatar.svg'),
         level: lvl,
-        ancestryClass: `${mSd.ancestryName || 'Ancestralidade'} · ${mSd.className || 'Classe'}`,
+        ancestryClass: `${mSd.ancestryName || ancestryFallback} · ${mSd.className || classFallback}`,
         hp: { value: hpVal, max: hpMax, temp: hpTemp, pct: hpPct },
         ac: num(mSd.armor?.value) || 10,
         perception: num(mSd.perception?.total),
@@ -151,7 +157,7 @@ export class Pf2ePartySheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const averageLevel = memberCount > 0 ? (levelSum / memberCount).toFixed(1) : '—';
 
     return {
-      name: doc.name || 'Novo Grupo',
+      name: doc.name || localize('pf2e.party.title', 'PF2e Party'),
       memberCount,
       averageLevel,
       stash: {
@@ -288,7 +294,7 @@ export class Pf2ePartySheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const type = target?.dataset?.type || 'equipment';
       await api.post('/items', {
         worldId: window.Loom?.world?.id || this.document.worldId,
-        name: 'Novo Item do Grupo',
+        name: localize('pf2e.party.newItem', 'Novo Item do Grupo'),
         type,
         data: {},
         actorId: this.document.id,

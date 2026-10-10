@@ -1,0 +1,84 @@
+{{!-- PF2E — hazard-sheet.hbs: Ficha Tática de Ameaça / Perigo / Armadilha --}}
+<div class="pf2e-panel tat-hud pf2e-hazard-sheet">
+
+  {{!-- Cabeçalho: Retrato, Nome, Complexidade, Nível --}}
+  <header class="tat-top">
+    <button type="button" class="tat-portrait" data-action="pick-portrait" title="{{localize "pf2e.sheets.portrait"}}">
+      <img src="{{avatarUrl}}" alt="{{name}}" onerror="this.src='/marketplace/rulesets/pf2e/assets/images/default-avatar.svg'" />
+    </button>
+    <div class="tat-id">
+      <input class="tat-in tat-name" type="text" name="name" value="{{name}}" placeholder="{{localize "pf2e.sheets.name"}}" />
+      <div class="tat-id-line">
+        <label class="complexity-field">
+          <span>{{localize "pf2e.hazard.complexity"}}:</span>
+          <select class="tat-in tat-in-sm" name="sd:complexity">
+            <option value="simple"{{#unless isComplex}} selected{{/unless}}>{{localize "pf2e.hazard.simple"}}</option>
+            <option value="complex"{{#if isComplex}} selected{{/if}}>{{localize "pf2e.hazard.complex"}}</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <label class="tat-level" title="{{localize "pf2e.sheets.level"}}">
+      <span>{{localize "pf2e.sheets.level"}}</span>
+      <input class="tat-in" type="number" name="sd:level" value="{{level}}" min="-1" max="25" />
+    </label>
+  </header>
+
+  {{!-- Pontos de Vida, Limiar de Quebra e Dureza --}}
+  <div class="tat-tile tat-hp{{#if hp.low}} is-low{{/if}}">
+    <span class="tat-label">{{localize "pf2e.sheets.hp"}}</span>
+    <div class="tat-hp-read">
+      <input class="tat-in tat-hp-cur" type="number" name="sd:hp.value" value="{{hp.value}}" />
+      <span class="tat-hp-max">/ <input class="tat-in tat-in-sm" type="number" name="sd:hp.max" value="{{hp.max}}" /></span>
+      <label class="tat-hp-temp">{{localize "pf2e.hazard.hardness"}} <input class="tat-in tat-in-sm" type="number" name="sd:hardness" value="{{hardness}}" /></label>
+    </div>
+    <div class="tat-meter"><span style="width: {{hp.pct}}%"></span></div>
+  </div>
+
+  {{!-- Furtividade & Defesas em Grid Alinhado --}}
+  <section class="tat-defenses">
+    <div class="tat-tile tat-def tat-def-ac" title="{{localize "pf2e.defenses.ac"}}">
+      <input class="tat-in tat-def-in" type="number" name="sd:ac" value="{{ac}}" />
+      <span class="tat-def-name">{{localize "pf2e.sheets.short.ac"}}</span>
+    </div>
+
+    <div class="tat-tile tat-def" title="{{localize "pf2e.hazard.stealthDC"}}">
+      <input class="tat-in tat-def-in" type="number" name="sd:stealth.dc" value="{{stealth.dc}}" />
+      <span class="tat-def-name">{{localize "pf2e.hazard.stealthDC"}}</span>
+    </div>
+
+    <div class="tat-tile tat-def" title="{{localize "pf2e.defenses.fortitude"}}">
+      <button type="button" class="tat-def-value tat-roll" data-action="roll-save" data-key="fortitude">{{saves.fortitude}}</button>
+      <span class="tat-def-name">{{localize "pf2e.saves.fortitudeAbbr"}}</span>
+    </div>
+
+    <div class="tat-tile tat-def" title="{{localize "pf2e.defenses.reflex"}}">
+      <button type="button" class="tat-def-value tat-roll" data-action="roll-save" data-key="reflex">{{saves.reflex}}</button>
+      <span class="tat-def-name">{{localize "pf2e.saves.reflexAbbr"}}</span>
+    </div>
+
+    <div class="tat-tile tat-def" title="{{localize "pf2e.defenses.will"}}">
+      <button type="button" class="tat-def-value tat-roll" data-action="roll-save" data-key="will">{{saves.will}}</button>
+      <span class="tat-def-name">{{localize "pf2e.saves.willAbbr"}}</span>
+    </div>
+  </section>
+
+  {{!-- Desativar (Disable) --}}
+  <section class="tat-block">
+    <h3 class="tat-label"><i class="fa-solid fa-wrench"></i> {{localize "pf2e.hazard.disable"}}</h3>
+    <textarea class="tat-in tat-notes" name="sd:disable" placeholder="...">{{disable}}</textarea>
+  </section>
+
+  {{!-- Rotina / Reação --}}
+  <section class="tat-block">
+    <h3 class="tat-label"><i class="fa-solid fa-bolt"></i> {{#if isComplex}}{{localize "pf2e.hazard.routine"}}{{else}}{{localize "pf2e.hazard.reaction"}}{{/if}}</h3>
+    <textarea class="tat-in tat-notes" name="sd:routine" placeholder="...">{{routine}}</textarea>
+  </section>
+
+  {{!-- Reinicialização (Reset) --}}
+  <section class="tat-block">
+    <h3 class="tat-label"><i class="fa-solid fa-rotate-left"></i> {{localize "pf2e.hazard.reset"}}</h3>
+    <textarea class="tat-in tat-notes" name="sd:reset" placeholder="...">{{reset}}</textarea>
+  </section>
+
+</div>

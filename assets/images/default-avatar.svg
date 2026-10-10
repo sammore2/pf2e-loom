@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#4a0e0c"/>
+      <stop offset="70%" stop-color="#240706"/>
+      <stop offset="100%" stop-color="#120303"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5e1a4"/>
+      <stop offset="50%" stop-color="#c89b3c"/>
+      <stop offset="100%" stop-color="#8a631e"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="256" height="256" fill="url(#bgGrad)"/>
+
+  <!-- Ornate Border Frame -->
+  <rect x="8" y="8" width="240" height="240" rx="10" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" opacity="0.85"/>
+  <rect x="14" y="14" width="228" height="228" rx="7" fill="none" stroke="url(#goldGrad)" stroke-width="1" opacity="0.4"/>
+
+  <!-- Corner Filigree Accents -->
+  <path d="M 12 28 L 28 12 M 12 36 L 36 12" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 244 28 L 228 12 M 244 36 L 220 12" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 12 228 L 28 244 M 12 220 L 36 244" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 244 228 L 228 244 M 244 220 L 220 244" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- Adventurer Hero Crest Silhouette -->
+  <g filter="url(#glow)">
+    <!-- Helmet / Head Crest -->
+    <path d="M 128 52 C 104 52 92 68 92 92 C 92 116 106 130 128 130 C 150 130 164 116 164 92 C 164 68 152 52 128 52 Z" fill="url(#goldGrad)"/>
+    <path d="M 128 42 L 132 54 L 124 54 Z" fill="url(#goldGrad)"/>
+
+    <!-- Hood / Shoulders Mantle -->
+    <path d="M 128 142 C 96 142 56 162 48 200 C 46 210 52 218 64 218 L 192 218 C 204 218 210 210 208 200 C 200 162 160 142 128 142 Z" fill="url(#goldGrad)"/>
+
+    <!-- Subtle Inner Shading -->
+    <path d="M 128 62 C 112 62 104 74 104 92 C 104 106 112 118 128 118 C 144 118 152 106 152 92 C 152 74 144 62 128 62 Z" fill="#240706" opacity="0.55"/>
+    <path d="M 128 154 C 106 154 78 170 70 202 L 186 202 C 178 170 150 154 128 154 Z" fill="#240706" opacity="0.45"/>
+  </g>
+</svg>

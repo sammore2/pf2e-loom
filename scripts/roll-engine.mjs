@@ -1,10 +1,8 @@
-// PF2E — scripts/roll-engine.mjs
-// Client rolls: every d20 roll goes through the shared dialog plus a
-// fire-and-forget dispatch. Single calculation pipeline shared with sheets and rules.
 import { SKILL_ABILITIES, SAVE_KEYS } from './config.mjs';
 import { multipleAttackPenalty } from './rules.mjs';
 import { buildStrike, buildDamage } from './checks.mjs';
 import { prepareActorRow } from './prepare-data.mjs';
+import { localize } from './i18n.mjs';
 
 function num(v) {
   const n = Number(v);
@@ -38,14 +36,9 @@ async function baseRoll({ label, modifier = 0, actor = null, dc = null, rollType
   const meta = {
     label,
     system: 'pf2e',
-    rollType,
-    pf2e: {
-      version: '0.1.0',
-      requestId: `pf2e-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      dc: finalDC,
-      rollMode: choice.rollMode || 'public',
-      fortune: choice.rollType,
-    },
+    dc: finalDC,
+    fortune: choice.rollType,
+    rollMode: choice.rollMode || 'public',
     ...extraMeta,
   };
   if (finalDC !== null && finalDC !== undefined) meta.dc = finalDC;
@@ -63,9 +56,10 @@ async function baseRoll({ label, modifier = 0, actor = null, dc = null, rollType
 }
 
 /** Generic check: flat modifier, optional DC. */
-export async function rollCheck(actor, { label = 'Check', modifier = 0, dc = null } = {}) {
+export async function rollCheck(actor, { label = null, modifier = 0, dc = null, extraMeta = {} } = {}) {
   const prepActor = getPreparedActor(actor);
-  return baseRoll({ label, modifier, actor: prepActor, dc, rollType: 'check' });
+  const defaultLabel = label || localize('pf2e.rolls.check', 'Check');
+  return baseRoll({ label: defaultLabel, modifier, actor: prepActor, dc, rollType: 'check', extraMeta });
 }
 
 /** Skill check by key; `lore:<name>` addresses a free lore entry. */
@@ -77,14 +71,15 @@ export async function rollSkill(actor, key) {
   let breakdown = '';
 
   if (String(key).startsWith('lore:')) {
-    const name = String(key).slice(5).toLowerCase();
-    const entry = (sd.lore || []).find((e) => String(e?.name || '').toLowerCase() === name);
+    const name = String(key).slice(5);
+    const entry = (sd.lore || []).find((e) => String(e?.name || '').toLowerCase() === name.toLowerCase());
     modifier = num(entry?.total);
-    label = entry?.name || label;
+    const loreLabel = localize('pf2e.skills.lore', 'Lore');
+    label = entry?.name ? `${loreLabel} (${entry.name})` : `${loreLabel} (${name})`;
     breakdown = entry?.breakdown || '';
   } else if (SKILL_ABILITIES[key]) {
     modifier = num(sd.skills?.[key]?.total);
-    label = key;
+    label = localize(`pf2e.skills.${key}`, key);
     breakdown = sd.skills?.[key]?.breakdown || '';
   } else {
     return null;
@@ -104,8 +99,9 @@ export async function rollSave(actor, key) {
   const prepActor = getPreparedActor(actor);
   const sd = actorData(prepActor);
   const entry = sd.saves?.[key];
+  const label = localize(`pf2e.defenses.${key}`, key);
   return baseRoll({
-    label: key,
+    label,
     modifier: num(entry?.total),
     actor: prepActor,
     rollType: 'save',
@@ -117,7 +113,7 @@ export async function rollPerception(actor) {
   const prepActor = getPreparedActor(actor);
   const sd = actorData(prepActor);
   return baseRoll({
-    label: 'perception',
+    label: localize('pf2e.defenses.perception', 'Perception'),
     modifier: num(sd.perception?.total),
     actor: prepActor,
     rollType: 'perception',
@@ -129,7 +125,7 @@ export async function rollInitiative(actor) {
   const prepActor = getPreparedActor(actor);
   const sd = actorData(prepActor);
   return baseRoll({
-    label: 'initiative',
+    label: localize('pf2e.sheets.initiative', 'Initiative'),
     modifier: num(sd.derived?.initiative),
     actor: prepActor,
     rollType: 'initiative',

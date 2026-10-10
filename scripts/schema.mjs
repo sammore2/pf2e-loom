@@ -80,17 +80,66 @@ function defaultHazard() {
   };
 }
 
+function defaultFamiliar() {
+  return {
+    level: 1,
+    master: '',
+    hp: { value: 5, max: 5, temp: 0 },
+    ac: { value: 15 },
+    perception: { total: 0 },
+    speed: { value: 25, flying: 0, swimming: 0, burrowing: 0, climbing: 0 },
+    saves: {
+      fortitude: { total: 0 },
+      reflex: { total: 0 },
+      will: { total: 0 },
+    },
+    skills: {
+      acrobatics: { total: 0 },
+      stealth: { total: 0 },
+    },
+    abilitiesCount: 2,
+    abilities: [],
+    traits: ['animal', 'minion'],
+    notes: '',
+  };
+}
+
+function defaultVehicle() {
+  return {
+    level: 1,
+    price: '',
+    size: 'huge',
+    crew: '1',
+    passengers: 0,
+    cargo: 0,
+    piloting: { check: '', dc: 15 },
+    ac: 10,
+    hardness: 5,
+    hp: { value: 20, max: 20, brokenThreshold: 10 },
+    speed: { type: 'wind', value: 20 },
+    collision: { dc: 15, damage: '2d6' },
+    immunities: '',
+    description: '',
+  };
+}
+
 export function getDefaultData(type) {
   switch (type) {
     case 'character':
     case 'npc':
       return defaultActor();
 
-    case 'party':
+    case 'group':
       return defaultParty();
 
     case 'hazard':
       return defaultHazard();
+
+    case 'familiar':
+      return defaultFamiliar();
+
+    case 'vehicle':
+      return defaultVehicle();
 
     case 'ancestry':
       return { ...defaultBaseItem(), hp: 0, size: 'med', speed: 0, boosts: '' };

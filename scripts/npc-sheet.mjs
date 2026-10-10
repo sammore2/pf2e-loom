@@ -12,6 +12,8 @@ import { proficiencyBonus, multipleAttackPenalty } from './rules.mjs';
 import { buildStrike } from './checks.mjs';
 import { rollCheck, rollSkill, rollSave, rollPerception, rollAttack, rollDamage } from './roll-engine.mjs';
 import { Pf2eItemSheet } from './item-sheet.mjs';
+import { sendChatCard } from './chat-card.mjs';
+import { localize } from './i18n.mjs';
 
 function num(v) {
   const n = Number(v);
@@ -266,7 +268,9 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       ...context,
       defTiles,
       name: (this.document?.name && this.document.name !== 'undefined') ? this.document.name : '',
-      avatarUrl: this.document?.avatarUrl || this.document?.img || '',
+      avatarUrl: (this.document?.avatarUrl && this.document.avatarUrl !== '/icons/svg/adventurer.svg')
+        ? this.document.avatarUrl
+        : ((this.document?.img && this.document.img !== '/icons/svg/adventurer.svg') || '/marketplace/rulesets/pf2e/assets/images/default-avatar.svg'),
       level,
       hp: { value: num(sd.hp?.value), max: num(sd.hp?.max), temp: num(sd.hp?.temp), pct: hpPct, low: hpPct < 25 },
       abilities,
@@ -293,7 +297,10 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     }
     if (action === 'roll-attribute') {
       const sd = this.document?.systemData || {};
-      void rollCheck(this.document, { label: target?.dataset?.key || 'check', modifier: num(sd.abilities?.[target?.dataset?.key]?.value) });
+      const key = target?.dataset?.key || 'check';
+      const attrName = localize(`pf2e.attributes.${key}`, key.toUpperCase());
+      const label = `${localize('pf2e.rolls.check', 'Check')} (${attrName})`;
+      void rollCheck(this.document, { label, modifier: num(sd.abilities?.[key]?.value), extraMeta: { ability: key, checkType: 'ability' } });
       return;
     }
     if (action === 'roll-skill') {
@@ -316,6 +323,28 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (action === 'roll-damage' || action === 'roll-damage-crit') {
       const item = id ? this._findItem(id) : null;
       void rollDamage(this.document, item, { critical: action === 'roll-damage-crit' });
+      return;
+    }
+    if (action === 'action-chat' || action === 'item-chat') {
+      const itemId = id || target?.dataset?.id || target?.closest?.('[data-id]')?.dataset?.id;
+      const item = itemId ? this._findItem(itemId) : null;
+      if (!item) return;
+      const sys = item.system || item.data || {};
+      const desc = sys.description || '';
+      const glyph = sys.actions === 'reaction' ? '↺' : (sys.actions === 'free' ? '◇' : (sys.actions || '◆'));
+      const traits = Array.isArray(sys.traits) ? sys.traits : (sys.traits ? [sys.traits] : []);
+      const typeLabel = item.type === 'spell'
+        ? localize('pf2e.itemTypes.spell', 'Spell')
+        : (item.type === 'feat'
+          ? localize('pf2e.itemTypes.feat', 'Feat')
+          : (item.type === 'weapon' ? localize('pf2e.rolls.strike', 'Strike') : localize('pf2e.itemTypes.action', 'Action')));
+      void sendChatCard(this.document, {
+        name: item.name,
+        glyph,
+        traits,
+        desc,
+        type: typeLabel,
+      });
       return;
     }
     if (action === 'item-open') {

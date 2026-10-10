@@ -1,0 +1,8 @@
+Icons in this folder (assets/pf2e/icons/*.png, 102 files)
+
+Source: OpenGameArt, "Skill, item and spell icons"
+URL: https://opengameart.org/content/skill-item-and-spell-icons
+Author: pauliuw (the archive's own note credits DustyChest, the original graphics author)
+License: CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/)
+
+The archive note says the graphics are CC0 and asks that users email the author with where they are used. That is optional under CC0; it is recorded here for courtesy.
