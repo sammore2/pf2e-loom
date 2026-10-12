@@ -17,7 +17,8 @@ import { Pf2eFamiliarSheet } from './scripts/familiar-sheet.mjs';
 import { Pf2eVehicleSheet } from './scripts/vehicle-sheet.mjs';
 import { Pf2eItemSheet } from './scripts/item-sheet.mjs';
 import { Pf2eCompendiumBrowser } from './scripts/compendium-browser.mjs';
-import { registerChatWrapper, sendChatCard, renderPf2eRollCard } from './scripts/chat-card.mjs';
+import { registerChatWrapper, sendChatCard } from './scripts/chat-card.mjs';
+import { registerCombatInitiative } from './scripts/combat-initiative.mjs';
 import { initI18n, localize } from './scripts/i18n.mjs';
 
 function prepareData(row) {
@@ -26,6 +27,7 @@ function prepareData(row) {
 
 initI18n();
 registerSettings();
+registerCombatInitiative();
 
 SystemRegistry.register(defineSystem({
   id: SYSTEM_ID,
@@ -64,76 +66,6 @@ window.Loom.LoomHooks.on('combatTurn', (combat) => {
   void tickEndedTurnConditions(combat);
   void announceTurnActions(combat);
 });
-
-// Combat start: each combatant rolls initiative the pf2e way (d20 plus the actor's own initiative bonus,
-// which is perception by default and includes the extra bonus). The core sends these totals to the server.
-window.Loom.LoomHooks.on('combatInitiative', (ctx) => {
-  for (const castId of ctx.castIds || []) {
-    ctx.pending.push(rollPf2eInitiativeFor(castId, ctx));
-  }
-});
-
-// Posts a ready card straight to chat through the same paths sendChatCard uses first, so no roll is dispatched
-// (a dispatched roll with a placeholder formula would leave a total-0 entry in the roll log).
-// Returns false when neither path is available, so the caller can fall back.
-async function postCardDirect(actor, cardHtml) {
-  const speaker = { actor: actor?.id || null, actorId: actor?.id || null, actorName: actor?.name || '', alias: actor?.name || '' };
-  const payload = { content: cardHtml, speaker, flags: { pf2e: { cardHtml } } };
-  const chatCls = window.Loom?.ChatMessage || window.ChatMessage || window.Loom?.config?.ChatMessage?.documentClass;
-  if (chatCls && typeof chatCls.create === 'function') {
-    try {
-      const res = await chatCls.create(payload);
-      if (res) return true;
-    } catch (err) {
-      console.warn('[pf2e] ChatMessage.create failed for initiative card:', err);
-    }
-  }
-  if (window.Loom?.socket?.emit) {
-    const worldId = window.Loom?.world?.id || actor?.worldId || '';
-    const userId = window.Loom?.user?.id || '';
-    window.Loom.socket.emit('chat.message', { worldId, userId, ...payload });
-    return true;
-  }
-  return false;
-}
-
-async function rollPf2eInitiativeFor(castId, ctx) {
-  try {
-    const cast = await window.Loom.api.get(`/cast/${encodeURIComponent(castId)}`);
-    if (!cast?.id) return;
-    const holder = cast.isLinked && cast.actorId
-      ? await window.Loom.api.get(`/actors/${encodeURIComponent(cast.actorId)}`)
-      : cast;
-    const bonus = Number(holder?.systemData?.derived?.initiative) || 0;
-    // Cryptographic randomness, rolled here so the tracker and the chat card show the same total.
-    const d20 = 1 + (crypto.getRandomValues(new Uint32Array(1))[0] % 20);
-    const total = d20 + bonus;
-    ctx.initiatives[castId] = total;
-    const label = localize('pf2e.combat.initiativeTitle', 'Initiative');
-    // Same shape as the skill rolls: a pf2e roll with its natural d20, rendered by renderPf2eRollCard.
-    // The total is the one already stored in ctx.initiatives, so the card and the tracker agree.
-    const roll = {
-      formula: bonus ? `1d20 + ${bonus}` : '1d20',
-      total,
-      mode: 'public',
-      terms: [
-        { kind: 'dice', count: 1, faces: 20, rolls: [d20] },
-        ...(bonus ? [{ kind: 'modifier', value: bonus }] : []),
-      ],
-      meta: { label, system: 'pf2e', rollType: 'initiative', rollMode: 'public', dc: null },
-    };
-    const cardHtml = renderPf2eRollCard(roll);
-    const posted = await postCardDirect(holder, cardHtml);
-    if (!posted) {
-      await sendChatCard(holder, {
-        name: holder?.name || label, glyph: '⚡', type: label,
-        desc: `<strong>${total}</strong> · d20 ${d20} + ${bonus}`,
-      });
-    }
-  } catch (error) {
-    console.error(`[pf2e] Could not roll initiative for Cast ${castId}:`, error);
-  }
-}
 
 // Start of a combatant's turn: post its action budget (resolveTurnActions) to chat. GM only, so it posts once.
 async function announceTurnActions(combat) {
