@@ -503,5 +503,48 @@ test('Item Data Normalization — prevents [object Object] in descriptions and a
   assert.ok(!String(normalized.description).includes('[object Object]'));
 });
 
+test('Parchment Font Contrast — ensures high contrast colors for empty states, fields, and headers', () => {
+  const css = fs.readFileSync(path.join(__dirname, '../styles/pf2e.css'), 'utf8');
+
+  // Verify .tat-empty has high-contrast warm sepia/brown color on parchment
+  assert.ok(css.includes('.pf2e-ui .tat-empty'));
+  assert.ok(css.includes('color: #5c401e !important;'));
+
+  // Verify .tat-field has high-contrast dark ink on parchment
+  assert.ok(css.includes('color: #4a3319 !important;'));
+
+  // Verify .pf2e-effects-header title is styled with engraved crimson
+  assert.ok(css.includes('.pf2e-effects-header h3.tat-label'));
+  assert.ok(css.includes('.pf2e-spellbook-heading'));
+
+  // Verify that dark elements remain intact with gold/light accents
+  assert.ok(css.includes('.pf2e-ui .tat-rail .tat-empty'));
+  assert.ok(css.includes('.pf2e-ui .tat-rail .tat-field'));
+});
+
+test('Item Drop Deduplication Logic — prevents duplicate item addition for unique items', () => {
+  const isUniqueType = (type) => ['spell', 'feat', 'action', 'class', 'ancestry', 'heritage', 'background'].includes(type);
+  const shouldSkipDrop = (existingItems, source) => {
+    const itemType = source.type || 'equipment';
+    if (!isUniqueType(itemType)) return false;
+    return existingItems.some((it) => it.type === itemType && it.name?.trim().toLowerCase() === source.name?.trim().toLowerCase());
+  };
+
+  const actorItems = [
+    { id: '1', name: 'Fireball', type: 'spell' },
+    { id: '2', name: 'Power Attack', type: 'feat' },
+  ];
+
+  // Dropping duplicate Fireball must be skipped
+  assert.equal(shouldSkipDrop(actorItems, { name: 'Fireball', type: 'spell' }), true);
+  assert.equal(shouldSkipDrop(actorItems, { name: 'fireball', type: 'spell' }), true);
+
+  // Dropping new spell Heal must be allowed
+  assert.equal(shouldSkipDrop(actorItems, { name: 'Heal', type: 'spell' }), false);
+
+  // Dropping equipment with same name (e.g. multiple daggers) is allowed
+  assert.equal(shouldSkipDrop([{ name: 'Dagger', type: 'equipment' }], { name: 'Dagger', type: 'equipment' }), false);
+});
+
 
 

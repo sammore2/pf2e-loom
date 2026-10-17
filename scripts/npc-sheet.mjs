@@ -89,6 +89,8 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   }
 
   _hasDropListener = false;
+  _isDropping = false;
+
   _attachDropListener() {
     if (!this.element || this._hasDropListener) return;
     this._hasDropListener = true;
@@ -99,22 +101,63 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     this.element.addEventListener('drop', (e) => void this._onDropItem(e));
   }
 
-  async _onDropItem(event) {
-    event.preventDefault();
-    if (!this.document) return;
-    let data;
+  _onDrop(event) {
+    if (event?._pf2eHandled) return;
+    super._onDrop?.(event);
+  }
+
+  async _onDropItem(event, explicitData) {
+    if (event) {
+      if (event._pf2eHandled) return;
+      event._pf2eHandled = true;
+      if (typeof event.stopImmediatePropagation === 'function') {
+        event.stopImmediatePropagation();
+      }
+      if (typeof event.stopPropagation === 'function') {
+        event.stopPropagation();
+      }
+      if (typeof event.preventDefault === 'function') {
+        event.preventDefault();
+      }
+    }
+    if (this._isDropping) return;
+    this._isDropping = true;
+
     try {
-      const raw = event.dataTransfer?.getData('application/json') || event.dataTransfer?.getData('text/plain');
-      if (raw) data = JSON.parse(raw);
-    } catch { /* payload inválido: ignora */ }
-    if (!data) return;
-    const itemId = data.id || data.itemId;
-    if (!itemId && !data.data) return;
-    try {
+      if (!this.document) return;
+      let data = explicitData;
+      if (!data && event?.dataTransfer) {
+        try {
+          const raw = event.dataTransfer.getData('application/json') || event.dataTransfer.getData('text/plain');
+          if (raw) data = JSON.parse(raw);
+        } catch { /* payload inválido: ignora */ }
+      }
+      if (!data) return;
+      const itemId = data.id || data.itemId;
+      if (!itemId && !data.data) return;
+
       let source = data.data;
       if (!source && itemId) source = await api.get(`/items/${itemId}`);
       if (!source) return;
+
       const itemType = source.type || 'equipment';
+
+      const existingItems = this.document.items || [];
+      const isUniqueType = ['spell', 'feat', 'action', 'class', 'ancestry', 'heritage', 'background'].includes(itemType);
+      if (isUniqueType) {
+        const alreadyExists = existingItems.some((it) => {
+          if (it.type !== itemType) return false;
+          if (it.name && source.name && it.name.trim().toLowerCase() === source.name.trim().toLowerCase()) return true;
+          return false;
+        });
+        if (alreadyExists) {
+          if (typeof window?.Loom?.toast === 'function') {
+            window.Loom.toast({ message: `"${source.name}" já está na ficha.`, type: 'info' });
+          }
+          return;
+        }
+      }
+
       const rawData = source.system || source.data || getDefaultData(itemType);
       const normalizedData = normalizeItemData(rawData, itemType);
       await api.post('/items', {
@@ -128,6 +171,10 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       await this._reloadDocument();
     } catch (err) {
       console.error('Failed to drop item:', err);
+    } finally {
+      setTimeout(() => {
+        this._isDropping = false;
+      }, 350);
     }
   }
 
