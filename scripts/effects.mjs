@@ -78,7 +78,9 @@ export function getNativeConditionId(conditionId) {
 
 /**
  * Toggles a native condition on a target cast or actor using the core API.
- * Automatically handles token status markers and core visual presets.
+ * Automatically handles token status markers and core visual presets when called by GM/Assistant GM.
+ * When called by a player (non-GM), the server returns 403; this is safely caught without throwing
+ * or breaking the sheet workflow.
  */
 export async function toggleNativeCondition({ targetActorId, targetCastId, conditionId, on }) {
   const nativeId = getNativeConditionId(conditionId);
@@ -95,9 +97,12 @@ export async function toggleNativeCondition({ targetActorId, targetCastId, condi
   else return null;
 
   try {
-    return await fx.condition(payload);
-  } catch (err) {
-    console.warn(`[pf2e] Failed to toggle native condition "${nativeId}":`, err);
+    const res = await fx.condition(payload);
+    // Non-GM players receive 403 (res.ok === false with 'Assistant GM permission required').
+    // This is expected in core, as only GM/Assistant GM can toggle native canvas token status markers.
+    return res;
+  } catch {
+    // Gracefully handle 403 or permission errors without breaking the sheet
     return null;
   }
 }
@@ -199,34 +204,20 @@ export async function applyItemEffect(actor, item) {
 
 /** Removes applied buffs originated from an item (e.g. on unequip or delete). */
 export async function removeItemEffects(item, actorId = null) {
-  if (!item?.id) return;
+  if (!item?.id) return null;
   const fx = getEffectsApi();
-  if (!fx) return;
+  if (!fx || typeof fx.clear !== 'function') return null;
   const targetId = actorId || item.actorId;
+  if (!targetId) return null;
 
-  // 1. Try native Loom.effects.clear
-  if (targetId && typeof fx.clear === 'function') {
-    try {
-      const cleared = await fx.clear({
-        targetActorId: targetId,
-        filter: { sourceId: item.id },
-      });
-      if (cleared?.ok && cleared.removed?.length) return;
-    } catch {
-      // Fall through to fallback
-    }
-  }
-
-  // 2. Fallback: inspect forItem and delete applied copies
   try {
-    const buffs = await fx.forItem(item.id);
-    for (const buff of buffs || []) {
-      if (buff.actorId || !targetId) {
-        await fx.delete(buff.id);
-      }
-    }
+    return await fx.clear({
+      targetActorId: targetId,
+      filter: { sourceType: 'item', sourceId: item.id },
+    });
   } catch (err) {
-    console.warn(`[pf2e] Failed to remove item effects for item ${item.id}:`, err);
+    console.warn(`[pf2e] Failed to clear item effects for item ${item.id}:`, err);
+    return null;
   }
 }
 

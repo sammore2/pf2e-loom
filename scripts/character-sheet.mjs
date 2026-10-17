@@ -1109,8 +1109,8 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
           conditionId: value,
           on: true,
         });
-      } catch (err) {
-        console.warn(`[pf2e] Failed to toggle native condition "${value}":`, err);
+      } catch {
+        // 403 for non-GM player is expected and must not disrupt sheet updates
       }
       await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { conditions } });
       target.value = '';
@@ -1180,8 +1180,8 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         conditionId: id,
         on: !isRemoving,
       });
-    } catch (err) {
-      console.warn(`[pf2e] Failed to toggle native condition "${id}":`, err);
+    } catch {
+      // 403 for non-GM player is expected and must not disrupt sheet updates
     }
 
     await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { conditions } });

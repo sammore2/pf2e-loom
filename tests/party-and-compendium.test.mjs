@@ -357,6 +357,32 @@ test('Native Effects — toggleNativeCondition invokes Loom.effects.condition', 
       on: false,
       targetCastId: 'cast-456',
     });
+
+    // Simulated 403 for non-GM player: returns result or null without throwing
+    globalThis.Loom.effects.condition = async () => ({
+      ok: false,
+      removed: [],
+      error: 'Assistant GM permission required',
+    });
+
+    const nonGmRes = await toggleNativeCondition({
+      targetActorId: 'actor-123',
+      conditionId: 'blinded',
+      on: true,
+    });
+    assert.equal(nonGmRes?.ok, false);
+    assert.equal(nonGmRes?.error, 'Assistant GM permission required');
+
+    // Thrown 403/network error handled safely
+    globalThis.Loom.effects.condition = async () => {
+      throw new Error('403 Forbidden');
+    };
+    const thrownRes = await toggleNativeCondition({
+      targetActorId: 'actor-123',
+      conditionId: 'blinded',
+      on: true,
+    });
+    assert.equal(thrownRes, null);
   } finally {
     delete globalThis.Loom;
   }
@@ -442,7 +468,7 @@ test('Native Effects — ensureItemTemplate, applyItemEffect, and removeItemEffe
     await syncEquippedEffect(item, { id: 'actor-hero' });
     assert.equal(clearCalls.length, 1);
     assert.equal(clearCalls[0].targetActorId, 'actor-hero');
-    assert.deepEqual(clearCalls[0].filter, { sourceId: 'sword-1' });
+    assert.deepEqual(clearCalls[0].filter, { sourceType: 'item', sourceId: 'sword-1' });
   } finally {
     delete globalThis.Loom;
   }
