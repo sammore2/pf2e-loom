@@ -2474,12 +2474,56 @@
 }
 
 .pf2e-ui .tat-icon {
-  color: var(--tat-dim);
-  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  color: #4a3319;
+  background: rgba(92, 64, 30, 0.08);
+  border: 1px solid rgba(92, 64, 30, 0.22);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: all 120ms ease;
 }
 
 .pf2e-ui .tat-icon:hover {
-  color: #ffffff;
+  color: #8c1d1a;
+  background: rgba(140, 29, 26, 0.12);
+  border-color: rgba(140, 29, 26, 0.35);
+  transform: translateY(-1px) scale(1.05);
+}
+
+.pf2e-ui .tat-icon:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.pf2e-ui .tat-icon[data-action*="delete"],
+.pf2e-ui .tat-icon[data-action*="remove"] {
+  color: #7a2b28;
+}
+
+.pf2e-ui .tat-icon[data-action*="delete"]:hover,
+.pf2e-ui .tat-icon[data-action*="remove"]:hover {
+  color: #b91c1c;
+  background: rgba(185, 28, 28, 0.14);
+  border-color: rgba(185, 28, 28, 0.4);
+}
+
+.pf2e-ui .tat-icon[data-action*="chat"]:hover {
+  color: #5c1412;
+  background: rgba(92, 20, 18, 0.14);
+  border-color: rgba(92, 20, 18, 0.4);
+}
+
+.pf2e-ui .tat-icon[data-action*="open"]:hover,
+.pf2e-ui .tat-icon[data-action*="edit"]:hover {
+  color: #1d5b94;
+  background: rgba(29, 91, 148, 0.14);
+  border-color: rgba(29, 91, 148, 0.4);
 }
 
 /* ── 11. ABA COMBATE: CONSOLE DE TURNO & GOLPES TÁTICOS ── */
@@ -2645,6 +2689,14 @@
   display: flex;
   gap: 4px;
   flex-wrap: wrap;
+}
+
+.pf2e-ui .tat-strike-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .pf2e-ui .tat-main .tat-tag,
@@ -3170,17 +3222,27 @@
 }
 
 .pf2e-ui .pf2e-equip-toggle {
-  color: #887a6b;
+  color: #5c401e;
   transition: all 120ms ease;
 }
 
 .pf2e-ui .pf2e-equip-toggle.is-equipped {
-  color: #60a5fa !important;
-  text-shadow: 0 0 6px rgba(96, 165, 250, 0.6);
+  color: #1d5b94 !important;
+  background: rgba(29, 91, 148, 0.12) !important;
+  border-color: rgba(29, 91, 148, 0.4) !important;
+  box-shadow: 0 0 4px rgba(29, 91, 148, 0.25);
 }
 
 .pf2e-ui .pf2e-equip-toggle:hover {
-  color: #ffffff !important;
+  color: #1d5b94 !important;
+  background: rgba(29, 91, 148, 0.14) !important;
+  border-color: rgba(29, 91, 148, 0.45) !important;
+}
+
+.pf2e-ui .pf2e-equip-toggle.is-equipped:hover {
+  color: #10365c !important;
+  background: rgba(29, 91, 148, 0.22) !important;
+  border-color: rgba(29, 91, 148, 0.6) !important;
 }
 
 .pf2e-ui .pf2e-formula-row {
