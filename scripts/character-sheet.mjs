@@ -6,7 +6,8 @@
 import { xpProgress } from './rules.mjs';
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager, LoomDialog } from '/_loom/sdk/index.js';
 import { ATTRIBUTE_KEYS, SKILL_ABILITIES, SAVE_KEYS, CONDITIONS, RANK_KEYS, ITEM_TYPE_ICON } from './config.mjs';
-import { fmtMod, setPathValue, resolveActorPortrait } from './utils.mjs';
+import { fmtMod, setPathValue, resolveActorPortrait, getItemType, getActorType } from './utils.mjs';
+import { toggleNativeCondition, syncEquippedEffect, removeItemEffects } from './effects.mjs';
 import { getDefaultData } from './schema.mjs';
 import { prepareActorRow } from './prepare-data.mjs';
 import { proficiencyBonus, multipleAttackPenalty } from './rules.mjs';
@@ -419,15 +420,27 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (!this.document || this._pendingFields.size === 0) return;
     const pending = this._pendingFields;
     this._pendingFields = new Map();
-    const sd = this.document.systemData || {};
+    const changedSystemData = {};
     let name;
     for (const [key, value] of pending) {
-      if (key === 'name') name = value;
-      else setPathValue(sd, key.slice(3), value);
+      if (key === 'name') {
+        name = value;
+      } else {
+        const path = key.slice(3);
+        setPathValue(changedSystemData, path, value);
+        if (this.document.systemData) {
+          setPathValue(this.document.systemData, path, value);
+        }
+      }
     }
-    const submitData = { systemData: sd };
+    const submitData = {};
+    if (Object.keys(changedSystemData).length > 0) {
+      submitData.systemData = changedSystemData;
+    }
     if (name !== undefined) submitData.name = name;
-    await api.put(`${this.apiRoute}/${this.document.id}`, submitData);
+    if (Object.keys(submitData).length > 0) {
+      await api.put(`${this.apiRoute}/${this.document.id}`, submitData);
+    }
     await this._reloadDocument();
   }
 
@@ -455,10 +468,11 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const traits = Array.isArray(idata.traits) ? [...idata.traits] : (idata.traits ? [idata.traits] : []);
     if (idata.agile && !traits.includes('agile')) traits.push('agile');
     if (idata.finesse && !traits.includes('finesse')) traits.push('finesse');
+    const itemType = getItemType(item);
     return {
       id: item.id,
       name: item.name,
-      icon: ITEM_TYPE_ICON[item.type] || 'fa-solid fa-hammer',
+      icon: ITEM_TYPE_ICON[itemType] || 'fa-solid fa-hammer',
       actions: formatActionGlyph(idata.actions || idata.cost || '1'),
       atk: [fmtMod(strike0.total), fmtMod(strike1.total), fmtMod(strike2.total)],
       mapLabels: [`◆ ${fmtMod(strike0.total)}`, `◆ ${fmtMod(strike1.total)}`, `◆ ${fmtMod(strike2.total)}`],
@@ -1089,7 +1103,16 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const conditions = { ...(sd.conditions || {}) };
       const isValued = CONDITIONS.some((c) => c.id === value && c.valued);
       conditions[value] = isValued ? 1 : true;
-      await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, conditions } });
+      try {
+        await toggleNativeCondition({
+          targetActorId: this.document.id,
+          conditionId: value,
+          on: true,
+        });
+      } catch (err) {
+        console.warn(`[pf2e] Failed to toggle native condition "${value}":`, err);
+      }
+      await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { conditions } });
       target.value = '';
       await this._reloadDocument();
       return;
@@ -1147,9 +1170,21 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   async _setCondition(id, value) {
     const sd = this.document?.systemData || {};
     const conditions = { ...(sd.conditions || {}) };
-    if (value === null || value === undefined || value === 0 || value === false) delete conditions[id];
+    const isRemoving = value === null || value === undefined || value === 0 || value === false;
+    if (isRemoving) delete conditions[id];
     else conditions[id] = value;
-    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, conditions } });
+
+    try {
+      await toggleNativeCondition({
+        targetActorId: this.document.id,
+        conditionId: id,
+        on: !isRemoving,
+      });
+    } catch (err) {
+      console.warn(`[pf2e] Failed to toggle native condition "${id}":`, err);
+    }
+
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { conditions } });
     await this._reloadDocument();
   }
 
@@ -1250,11 +1285,12 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const desc = sys.description || '';
       const glyph = formatActionGlyph(sys.actions || sys.cost || '1');
       const traits = Array.isArray(sys.traits) ? sys.traits : (sys.traits ? [sys.traits] : []);
-      const typeLabel = item.type === 'spell'
+      const iType = getItemType(item);
+      const typeLabel = iType === 'spell'
         ? localize('pf2e.itemTypes.spell', 'Spell')
-        : (item.type === 'feat'
+        : (iType === 'feat'
           ? localize('pf2e.itemTypes.feat', 'Feat')
-          : (item.type === 'weapon' ? localize('pf2e.rolls.strike', 'Strike') : localize('pf2e.itemTypes.action', 'Action')));
+          : (iType === 'weapon' ? localize('pf2e.rolls.strike', 'Strike') : localize('pf2e.itemTypes.action', 'Action')));
       void sendChatCard(this.document, {
         name: item.name,
         glyph,
@@ -1731,15 +1767,25 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (action === 'rest-recovery') {
       const sd = this.document?.systemData || {};
       const conditions = { ...(sd.conditions || {}) };
+      const hadDying = Boolean(conditions.dying);
       delete conditions.dying;
       if (conditions.wounded) {
         const w = num(conditions.wounded) - 1;
         if (w <= 0) delete conditions.wounded;
         else conditions.wounded = w;
       }
+      if (hadDying) {
+        try {
+          await toggleNativeCondition({
+            targetActorId: this.document.id,
+            conditionId: 'dead',
+            on: false,
+          });
+        } catch {}
+      }
       const maxHp = num(sd.hp?.max) || 10;
       const hp = { ...(sd.hp || {}), value: maxHp, temp: 0 };
-      void api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, hp, conditions } })
+      void api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { hp, conditions } })
         .then(() => this._reloadDocument());
       return;
     }
@@ -1748,7 +1794,17 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       return;
     }
     if (action === 'item-delete') {
-      if (id) void api.delete(`/items/${id}`).then(() => this._reloadDocument());
+      if (id) {
+        const item = itemsArray(this.document?.items).find((i) => i.id === id);
+        if (item) {
+          try {
+            await removeItemEffects(item, this.document.id);
+          } catch (err) {
+            console.warn(`[pf2e] Failed to remove effects for deleted item ${id}:`, err);
+          }
+        }
+        void api.delete(`/items/${id}`).then(() => this._reloadDocument());
+      }
       return;
     }
     if (action === 'item-toggle-equip') {
@@ -1759,7 +1815,13 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
           const currentEquipped = Boolean(idata.equipped || idata.worn);
           idata.equipped = !currentEquipped;
           idata.worn = !currentEquipped;
-          void api.put(`/items/${id}`, { data: idata }).then(() => this._reloadDocument());
+          await api.put(`/items/${id}`, { data: idata });
+          try {
+            await syncEquippedEffect({ ...item, data: idata, actorId: this.document.id }, this.document);
+          } catch (err) {
+            console.warn(`[pf2e] Failed to sync equipped effect for item ${id}:`, err);
+          }
+          await this._reloadDocument();
         }
       }
       return;

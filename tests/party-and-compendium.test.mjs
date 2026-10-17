@@ -8,7 +8,18 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getDefaultData } from '../scripts/schema.mjs';
 import { prepareActorRow } from '../scripts/prepare-data.mjs';
-import { resolveActorPortrait } from '../scripts/utils.mjs';
+import { resolveActorPortrait, getItemType, getActorType } from '../scripts/utils.mjs';
+import {
+  bonusesToChanges,
+  NATIVE_CONDITIONS,
+  getNativeConditionId,
+  toggleNativeCondition,
+  ensureItemTemplate,
+  applyItemEffect,
+  removeItemEffects,
+  syncEquippedEffect,
+  clearItemEffects,
+} from '../scripts/effects.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -262,6 +273,178 @@ test('Bestiary Ability Glossaries and Effects — pack_meta.type is Item and ent
         db.close();
       }
     }
+  }
+});
+
+test('Type Helpers — getItemType and getActorType resolve subtypes accurately', () => {
+  // Direct item types
+  assert.equal(getItemType({ type: 'spell' }), 'spell');
+  assert.equal(getItemType({ type: 'weapon' }), 'weapon');
+  assert.equal(getItemType({ type: 'feat' }), 'feat');
+
+  // Normalized canonical Item type with subtype in data/system
+  assert.equal(getItemType({ type: 'Item', data: { type: 'spell' } }), 'spell');
+  assert.equal(getItemType({ type: 'item', system: { type: 'action' } }), 'action');
+  assert.equal(getItemType({ type: 'Item', systemData: { type: 'effect' } }), 'effect');
+  assert.equal(getItemType({ type: 'Item', data: { itemType: 'equipment' } }), 'equipment');
+  assert.equal(getItemType({ type: 'Item' }), 'equipment');
+  assert.equal(getItemType(null), 'equipment');
+
+  // Direct actor types
+  assert.equal(getActorType({ type: 'npc' }), 'npc');
+  assert.equal(getActorType({ type: 'character' }), 'character');
+  assert.equal(getActorType({ type: 'hazard' }), 'hazard');
+
+  // Normalized canonical Actor type with subtype in data/system
+  assert.equal(getActorType({ type: 'Actor', data: { type: 'npc' } }), 'npc');
+  assert.equal(getActorType({ type: 'actor', system: { type: 'hazard' } }), 'hazard');
+  assert.equal(getActorType({ type: 'Actor', systemData: { type: 'party' } }), 'party');
+  assert.equal(getActorType({ type: 'Actor' }), 'character');
+  assert.equal(getActorType(null), 'character');
+});
+
+test('Native Effects — 15 token conditions and condition resolution', () => {
+  const expectedConditions = [
+    'blinded', 'poisoned', 'stunned', 'prone', 'invisible',
+    'restrained', 'frightened', 'grappled', 'unconscious',
+    'burning', 'paralyzed', 'deafened', 'charmed', 'incapacitated', 'dead'
+  ];
+
+  assert.equal(NATIVE_CONDITIONS.size, 15);
+  for (const c of expectedConditions) {
+    assert.ok(NATIVE_CONDITIONS.has(c), `NATIVE_CONDITIONS must include '${c}'`);
+    assert.equal(getNativeConditionId(c), c);
+  }
+
+  // PF2e mapping aliases
+  assert.equal(getNativeConditionId('grabbed'), 'grappled');
+  assert.equal(getNativeConditionId('BLINDED'), 'blinded');
+  assert.equal(getNativeConditionId('unknown-condition'), null);
+});
+
+test('Native Effects — toggleNativeCondition invokes Loom.effects.condition', async () => {
+  const calls = [];
+  globalThis.Loom = {
+    effects: {
+      async condition(payload) {
+        calls.push(payload);
+        return { ok: true, removed: [] };
+      },
+    },
+  };
+
+  try {
+    const res = await toggleNativeCondition({
+      targetActorId: 'actor-123',
+      conditionId: 'prone',
+      on: true,
+    });
+    assert.ok(res?.ok);
+    assert.deepEqual(calls[0], {
+      conditionId: 'prone',
+      on: true,
+      targetActorId: 'actor-123',
+    });
+
+    // Mapped condition (grabbed -> grappled)
+    await toggleNativeCondition({
+      targetCastId: 'cast-456',
+      conditionId: 'grabbed',
+      on: false,
+    });
+    assert.deepEqual(calls[1], {
+      conditionId: 'grappled',
+      on: false,
+      targetCastId: 'cast-456',
+    });
+  } finally {
+    delete globalThis.Loom;
+  }
+});
+
+test('Native Effects — bonusesToChanges flattens bonuses correctly', () => {
+  const bonuses = {
+    abilities: { str: 2, con: 0, int: -1 },
+    saves: { reflex: 1, will: 0, all: 2 },
+    ac: 3,
+    initiative: 2,
+    hp: 10,
+  };
+  const changes = bonusesToChanges(bonuses);
+  assert.deepEqual(changes, [
+    { key: 'abilities.str.value', mode: 'add', value: 2 },
+    { key: 'abilities.int.value', mode: 'add', value: -1 },
+    { key: 'saves.reflex.extra', mode: 'add', value: 1 },
+    { key: 'armor.extra', mode: 'add', value: 3 },
+    { key: 'initiative.extra', mode: 'add', value: 2 },
+    { key: 'hp.extra', mode: 'add', value: 10 },
+  ]);
+});
+
+test('Native Effects — ensureItemTemplate, applyItemEffect, and removeItemEffects workflow', async () => {
+  const store = [];
+  const applyCalls = [];
+  const clearCalls = [];
+
+  globalThis.Loom = {
+    effects: {
+      async forItem(itemId) {
+        return store.filter((b) => b.itemId === itemId);
+      },
+      async create(data) {
+        const item = { id: `buff-${store.length + 1}`, ...data };
+        store.push(item);
+        return item;
+      },
+      async apply(payload) {
+        applyCalls.push(payload);
+        const template = store.find((b) => b.id === payload.templateId);
+        return { status: 'applied', effect: { id: 'applied-1', ...template, ...payload } };
+      },
+      async clear(payload) {
+        clearCalls.push(payload);
+        return { ok: true, removed: ['applied-1'] };
+      },
+    },
+  };
+
+  try {
+    const item = {
+      id: 'sword-1',
+      name: 'Flaming Longsword',
+      type: 'weapon',
+      data: {
+        bonuses: { ac: 1, hp: 5 },
+        equipped: true,
+      },
+    };
+
+    // 1. Template creation (one per item, itemId set, no actorId/castId)
+    const tmpl = await ensureItemTemplate(item);
+    assert.ok(tmpl?.id);
+    assert.equal(tmpl.itemId, 'sword-1');
+    assert.equal(tmpl.durationUnit, 'permanent');
+    assert.equal(tmpl.duration, -1);
+    assert.equal(tmpl.actorId, undefined);
+
+    // Re-call returns existing template without duplication
+    const tmpl2 = await ensureItemTemplate(item);
+    assert.equal(tmpl2.id, tmpl.id);
+
+    // 2. Apply on equip
+    await syncEquippedEffect(item, { id: 'actor-hero' });
+    assert.equal(applyCalls.length, 1);
+    assert.equal(applyCalls[0].templateId, tmpl.id);
+    assert.equal(applyCalls[0].targetActorId, 'actor-hero');
+
+    // 3. Clear on unequip
+    item.data.equipped = false;
+    await syncEquippedEffect(item, { id: 'actor-hero' });
+    assert.equal(clearCalls.length, 1);
+    assert.equal(clearCalls[0].targetActorId, 'actor-hero');
+    assert.deepEqual(clearCalls[0].filter, { sourceId: 'sword-1' });
+  } finally {
+    delete globalThis.Loom;
   }
 });
 

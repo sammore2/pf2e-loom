@@ -5,7 +5,7 @@
 // personagem (debounce, drop, onAction); sem abas.
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager } from '/_loom/sdk/index.js';
 import { ATTRIBUTE_KEYS, CONDITIONS, RANK_KEYS, SAVE_KEYS, SKILL_ABILITIES } from './config.mjs';
-import { fmtMod, setPathValue, resolveActorPortrait } from './utils.mjs';
+import { fmtMod, setPathValue, resolveActorPortrait, getItemType } from './utils.mjs';
 import { getDefaultData } from './schema.mjs';
 import { prepareActorRow } from './prepare-data.mjs';
 import { proficiencyBonus, multipleAttackPenalty } from './rules.mjs';
@@ -391,11 +391,12 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const desc = sys.description || '';
       const glyph = sys.actions === 'reaction' ? '↺' : (sys.actions === 'free' ? '◇' : (sys.actions || '◆'));
       const traits = Array.isArray(sys.traits) ? sys.traits : (sys.traits ? [sys.traits] : []);
-      const typeLabel = item.type === 'spell'
+      const iType = getItemType(item);
+      const typeLabel = iType === 'spell'
         ? localize('pf2e.itemTypes.spell', 'Spell')
-        : (item.type === 'feat'
+        : (iType === 'feat'
           ? localize('pf2e.itemTypes.feat', 'Feat')
-          : (item.type === 'weapon' ? localize('pf2e.rolls.strike', 'Strike') : localize('pf2e.itemTypes.action', 'Action')));
+          : (iType === 'weapon' ? localize('pf2e.rolls.strike', 'Strike') : localize('pf2e.itemTypes.action', 'Action')));
       void sendChatCard(this.document, {
         name: item.name,
         glyph,

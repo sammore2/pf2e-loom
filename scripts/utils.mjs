@@ -189,3 +189,28 @@ export function resolveActorPortrait(doc, row) {
   if (row?.systemData?.prototypeToken?.texture?.src) return row.systemData.prototypeToken.texture.src;
   return '/marketplace/rulesets/pf2e/assets/images/default-avatar.svg';
 }
+
+/**
+ * Resolves the specific item subtype for an item document or record in PF2e.
+ * Supports both direct typing (e.g. `item.type === 'spell'`) and normalized
+ * primary typing where the core provides `item.type === 'Item'` (or `'item'`)
+ * and stores the subtype in `item.data.type`, `item.system.type`, or `item.data.itemType`.
+ */
+export function getItemType(item) {
+  if (!item) return 'equipment';
+  const rawType = (item.type || '').toLowerCase();
+  if (rawType && rawType !== 'item') return rawType;
+  const subType = item.data?.type || item.system?.type || item.systemData?.type || item.data?.itemType || item.system?.itemType;
+  if (subType && String(subType).toLowerCase() !== 'item') return String(subType).toLowerCase();
+  return rawType && rawType !== 'item' ? rawType : 'equipment';
+}
+
+export function getActorType(actor) {
+  if (!actor) return 'character';
+  const rawType = (actor.type || '').toLowerCase();
+  if (rawType && rawType !== 'actor') return rawType;
+  const subType = actor.data?.type || actor.system?.type || actor.systemData?.type || actor.data?.actorType || actor.system?.actorType;
+  if (subType && String(subType).toLowerCase() !== 'actor') return String(subType).toLowerCase();
+  return rawType && rawType !== 'actor' ? rawType : 'character';
+}
+

@@ -1,22 +1,108 @@
 // ══════════════════════════════════════════════════════════════════════════
 // PF2E — scripts/effects.mjs
-// Component Version: 0.1.0
+// Component Version: 0.2.0
 //
-// Equivalent to the original ActiveEffectHelper/EffectAutomation, but built on
-// the real Loom engine (server/applications/lib/effects.ts): buffs with
-// `changes: [{key, mode, value}]` applied to systemData on the server before
-// the sheet renders — there's no `ActiveEffect` document or engine config UI,
-// so `onRenderActiveEffectConfig`/`_showKeysList` (legacy-only UI) and the
-// per-combat-round cleanup (`cleanupCombatEffects`, depends on a combat
-// tracker — out of scope) were cut. `key` here is relative to `systemData`,
-// no `system.` prefix (confirmed in effects.ts:45 — `change.key.split('.')`
-// applied directly onto the systemData clone).
+// Native Active Effects integration built on Loom core engine:
+// - Template creation: Loom.effects.create({ itemId, name, icon, durationUnit, duration, changes, ... })
+// - Application: Loom.effects.apply({ templateId, targetCastId / targetActorId })
+// - Removal: Loom.effects.clear({ targetCastId / targetActorId, filter })
+// - Native Conditions: Loom.effects.condition({ conditionId, on, ... })
 // ══════════════════════════════════════════════════════════════════════════
 
-import { effects } from '/_loom/sdk/index.js';
+import { getItemType } from './utils.mjs';
 
-/** Flattens the `bonuses` schema (weapon/armor/feature/item, see defaultBonuses)
- * into a list of `add`-mode `changes`, skipping zero/empty values. */
+let sdkEffects = null;
+if (typeof window !== 'undefined') {
+  try {
+    const mod = await import('/_loom/sdk/index.js');
+    sdkEffects = mod?.effects || null;
+  } catch {
+    sdkEffects = null;
+  }
+}
+
+/** Safe accessor for the runtime Loom effects API facade. */
+export function getEffectsApi() {
+  if (typeof globalThis !== 'undefined' && globalThis.Loom?.effects) {
+    return globalThis.Loom.effects;
+  }
+  return sdkEffects || null;
+}
+
+/** The 15 native status conditions supported in the core token menu. */
+export const NATIVE_CONDITIONS = new Set([
+  'blinded',
+  'poisoned',
+  'stunned',
+  'prone',
+  'invisible',
+  'restrained',
+  'frightened',
+  'grappled',
+  'unconscious',
+  'burning',
+  'paralyzed',
+  'deafened',
+  'charmed',
+  'incapacitated',
+  'dead',
+]);
+
+/** Maps PF2e condition identifiers to native Loom condition IDs. */
+export const PF2E_TO_NATIVE_CONDITION = {
+  blinded: 'blinded',
+  poisoned: 'poisoned',
+  stunned: 'stunned',
+  prone: 'prone',
+  invisible: 'invisible',
+  restrained: 'restrained',
+  frightened: 'frightened',
+  grabbed: 'grappled',
+  grappled: 'grappled',
+  unconscious: 'unconscious',
+  burning: 'burning',
+  paralyzed: 'paralyzed',
+  deafened: 'deafened',
+  charmed: 'charmed',
+  incapacitated: 'incapacitated',
+  dead: 'dead',
+};
+
+/** Resolves an arbitrary condition string into a native condition ID if recognized. */
+export function getNativeConditionId(conditionId) {
+  if (!conditionId) return null;
+  const key = String(conditionId).toLowerCase().trim();
+  if (NATIVE_CONDITIONS.has(key)) return key;
+  return PF2E_TO_NATIVE_CONDITION[key] || null;
+}
+
+/**
+ * Toggles a native condition on a target cast or actor using the core API.
+ * Automatically handles token status markers and core visual presets.
+ */
+export async function toggleNativeCondition({ targetActorId, targetCastId, conditionId, on }) {
+  const nativeId = getNativeConditionId(conditionId);
+  if (!nativeId) return null;
+  const fx = getEffectsApi();
+  if (!fx || typeof fx.condition !== 'function') return null;
+
+  const payload = {
+    conditionId: nativeId,
+    on: Boolean(on),
+  };
+  if (targetCastId) payload.targetCastId = targetCastId;
+  else if (targetActorId) payload.targetActorId = targetActorId;
+  else return null;
+
+  try {
+    return await fx.condition(payload);
+  } catch (err) {
+    console.warn(`[pf2e] Failed to toggle native condition "${nativeId}":`, err);
+    return null;
+  }
+}
+
+/** Flattens the `bonuses` schema into a list of `add`-mode `changes`, skipping zero/empty values. */
 export function bonusesToChanges(bonuses) {
   if (!bonuses) return [];
   const changes = [];
@@ -34,100 +120,182 @@ export function bonusesToChanges(bonuses) {
   return changes;
 }
 
-/** Creates (or recreates) the buff for an equipped item, mirroring `bonuses`
- * onto the actor. `item.system` (getter alias for the real `data` field —
- * Item uses `data`, not `systemData`, unlike Actor; see
- * SYSTEM_FIELD_BY_DOCUMENT in client-document.ts) works both for a live
- * LoomItem and for the raw row coming from the `item.updated` signal payload
- * (which only has `.data`). */
+/** Ensures an effect template exists on the item (item template has itemId, but no actorId/castId). */
+export async function ensureItemTemplate(item, def = null) {
+  if (!item?.id) return null;
+  const fx = getEffectsApi();
+  if (!fx) return null;
+
+  try {
+    const existing = await fx.forItem(item.id);
+    const targetName = def?.name || item.name;
+    const condId = def?.conditionId || '';
+    const found = (existing || []).find(
+      (b) => !b.actorId && !b.castId && (b.name === targetName || (condId && b.conditionId === condId))
+    );
+    if (found) return found;
+
+    const changes = def?.changes || bonusesToChanges(item.system?.bonuses ?? item.data?.bonuses);
+    if (!changes?.length && !condId) return null;
+
+    return await fx.create({
+      itemId: item.id,
+      name: targetName,
+      icon: def?.icon || item.imgUrl || '',
+      description: def?.description || item.system?.description || item.data?.description || '',
+      durationUnit: def?.durationUnit || 'permanent',
+      duration: typeof def?.duration === 'number' ? def.duration : -1,
+      expireOn: def?.expireOn || 'turn-end',
+      conditionId: condId,
+      tags: Array.isArray(def?.tags) ? def.tags : ['equipment'],
+      removeOnCombatEnd: !!def?.removeOnCombatEnd,
+      transfer: !!def?.transfer,
+      changes,
+      visual: def?.visual || {},
+    });
+  } catch (err) {
+    console.warn(`[pf2e] Failed to ensure template for item ${item.id}:`, err);
+    return null;
+  }
+}
+
+/** Creates or gets the template on the item and applies it onto the actor. */
 export async function applyItemEffect(actor, item) {
-  const bonuses = item?.system?.bonuses ?? item?.data?.bonuses;
-  const changes = bonusesToChanges(bonuses);
-  if (!actor || !changes.length) return null;
-  const rawDur = item?.system?.duration ?? item?.data?.duration;
-  const durVal = typeof rawDur === 'object' && rawDur !== null ? Number(rawDur.value) : Number(rawDur);
-  const payload = {
+  if (!actor?.id || !item?.id) return null;
+  const fx = getEffectsApi();
+  if (!fx) return null;
+
+  const template = await ensureItemTemplate(item);
+  if (template?.id && typeof fx.apply === 'function') {
+    try {
+      const res = await fx.apply({
+        templateId: template.id,
+        targetActorId: actor.id,
+      });
+      if (res?.status === 'applied') return res.effect;
+      if (res?.status === 'pending') {
+        globalThis.Loom?.showToast?.(`Efeito "${template.name}" aguardando aprovação do Mestre.`, 'info');
+        return null;
+      }
+      if (res?.status === 'blocked') return null;
+    } catch (err) {
+      console.warn(`[pf2e] Failed to apply template ${template.id} on actor ${actor.id}:`, err);
+    }
+  }
+
+  // Fallback: direct buff creation if apply is unavailable
+  const changes = bonusesToChanges(item.system?.bonuses ?? item.data?.bonuses);
+  if (!changes.length) return null;
+  return fx.create({
     actorId: actor.id,
     itemId: item.id,
     name: item.name,
     origin: item.id,
+    durationUnit: 'permanent',
+    duration: -1,
     changes,
-  };
-  if (Number.isFinite(durVal) && durVal > 0) payload.duration = durVal;
-  return effects.create(payload);
+  });
 }
 
-/** Removes every buff originated from an item (e.g. on unequip). */
-export async function removeItemEffects(item) {
+/** Removes applied buffs originated from an item (e.g. on unequip or delete). */
+export async function removeItemEffects(item, actorId = null) {
   if (!item?.id) return;
-  const buffs = await effects.forItem(item.id);
-  for (const buff of buffs || []) await effects.delete(buff.id);
-}
+  const fx = getEffectsApi();
+  if (!fx) return;
+  const targetId = actorId || item.actorId;
 
-/** Idempotently syncs an item's buff with its current `equipped` state —
- * called on every `item.updated`, not only when the field changes, because
- * the signal doesn't carry the previous value to diff against. `effects.forItem`
- * decides: no buff yet and equipped → create; buff exists and unequipped →
- * remove; otherwise no-op (avoids duplicating the buff on every irrelevant
- * update). */
-export async function syncEquippedEffect(item) {
-  const type = item?.type;
-  if (type !== 'weapon' && type !== 'armor') return;
-  const sd = item.system ?? item.data;
-  if (!sd || !item.actorId) return;
+  // 1. Try native Loom.effects.clear
+  if (targetId && typeof fx.clear === 'function') {
+    try {
+      const cleared = await fx.clear({
+        targetActorId: targetId,
+        filter: { sourceId: item.id },
+      });
+      if (cleared?.ok && cleared.removed?.length) return;
+    } catch {
+      // Fall through to fallback
+    }
+  }
 
-  const existing = await effects.forItem(item.id);
-  const isEquipped = !!sd.equipped;
-
-  if (isEquipped && (!existing || existing.length === 0)) {
-    await applyItemEffect({ id: item.actorId }, item);
-  } else if (!isEquipped && existing && existing.length > 0) {
-    await removeItemEffects(item);
+  // 2. Fallback: inspect forItem and delete applied copies
+  try {
+    const buffs = await fx.forItem(item.id);
+    for (const buff of buffs || []) {
+      if (buff.actorId || !targetId) {
+        await fx.delete(buff.id);
+      }
+    }
+  } catch (err) {
+    console.warn(`[pf2e] Failed to remove item effects for item ${item.id}:`, err);
   }
 }
 
-/** Tipos sem toggle "Equipado" — o bônus é permanente assim que o
- * personagem possui o item, então o gatilho certo é `item.created`/
- * `item.deleted`, não `item.updated` (ver Handout 11). */
+/** Idempotently syncs an item's buff with its current `equipped` state. */
+export async function syncEquippedEffect(item, actor = null) {
+  const itemType = getItemType(item);
+  if (!['weapon', 'armor', 'shield', 'equipment'].includes(itemType)) return;
+  const sd = item.system ?? item.data;
+  const targetActorId = actor?.id || item.actorId;
+  if (!sd || !targetActorId) return;
+
+  const isEquipped = Boolean(sd.equipped || sd.worn);
+  if (isEquipped) {
+    await applyItemEffect({ id: targetActorId }, item);
+  } else {
+    await removeItemEffects(item, targetActorId);
+  }
+}
+
+/** Tipos sem toggle "Equipado" — o bônus é permanente assim que o personagem possui o item. */
 const PERMANENT_BONUS_TYPES = ['feature', 'background', 'race', 'class', 'subclass', 'feat'];
 
-/**
- * Applies a temporary, duration-based effect (a concentration spell's buff, a
- * potion's condition, etc.) — same `effects.create()` the permanent/equip
- * helpers above already use, just with a finite `duration` (in ROUNDS). The
- * engine ticks this down automatically: `tickBuffDurations` (server
- * combat.ts) decrements every active buff's `duration` by 1 on every combat
- * round that completes and deletes it at 0 — no client-side tick loop
- * needed here, so there's no `tickEffects()` duplicating that.
- *
- * `itemId` is set to `origin` (not left blank) so the *existing*
- * `removeItemEffects()` — which looks buffs up by itemId via
- * `effects.forItem()` — can tear this down early (e.g. a failed
- * concentration save), reusing that function instead of adding a
- * parallel origin-based lookup.
- */
-export async function applyTemporaryEffect(actor, { changes, duration, origin = '', label = 'Effect' }) {
+/** Applies a temporary, duration-based effect. */
+export async function applyTemporaryEffect(actor, { changes, duration, origin = '', label = 'Effect', durationUnit = 'rounds' }) {
   if (!actor?.id || !changes?.length) return null;
-  return effects.create({
+  const fx = getEffectsApi();
+  if (!fx) return null;
+  return fx.create({
     actorId: actor.id,
     itemId: origin,
     name: label,
     origin,
+    durationUnit,
     duration: Number(duration) > 0 ? Number(duration) : 1,
     changes,
   });
 }
 
-/** Cria o efeito de um item permanente (feature/background/raça/classe/
- * subclasse/feat) assim que ele é adicionado ao personagem — idempotente
- * (não duplica se já existir um efeito pra esse item). Chamado em
- * `item.created`. */
+/** Clears applied effects from a target actor matching a filter. */
+export async function clearItemEffects(actor, filter = {}) {
+  if (!actor?.id) return null;
+  const fx = getEffectsApi();
+  if (!fx || typeof fx.clear !== 'function') return null;
+  try {
+    return await fx.clear({
+      targetActorId: actor.id,
+      filter,
+    });
+  } catch (err) {
+    console.warn(`[pf2e] Failed to clear effects for actor ${actor.id}:`, err);
+    return null;
+  }
+}
+
+/** Cria o efeito de um item permanente (feature/background/raça/classe/subclasse/feat). */
 export async function syncPermanentBonusEffect(item) {
-  const type = item?.type;
+  const type = getItemType(item);
   if (!PERMANENT_BONUS_TYPES.includes(type)) return;
   if (!item?.actorId) return;
 
-  const existing = await effects.forItem(item.id);
+  const fx = getEffectsApi();
+  if (!fx) return;
+  let existing = [];
+  try {
+    const all = await fx.forItem(item.id);
+    existing = (all || []).filter((b) => b.actorId === item.actorId);
+  } catch {
+    existing = [];
+  }
   if (existing && existing.length > 0) return;
 
   await applyItemEffect({ id: item.actorId }, item);
@@ -140,41 +308,10 @@ export async function syncItemEffectTemplates(item) {
   const effectDefs = Array.isArray(idata.effects) ? idata.effects : [];
   if (!effectDefs.length) return [];
 
-  let existing = [];
-  try {
-    if (typeof effects?.forItem === 'function') {
-      existing = await effects.forItem(item.id);
-    }
-  } catch {
-    existing = [];
-  }
-
   const createdOrExisting = [];
   for (const def of effectDefs) {
-    const found = (existing || []).find((b) => b.name === def.name || (def.conditionId && b.conditionId === def.conditionId));
-    if (found) {
-      createdOrExisting.push(found);
-    } else if (typeof effects?.create === 'function') {
-      try {
-        const buff = await effects.create({
-          itemId: item.id,
-          name: def.name,
-          icon: def.icon || item.imgUrl || '',
-          description: def.description || '',
-          durationUnit: def.durationUnit || 'permanent',
-          duration: typeof def.duration === 'number' ? def.duration : -1,
-          expireOn: def.expireOn || 'turn-end',
-          conditionId: def.conditionId || '',
-          removeOnCombatEnd: !!def.removeOnCombatEnd,
-          transfer: !!def.transfer,
-          changes: Array.isArray(def.changes) ? def.changes : [],
-          visual: def.visual || {},
-        });
-        createdOrExisting.push(buff);
-      } catch (err) {
-        console.warn(`[pf2e] Failed to create effect template "${def.name}" for item ${item.id}:`, err);
-      }
-    }
+    const tmpl = await ensureItemTemplate(item, def);
+    if (tmpl) createdOrExisting.push(tmpl);
   }
   return createdOrExisting;
 }
@@ -185,17 +322,22 @@ export async function applySpellOrItemEffects(actor, item, options = {}) {
   const templates = await syncItemEffectTemplates(item);
   if (!templates.length) return [];
 
+  const fx = getEffectsApi();
+  if (!fx) return [];
+
   let targetList = [];
   if (Array.isArray(options.targets) && options.targets.length) {
     targetList = options.targets;
   } else if (options.targetCastId) {
-    targetList = [{ castId: options.targetCastId }];
+    targetList = [{ targetCastId: options.targetCastId }];
   } else if (options.targetActorId) {
-    targetList = [{ actorId: options.targetActorId }];
+    targetList = [{ targetActorId: options.targetActorId }];
   } else if (typeof window !== 'undefined' && Array.isArray(window.Loom?.targets) && window.Loom.targets.length) {
-    targetList = window.Loom.targets;
+    targetList = window.Loom.targets.map((t) =>
+      t?.castId || t?.id ? { targetCastId: t.castId || t.id } : { targetActorId: t?.actorId || actor?.id }
+    );
   } else if (actor?.id) {
-    targetList = [{ actorId: actor.id }];
+    targetList = [{ targetActorId: actor.id }];
   }
 
   const results = [];
@@ -204,17 +346,16 @@ export async function applySpellOrItemEffects(actor, item, options = {}) {
 
     for (const target of targetList) {
       const targetPayload = {};
-      const tCastId = target?.castId || target?.id;
-      const tActorId = target?.actorId || (!target?.castId ? target?.id : null);
-      if (tCastId) targetPayload.targetCastId = tCastId;
-      else if (tActorId) targetPayload.targetActorId = tActorId;
+      if (target.targetCastId) targetPayload.targetCastId = target.targetCastId;
+      else if (target.targetActorId) targetPayload.targetActorId = target.targetActorId;
+      else if (target.castId || target.id) targetPayload.targetCastId = target.castId || target.id;
+      else if (target.actorId) targetPayload.targetActorId = target.actorId;
       else if (actor?.id) targetPayload.targetActorId = actor.id;
 
       try {
-        if (typeof effects?.apply === 'function') {
-          const res = await effects.apply({
+        if (typeof fx.apply === 'function') {
+          const res = await fx.apply({
             templateId: template.templateId || template.id,
-            sourceId: actor?.id,
             ...targetPayload,
           });
           results.push({ template, res, target });
@@ -239,4 +380,3 @@ export async function applySpellOrItemEffects(actor, item, options = {}) {
   }
   return results;
 }
-
