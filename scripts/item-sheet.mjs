@@ -2,9 +2,10 @@
 // Uma só ficha pra todos os tipos: cabeçalho (ícone/nome/tipo/custo em
 // ações), corpo em 2 colunas com os campos do tipo, aba Descrição e traços
 // como chips. Forma segue o molde da ficha de item de referência do motor.
-import { LoomHandlebarsMixin, LoomItemSheet, api } from '/_loom/sdk/index.js';
-import { ATTRIBUTE_KEYS, RANK_KEYS, ITEM_TYPE_ICON, ITEM_TYPE_LABEL } from './config.mjs';
+import { LoomHandlebarsMixin, LoomItemSheet, api, effects } from '/_loom/sdk/index.js';
+import { ATTRIBUTE_KEYS, RANK_KEYS, ITEM_TYPE_ICON, ITEM_TYPE_LABEL, SKILL_ABILITIES } from './config.mjs';
 import { setPathValue } from './utils.mjs';
+import { localize } from './i18n.mjs';
 
 function rankOptions(selected) {
   return RANK_KEYS.map((r) => ({ value: r, selected: r === selected }));
@@ -16,6 +17,7 @@ function attrOptions(selected, allowAuto) {
 }
 
 const ACTION_COSTS = ['', '1', '2', '3', 'reaction', 'free'];
+const ACTION_CATEGORIES = ['encounter', 'exploration', 'downtime'];
 
 function costOptions(selected) {
   return ACTION_COSTS.map((c) => ({ value: c, selected: c === selected }));
@@ -72,7 +74,7 @@ export class Pf2eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
     });
   }
 
-  onAction(action, id, target) {
+  async onAction(action, id, target) {
     if (action === 'tab') {
       const tab = target.dataset.tab;
       if (!tab) return;
@@ -84,6 +86,14 @@ export class Pf2eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
       void this._pickIcon();
       return;
     }
+    if (action === 'open-effect-config') {
+      const effectId = target.dataset.effectId || target.dataset.id || id;
+      const effectsApi = window.Loom?.effects || effects;
+      if (effectId && typeof effectsApi?.openConfig === 'function') {
+        void effectsApi.openConfig(effectId);
+      }
+      return;
+    }
     if (action === 'trait-add') {
       const input = this.element?.querySelector('input[name="new-trait"]');
       const t = (input?.value || '').trim().toLowerCase();
@@ -93,6 +103,41 @@ export class Pf2eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
     if (action === 'trait-remove') {
       const t = target?.dataset?.trait || '';
       void this._saveTraits(this._allTraits().filter((x) => x !== t));
+      return;
+    }
+    if (action === 'rule-add') {
+      const data = { ...(this.document.data || {}) };
+      data.rules = Array.isArray(data.rules) ? [...data.rules] : [];
+      data.rules.push({ key: 'FlatModifier', selector: 'athletics', value: 1, type: 'item' });
+      await api.put(`${this.apiRoute}/${this.document.id}`, { data });
+      await this._reloadDocument();
+      return;
+    }
+    if (action === 'rule-remove') {
+      const idx = Number(target?.dataset?.index ?? id);
+      const data = { ...(this.document.data || {}) };
+      if (Array.isArray(data.rules) && idx >= 0 && idx < data.rules.length) {
+        data.rules.splice(idx, 1);
+        await api.put(`${this.apiRoute}/${this.document.id}`, { data });
+        await this._reloadDocument();
+      }
+      return;
+    }
+    if (action === 'rules-json-save') {
+      const textarea = this.element?.querySelector('textarea[name="raw-rules-json"]');
+      if (textarea) {
+        try {
+          const parsed = JSON.parse(textarea.value);
+          if (Array.isArray(parsed)) {
+            const data = { ...(this.document.data || {}), rules: parsed };
+            await api.put(`${this.apiRoute}/${this.document.id}`, { data });
+            await this._reloadDocument();
+            window.Loom?.showToast?.('Regras salvas com sucesso!', 'success');
+          }
+        } catch (err) {
+          alert('JSON inválido: ' + err.message);
+        }
+      }
       return;
     }
     if (typeof super.onAction === 'function') super.onAction(action, id, target);
@@ -194,6 +239,37 @@ export class Pf2eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
     const costText = costPips.length > 0 ? '' : (/^(reaction|free)$/.test(cost) ? cost : '');
 
     const is = (t) => type === t;
+
+    let rawEffects = [];
+    if (this.document?.id && typeof effects?.forItem === 'function') {
+      try {
+        rawEffects = await effects.forItem(this.document.id);
+      } catch {
+        // Unpersisted item or preview
+      }
+    }
+    if ((!rawEffects || !rawEffects.length) && Array.isArray(v.effects)) {
+      rawEffects = v.effects;
+    }
+
+    const itemEffects = (rawEffects || []).map((e) => {
+      let durationLabel = 'Permanente';
+      if (e.durationUnit && e.durationUnit !== 'permanent') {
+        durationLabel = `${e.duration} ${e.durationUnit}`;
+      } else if (typeof e.duration === 'number' && e.duration > 0) {
+        durationLabel = `${e.duration} rodada${e.duration === 1 ? '' : 's'}`;
+      }
+      const changesSummary = Array.isArray(e.changes) ? e.changes.map((c) => `${c.key}: ${c.mode} ${c.value}`).join(' • ') : '';
+      return {
+        ...e,
+        id: e.id || e.templateId || '',
+        durationLabel,
+        changesSummary,
+        hasVisual: !!(e.visual?.kind || e.visual?.color),
+        visualKind: e.visual?.kind || 'fx',
+        visualColor: e.visual?.color || '#ffd700',
+      };
+    });
     return {
       ...context,
       name: (this.document?.name && this.document.name !== 'undefined') ? this.document.name : '',
@@ -207,6 +283,30 @@ export class Pf2eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
       costText,
       hasCost: ['feat', 'action', 'spell'].includes(type),
       costOptions: costOptions(cost),
+      actionCategoryOptions: ACTION_CATEGORIES.map((c) => ({
+        value: c,
+        label: localize(`pf2e.sheets.${c}`, c),
+        selected: (v.actionCategory || 'encounter') === c,
+      })),
+      checkTypeOptions: [
+        { value: 'none', label: 'Nenhum / Informativo (Card)', selected: (v.checkType || 'none') === 'none' },
+        { value: 'skill', label: 'Teste de Perícia', selected: v.checkType === 'skill' },
+        { value: 'attack', label: 'Golpe / Ataque', selected: v.checkType === 'attack' },
+        { value: 'custom', label: 'Rolagem Livre / Fórmula', selected: v.checkType === 'custom' },
+        { value: 'save', label: 'Salvaguarda Alvo (CD)', selected: v.checkType === 'save' },
+      ],
+      skillOptions: Object.keys(SKILL_ABILITIES).map((sk) => ({
+        value: sk,
+        label: localize(`pf2e.skills.${sk}`, sk),
+        selected: (v.skill || 'athletics') === sk,
+      })),
+      actionCategory: v.actionCategory || 'encounter',
+      checkType: v.checkType || 'none',
+      skill: v.skill || 'athletics',
+      dc: v.dc ?? '',
+      formula: v.formula || '',
+      trigger: v.trigger || '',
+      requirements: v.requirements || '',
       isAncestry: is('ancestry'),
       isHeritage: is('heritage'),
       isBackground: is('background'),
@@ -259,6 +359,22 @@ export class Pf2eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
       price: v.price || '',
       rank: v.rank ?? 1,
       save: v.save || '',
+      rules: (Array.isArray(v.rules) ? v.rules : []).map((r, idx) => ({
+        index: idx,
+        key: r.key || 'FlatModifier',
+        selector: r.selector || '',
+        value: r.value ?? '',
+        type: r.type || '',
+        damageType: r.damageType || '',
+        diceNumber: r.diceNumber ?? '',
+        dieSize: r.dieSize || '',
+        critical: !!r.critical,
+        predicate: Array.isArray(r.predicate) ? r.predicate.join(', ') : (r.predicate || ''),
+      })),
+      rulesCount: Array.isArray(v.rules) ? v.rules.length : 0,
+      rawRulesJson: JSON.stringify(Array.isArray(v.rules) ? v.rules : [], null, 2),
+      effects: itemEffects,
+      effectsCount: itemEffects.length,
     };
   }
 }

@@ -1,0 +1,199 @@
+<div class="pf2e-builder-window pf2e-ui">
+  {{!-- Stepper Navigation Bar --}}
+  <nav class="pf2e-builder-stepper">
+    <button type="button" class="builder-step-tab{{#if (eq step 1)}} active{{/if}}{{#if (gt step 1)}} done{{/if}}" data-action="goto-step" data-step="1">
+      <span class="step-num">1</span>
+      <span class="step-lbl">{{localize "pf2e.builder.stepAncestry"}}</span>
+    </button>
+    <button type="button" class="builder-step-tab{{#if (eq step 2)}} active{{/if}}{{#if (gt step 2)}} done{{/if}}" data-action="goto-step" data-step="2">
+      <span class="step-num">2</span>
+      <span class="step-lbl">{{localize "pf2e.builder.stepHeritage"}}</span>
+    </button>
+    <button type="button" class="builder-step-tab{{#if (eq step 3)}} active{{/if}}{{#if (gt step 3)}} done{{/if}}" data-action="goto-step" data-step="3">
+      <span class="step-num">3</span>
+      <span class="step-lbl">{{localize "pf2e.builder.stepBackground"}}</span>
+    </button>
+    <button type="button" class="builder-step-tab{{#if (eq step 4)}} active{{/if}}{{#if (gt step 4)}} done{{/if}}" data-action="goto-step" data-step="4">
+      <span class="step-num">4</span>
+      <span class="step-lbl">{{localize "pf2e.builder.stepClass"}}</span>
+    </button>
+    <button type="button" class="builder-step-tab{{#if (eq step 5)}} active{{/if}}{{#if (gt step 5)}} done{{/if}}" data-action="goto-step" data-step="5">
+      <span class="step-num">5</span>
+      <span class="step-lbl">{{localize "pf2e.builder.stepAttributes"}}</span>
+    </button>
+    <button type="button" class="builder-step-tab{{#if (eq step 6)}} active{{/if}}{{#if (gt step 6)}} done{{/if}}" data-action="goto-step" data-step="6">
+      <span class="step-num">6</span>
+      <span class="step-lbl">{{localize "pf2e.builder.stepSkills"}}</span>
+    </button>
+    <button type="button" class="builder-step-tab{{#if (eq step 7)}} active{{/if}}" data-action="goto-step" data-step="7">
+      <span class="step-num">7</span>
+      <span class="step-lbl">{{localize "pf2e.builder.stepFeat"}}</span>
+    </button>
+  </nav>
+
+  {{!-- Step Content Area --}}
+  <div class="pf2e-builder-body">
+
+    {{!-- STEP 1: ANCESTRY --}}
+    {{#if (eq step 1)}}
+    <section class="builder-step-panel">
+      <div class="builder-header">
+        <h2>{{localize "pf2e.builder.selectAncestry"}}</h2>
+        <input type="text" class="tat-in builder-search" placeholder="Search ancestry..." data-action="search-step" />
+      </div>
+      <div class="builder-cards-grid">
+        {{#each ancestries}}
+        <div class="builder-card{{#if selected}} is-selected{{/if}}" data-action="select-ancestry" data-id="{{id}}">
+          <div class="card-title-row">
+            <strong>{{name}}</strong>
+            {{#if hp}}<span class="tat-tag">{{hp}} HP</span>{{/if}}
+          </div>
+          {{#if speed}}<span class="tat-tag">{{speed}} ft</span>{{/if}}
+        </div>
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+    {{!-- STEP 2: HERITAGE --}}
+    {{#if (eq step 2)}}
+    <section class="builder-step-panel">
+      <div class="builder-header">
+        <h2>{{localize "pf2e.builder.selectHeritage"}}</h2>
+        <input type="text" class="tat-in builder-search" placeholder="Search heritage..." data-action="search-step" />
+      </div>
+      <div class="builder-cards-grid">
+        {{#each heritages}}
+        <div class="builder-card{{#if selected}} is-selected{{/if}}" data-action="select-heritage" data-id="{{id}}">
+          <div class="card-title-row">
+            <strong>{{name}}</strong>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+    {{!-- STEP 3: BACKGROUND --}}
+    {{#if (eq step 3)}}
+    <section class="builder-step-panel">
+      <div class="builder-header">
+        <h2>{{localize "pf2e.builder.selectBackground"}}</h2>
+        <input type="text" class="tat-in builder-search" placeholder="Search background..." data-action="search-step" />
+      </div>
+      <div class="builder-cards-grid">
+        {{#each backgrounds}}
+        <div class="builder-card{{#if selected}} is-selected{{/if}}" data-action="select-background" data-id="{{id}}">
+          <div class="card-title-row">
+            <strong>{{name}}</strong>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+      <div class="builder-custom-lore" style="margin-top: 12px;">
+        <label><strong>{{localize "pf2e.builder.loreName"}}:</strong></label>
+        <input type="text" class="tat-in" name="loreName" value="{{loreName}}" placeholder="Ex: Sailing Lore" style="width: 100%; margin-top: 4px;" />
+      </div>
+    </section>
+    {{/if}}
+
+    {{!-- STEP 4: CLASS --}}
+    {{#if (eq step 4)}}
+    <section class="builder-step-panel">
+      <div class="builder-header">
+        <h2>{{localize "pf2e.builder.selectClass"}}</h2>
+        <input type="text" class="tat-in builder-search" placeholder="Search class..." data-action="search-step" />
+      </div>
+      <div class="builder-cards-grid">
+        {{#each classes}}
+        <div class="builder-card{{#if selected}} is-selected{{/if}}" data-action="select-class" data-id="{{id}}">
+          <div class="card-title-row">
+            <strong>{{name}}</strong>
+            {{#if hp}}<span class="tat-tag">{{hp}} HP / lvl</span>{{/if}}
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+    {{!-- STEP 5: ATTRIBUTES --}}
+    {{#if (eq step 5)}}
+    <section class="builder-step-panel">
+      <div class="builder-header">
+        <h2>{{localize "pf2e.builder.selectAttributes"}}</h2>
+      </div>
+      <div class="builder-attr-grid">
+        {{#each attributes}}
+        <div class="builder-attr-card">
+          <span class="attr-name"><strong>{{label}}</strong> ({{localize (concat "pf2e.sheets.abbr." key)}})</span>
+          <div class="attr-controls">
+            <button type="button" class="tat-icon-btn" data-action="attr-dec" data-key="{{key}}">−1</button>
+            <b class="attr-val">{{modFmt}}</b>
+            <button type="button" class="tat-icon-btn" data-action="attr-inc" data-key="{{key}}">+1</button>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+    {{!-- STEP 6: SKILLS --}}
+    {{#if (eq step 6)}}
+    <section class="builder-step-panel">
+      <div class="builder-header">
+        <h2>{{localize "pf2e.builder.selectSkills"}}</h2>
+      </div>
+      <div class="builder-skills-grid">
+        {{#each skills}}
+        <button type="button" class="builder-skill-pill{{#if trained}} is-trained{{/if}}" data-action="toggle-skill" data-key="{{key}}">
+          <i class="fa-solid fa-{{#if trained}}check{{else}}plus{{/if}}"></i>
+          <span>{{label}}</span>
+        </button>
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+    {{!-- STEP 7: FEAT 1 --}}
+    {{#if (eq step 7)}}
+    <section class="builder-step-panel">
+      <div class="builder-header">
+        <h2>{{localize "pf2e.builder.selectFeat"}}</h2>
+        <input type="text" class="tat-in builder-search" placeholder="Search 1st level feat..." data-action="search-step" />
+      </div>
+      <div class="builder-cards-grid">
+        {{#each feats}}
+        <div class="builder-card{{#if selected}} is-selected{{/if}}" data-action="select-feat" data-id="{{id}}">
+          <div class="card-title-row">
+            <strong>{{name}}</strong>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+  </div>
+
+  {{!-- Footer Navigation Controls --}}
+  <footer class="pf2e-builder-foot">
+    {{#if (gt step 1)}}
+    <button type="button" class="tat-btn tat-btn-secondary" data-action="prev-step">
+      <i class="fa-solid fa-arrow-left"></i> {{localize "pf2e.builder.back"}}
+    </button>
+    {{else}}
+    <div></div>
+    {{/if}}
+
+    {{#if (lt step 7)}}
+    <button type="button" class="tat-btn tat-btn-primary" data-action="next-step">
+      {{localize "pf2e.builder.next"}} <i class="fa-solid fa-arrow-right"></i>
+    </button>
+    {{else}}
+    <button type="button" class="tat-btn tat-btn-success" data-action="finish-builder">
+      <i class="fa-solid fa-check"></i> {{localize "pf2e.builder.finish"}}
+    </button>
+    {{/if}}
+  </footer>
+</div>

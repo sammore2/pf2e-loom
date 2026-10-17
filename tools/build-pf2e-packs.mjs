@@ -248,13 +248,18 @@ function processRecords(records, stats) {
   return { entries, folders };
 }
 
-// The pack type is the most common entry type; packs with no entries use the
-// document type of their collection.
+// The pack type is the canonical document type (Item, Actor, etc.) derived from
+// the most common entry type; packs with no entries use the document type of their collection.
 function derivePackType(entries, records) {
   if (entries.length > 0) {
     const counts = new Map();
     for (const row of entries) counts.set(row.type, (counts.get(row.type) || 0) + 1);
-    return [...counts.entries()].sort((a, b) => b[1] - a[1])[0][0];
+    const mostCommon = [...counts.entries()].sort((a, b) => b[1] - a[1])[0][0];
+    const itemSubtypes = new Set(['action', 'effect', 'feat', 'spell', 'weapon', 'armor', 'shield', 'equipment', 'consumable', 'heritage', 'ancestry', 'background', 'class', 'formula']);
+    const actorSubtypes = new Set(['character', 'npc', 'hazard', 'vehicle', 'familiar', 'group']);
+    if (itemSubtypes.has(String(mostCommon).toLowerCase())) return 'Item';
+    if (actorSubtypes.has(String(mostCommon).toLowerCase())) return 'Actor';
+    return mostCommon;
   }
   const firstCollection = records.map(([key]) => /^!([^!]+)!/.exec(key)?.[1]).find((c) => c && COLLECTION_DOC_TYPES[c]);
   return firstCollection ? COLLECTION_DOC_TYPES[firstCollection] : 'unknown';

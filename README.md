@@ -59,7 +59,19 @@ Construído sob a arquitetura moderna de microsserviços e WebSockets do LoomVTT
 - Suporte imediato a **Arrastar e Soltar (Drag & Drop)** direto para as fichas de personagens ou NPCs.
 - Mais de **90 compêndios ORC** compactos e otimizados prontos para uso em campanhas.
 
-### ⏱️ 5. Integração com o Rastreador de Combate do LoomVTT
+### 🧙 5. Criador de Personagens & Evolução de Nível
+- **Assistente de Criação em 7 Passos**: Ancestralidade, Herança, Antecedente, Classe, Atributos (+1 por aumento direto Remaster), Perícias e Talentos iniciais integrados aos compêndios ORC.
+- **Subida de Nível (Level Up)**: Acúmulo de PV máximo, consumo de 1000 XP e cálculo de talentos e aumentos pendentes por classe.
+
+### ✨ 6. Magia Completa & Potencialização (Heightening)
+- **Potencialização Dinâmica**: Escalonamento por intervalo (`interval`) e ranks fixos (`fixed`), consumindo espaços de magia ou Pontos de Foco.
+- **Cartões de Magia com Salvaguardas e Dano**: CD calculada, rolagem de resistências com 4 graus de sucesso (0x/0.5x/1x/2x) e dano com 1 clique.
+
+### 🎲 7. Ferramentas do Mestre & Downtime
+- **Calculadora de Encontros & Tesouro**: Avaliação automática de ameaça (*Trivial*, *Baixa*, *Moderada*, *Severa*, *Extrema*) e orçamentos proporcionais por jogador com tabela de tesouro do GM Core.
+- **Atividades de Downtime**: Manufatura (*Crafting*) com cálculo de custo adiantado, dias extras e matérias-primas salvas; Obter Renda (*Earn Income*) por nível de tarefa e proficiência.
+
+### ⏱️ 8. Integração com o Rastreador de Combate do LoomVTT
 
 - **Iniciativa Direta**: Resposta automática ao hook `combatInitiative` do motor com o bônus de percepção ou perícia configurada do personagem.
 - **Anúncio de Turno**: Publicação automática do orçamento de ações no início do turno (*3 Ações*, *Reação*, *Acelerado/Quickened*, *Atordoado/Stunned*).
@@ -101,12 +113,24 @@ pf2e/
 ├── packs/              # Pacotes JSON base de ações, equipamentos, magias e talentos
 ├── packs-orc/          # Compêndios SQLite com dados sob a licença ORC
 ├── scripts/            # Módulos de lógica de jogo, fichas e integração
-│   ├── character-sheet.mjs    # Ficha de personagem principal
-│   ├── compendium-browser.mjs # Navegador de compêndios
-│   ├── conditions.mjs        # Catálogo e transições de condições
-│   ├── modifiers.mjs         # Regras de empilhamento de bônus
-│   ├── prepare-data.mjs      # Pipeline de preparação de dados de atores
-│   └── roll-engine.mjs       # Motor de rolagens e graus de sucesso
+│   ├── character-builder.mjs        # Lógica pura de criação e evolução de personagens
+│   ├── character-builder-dialog.mjs # Diálogo assistente de criação em 7 passos
+│   ├── character-sheet.mjs          # Ficha tática de personagem
+│   ├── compendium-browser.mjs       # Navegador de compêndios ORC
+│   ├── conditions.mjs               # Catálogo e transições de condições
+│   ├── damage.mjs                   # Dano, cura, mitigação e testes de recuperação
+│   ├── downtime.mjs                 # Obter Renda (Earn Income) e Manufatura (Crafting)
+│   ├── encounter.mjs                # Calculadora de encontros e tesouro Remaster
+│   ├── formula.mjs                  # Avaliador seguro de fórmulas matemáticas
+│   ├── gm-tools-sheet.mjs           # Painel de ferramentas do Mestre
+│   ├── modifiers.mjs                # Regras canônicas de empilhamento de bônus
+│   ├── persistent-damage.mjs        # Dano persistente e testes planos de fim de turno
+│   ├── predicate.mjs                # Avaliador puro de predicados booleanos
+│   ├── prepare-data.mjs             # Pipeline de preparação de dados de atores
+│   ├── progression-tables.mjs       # Tabelas de progressão por classe e nível
+│   ├── roll-engine.mjs              # Motor de rolagens, salvaguardas e dano
+│   ├── rule-elements.mjs            # Sistema de rule elements (FlatModifier, etc.)
+│   └── spellcasting.mjs             # Gestão de slots, foco, preparação e potencialização
 ├── templates/          # Templates Handlebars (.hbs) das fichas e janelas
 ├── tests/              # Suíte completa de testes unitários automatizados
 ├── pf2e.mjs            # Ponto de entrada do ruleset no LoomVTT

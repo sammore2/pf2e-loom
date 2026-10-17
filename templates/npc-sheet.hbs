@@ -22,7 +22,40 @@
       <label class="tat-hp-temp">{{localize "pf2e.sheets.temp"}} <input class="tat-in tat-in-sm" type="number" name="sd:hp.temp" value="{{hp.temp}}" /></label>
     </div>
     <div class="tat-meter"><span style="width: {{hp.pct}}%"></span></div>
+    <div class="pf2e-hp-actions" style="margin-top: 4px;">
+      <button type="button" class="tat-btn-xs" data-action="apply-damage" title="{{localize "pf2e.combatTools.damageTitle"}}">
+        <i class="fa-solid fa-burst"></i> {{localize "pf2e.combatTools.damage"}}
+      </button>
+      <button type="button" class="tat-btn-xs" data-action="apply-healing" title="{{localize "pf2e.combatTools.healTitle"}}">
+        <i class="fa-solid fa-heart-pulse"></i> {{localize "pf2e.combatTools.heal"}}
+      </button>
+    </div>
   </div>
+
+  {{!-- Active Conditions Pill Stack --}}
+  <section class="tat-block tat-conditions-card" style="margin-top: 6px;">
+    <h3 class="tat-label">{{localize "pf2e.sheets.conditions"}}</h3>
+    <div class="tat-condition-tags">
+      {{#each conditionsActive}}
+      <span class="tat-cond">
+        <span class="tat-cond-name">{{localize labelKey}}</span>
+        {{#if valued}}
+        <button type="button" data-action="cond-dec" data-id="{{id}}" title="−">−</button><b>{{value}}</b><button type="button" data-action="cond-inc" data-id="{{id}}" title="+">+</button>
+        {{else}}
+        <button type="button" data-action="cond-remove" data-id="{{id}}" title="×"><i class="fa-solid fa-xmark"></i></button>
+        {{/if}}
+      </span>
+      {{else}}
+      <p class="tat-empty">{{localize "pf2e.sheets.noConditions"}}</p>
+      {{/each}}
+    </div>
+    {{#if conditionOptions}}
+    <select class="tat-in tat-cond-add" data-action="cond-add">
+      <option value="">+ {{localize "pf2e.sheets.addCondition"}}</option>
+      {{#each conditionOptions}}<option value="{{value}}">{{localize labelKey}}</option>{{/each}}
+    </select>
+    {{/if}}
+  </section>
 
   <section class="tat-defenses">
     {{#each defTiles}}
@@ -78,7 +111,8 @@
     {{#each actionItems}}
     <div class="tat-actionrow" data-id="{{id}}">
       <span class="tat-cost">{{actions}}</span>
-      <button type="button" class="tat-link" data-action="item-open" data-id="{{id}}">{{name}}</button>
+      <button type="button" class="tat-link" data-action="action-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{name}}</button>
+      <button type="button" class="tat-icon" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}"><i class="fa-solid fa-pen-to-square"></i></button>
       <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="×"><i class="fa-solid fa-trash"></i></button>
     </div>
     {{/each}}

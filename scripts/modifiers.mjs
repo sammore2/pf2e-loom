@@ -22,6 +22,8 @@
  * @property {any} [predicate] Optional predicate condition
  */
 
+import { evaluatePredicate } from './predicate.mjs';
+
 function num(v) {
   const n = Number(v);
   return Number.isFinite(n) ? n : 0;
@@ -58,6 +60,7 @@ export function createModifier(data) {
  *
  * @param {Modifier[]} rawModifiers
  * @param {string|string[]} targetSelectors Selector or array of selectors (e.g. 'athletics' or ['all-checks', 'athletics'])
+ * @param {Set<string>|string[]} [rollOptions=[]] Optional active roll options for evaluating predicates
  * @returns {{
  *   total: number,
  *   applied: Modifier[],
@@ -65,7 +68,7 @@ export function createModifier(data) {
  *   breakdown: string
  * }}
  */
-export function resolveModifiers(rawModifiers = [], targetSelectors = []) {
+export function resolveModifiers(rawModifiers = [], targetSelectors = [], rollOptions = []) {
   const selectors = (Array.isArray(targetSelectors) ? targetSelectors : [targetSelectors]).map((s) => String(s).toLowerCase());
 
   // 1. Filter enabled modifiers that match at least one of the target selectors
@@ -74,6 +77,7 @@ export function resolveModifiers(rawModifiers = [], targetSelectors = []) {
 
   for (const m of rawModifiers) {
     if (!m || m.enabled === false || m.value === 0) continue;
+    if (m.predicate && !evaluatePredicate(m.predicate, rollOptions)) continue;
     // Deduplicate by ID
     if (seenIds.has(m.id)) continue;
     seenIds.add(m.id);

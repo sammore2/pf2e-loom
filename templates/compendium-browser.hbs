@@ -27,6 +27,12 @@
       <button type="button" class="pf2e-tab-btn{{#if (eq activeTab "feat")}} active{{/if}}" data-action="tab" data-tab="feat">
         <i class="fa-solid fa-award"></i> {{localize "pf2e.browser.feat"}} ({{counts.feat}})
       </button>
+      <button type="button" class="pf2e-tab-btn{{#if (eq activeTab "bestiary")}} active{{/if}}" data-action="tab" data-tab="bestiary">
+        <i class="fa-solid fa-dragon"></i> {{localize "pf2e.browser.bestiary"}} ({{counts.bestiary}})
+      </button>
+      <button type="button" class="pf2e-tab-btn{{#if (eq activeTab "hazard")}} active{{/if}}" data-action="tab" data-tab="hazard">
+        <i class="fa-solid fa-triangle-exclamation"></i> {{localize "pf2e.browser.hazard"}} ({{counts.hazard}})
+      </button>
     </nav>
   </header>
 
@@ -80,6 +86,12 @@
       </div>
 
       <div class="pf2e-detail-body">
+        {{#if selectedItem.hp}}
+        <div class="pf2e-detail-stat-row">
+          <span class="tat-label">{{localize "pf2e.resources.hp"}}:</span>
+          <b>{{selectedItem.hp}}</b>
+        </div>
+        {{/if}}
         {{#if selectedItem.damage}}
         <div class="pf2e-detail-stat-row">
           <span class="tat-label">{{localize "pf2e.sheets.damage"}}:</span>
@@ -88,8 +100,8 @@
         {{/if}}
         {{#if selectedItem.acBonus}}
         <div class="pf2e-detail-stat-row">
-          <span class="tat-label">{{localize "pf2e.sheets.acBonus"}}:</span>
-          <b>+{{selectedItem.acBonus}}</b>
+          <span class="tat-label">{{localize "pf2e.defenses.ac"}}:</span>
+          <b>{{selectedItem.acBonus}}</b>
           {{#if selectedItem.dexCap}}<span class="tat-dim">({{localize "pf2e.sheets.dexCap"}}: +{{selectedItem.dexCap}})</span>{{/if}}
         </div>
         {{/if}}

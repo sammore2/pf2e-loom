@@ -1,6 +1,7 @@
-// Stub from scaffold — replaced in handoff 02.
-// The engine accepts null here (LoomSystem.getSheetSchema returns
-// SheetSchema | null); sheets open generic until handoff 03.
+// PF2E — scripts/sheet-schemas.mjs
+// The ruleset uses native Handlebars sheets (Pf2eCharacterSheet, Pf2eNpcSheet, Pf2eItemSheet, etc.)
+// registered via sheets.catalog. Returning null instructs Loom's engine to bypass auto-generated
+// generic schema forms and render the custom ruleset views.
 export function getSheetSchema(type) {
   return null;
 }

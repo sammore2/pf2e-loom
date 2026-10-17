@@ -266,5 +266,33 @@ describe('Chat Card — Natural d20 Extraction & Degrees of Success', () => {
     assert.ok(htmlEn.includes('Agile'), 'Localized trait agile -> Agile');
     assert.ok(htmlEn.includes('Finesse'), 'Localized trait finesse -> Finesse');
   });
+
+  it('renderPf2eRollCard renders interactive damage action bar for damage rolls', async () => {
+    const { renderPf2eRollCard } = await import('../scripts/chat-card.mjs');
+    const roll = {
+      formula: '1d8 + 4',
+      total: 12,
+      terms: [
+        { kind: 'dice', faces: 8, count: 1, rolls: [8], dropped: [false], subtotal: 8 },
+        { kind: 'modifier', value: 4 },
+      ],
+      meta: {
+        system: 'pf2e',
+        label: 'Longsword',
+        rollType: 'damage',
+        damageType: 'slashing',
+      },
+    };
+
+    const html = renderPf2eRollCard(roll, (s) => s);
+    assert.ok(html.includes('pf2e-damage-application-bar'), 'Includes damage bar');
+    assert.ok(html.includes('data-damage="12"'), 'Carries damage total 12');
+    assert.ok(html.includes('data-damage-type="slashing"'), 'Carries damage type slashing');
+    assert.ok(html.includes('data-multiplier="1"'), 'Has full damage button');
+    assert.ok(html.includes('data-multiplier="0.5"'), 'Has half damage button');
+    assert.ok(html.includes('data-multiplier="2"'), 'Has double damage button');
+    assert.ok(html.includes('data-shield="true"'), 'Has shield block button');
+    assert.ok(html.includes('data-action="apply-heal"'), 'Has healing button');
+  });
 });
 

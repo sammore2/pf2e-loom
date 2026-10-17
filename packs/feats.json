@@ -7,9 +7,14 @@
       "level": 1,
       "category": "class",
       "actions": "2",
-      "traits": ["guerreiro", "floresio"],
-      "description": "Você desfere um golpe com toda a sua força. Faça um Golpe corpo a corpo. Se acertar, você adiciona um dado extra de dano da arma (ou dois dados no 10º nível, três no 18º nível)."
-    }
+      "traits": [
+        "guerreiro",
+        "floresio"
+      ],
+      "description": "Você desfere um golpe com toda a sua força. Faça um Golpe corpo a corpo. Se acertar, você adiciona um dado extra de dano da arma (ou dois dados no 10º nível, três no 18º nível).",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "ft-sudden-charge",
@@ -19,9 +24,14 @@
       "level": 1,
       "category": "class",
       "actions": "2",
-      "traits": ["guerreiro", "abertura"],
-      "description": "Com um ímpeto veloz, você Anda duas vezes e desfere um Golpe corpo a corpo se terminar o movimento em alcance do alvo."
-    }
+      "traits": [
+        "guerreiro",
+        "abertura"
+      ],
+      "description": "Com um ímpeto veloz, você Anda duas vezes e desfere um Golpe corpo a corpo se terminar o movimento em alcance do alvo.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "ft-double-slice",
@@ -31,9 +41,14 @@
       "level": 1,
       "category": "class",
       "actions": "2",
-      "traits": ["guerreiro", "floresio"],
-      "description": "Empunhando duas armas corpo a corpo, você Golpea com ambas no mesmo alvo. O segundo ataque não sofre penalidade cumulativa por ataques múltiplos até que ambos sejam resolvidos."
-    }
+      "traits": [
+        "guerreiro",
+        "floresio"
+      ],
+      "description": "Empunhando duas armas corpo a corpo, você Golpea com ambas no mesmo alvo. O segundo ataque não sofre penalidade cumulativa por ataques múltiplos até que ambos sejam resolvidos.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "ft-reactive-strike",
@@ -43,9 +58,13 @@
       "level": 1,
       "category": "class",
       "actions": "R",
-      "traits": ["guerreiro"],
-      "description": "Gatilho: Uma criatura em seu alcance usa uma ação de manipulação ou movimento, faz um ataque à distância ou sai de um quadrado durante uma ação de movimento. Efeito: Você desfere um Golpe corpo a corpo contra a criatura desencadeadora."
-    }
+      "traits": [
+        "guerreiro"
+      ],
+      "description": "Gatilho: Uma criatura em seu alcance usa uma ação de manipulação ou movimento, faz um ataque à distância ou sai de um quadrado durante uma ação de movimento. Efeito: Você desfere um Golpe corpo a corpo contra a criatura desencadeadora.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "ft-toughness",
@@ -55,9 +74,13 @@
       "level": 1,
       "category": "general",
       "actions": "0",
-      "traits": ["geral"],
-      "description": "Você ganha PV máximos adicionais iguais ao seu nível. Além disso, a CD para seus testes de recuperação passa a ser 9 + seu valor atual de Moribundo em vez de 10 + Moribundo."
-    }
+      "traits": [
+        "geral"
+      ],
+      "description": "Você ganha PV máximos adicionais iguais ao seu nível. Além disso, a CD para seus testes de recuperação passa a ser 9 + seu valor atual de Moribundo em vez de 10 + Moribundo.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "ft-diehard",
@@ -67,9 +90,13 @@
       "level": 1,
       "category": "general",
       "actions": "0",
-      "traits": ["geral"],
-      "description": "Seu limiar para a morte aumenta: você só morre ao atingir a condição Moribundo 5, em vez de Moribundo 4."
-    }
+      "traits": [
+        "geral"
+      ],
+      "description": "Seu limiar para a morte aumenta: você só morre ao atingir a condição Moribundo 5, em vez de Moribundo 4.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "ft-fleet",
@@ -79,9 +106,13 @@
       "level": 1,
       "category": "general",
       "actions": "0",
-      "traits": ["geral"],
-      "description": "Seu Deslocamento terrestre aumenta em 1,5 metro (5 pés)."
-    }
+      "traits": [
+        "geral"
+      ],
+      "description": "Seu Deslocamento terrestre aumenta em 1,5 metro (5 pés).",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "ft-battle-medicine",
@@ -91,8 +122,14 @@
       "level": 1,
       "category": "skill",
       "actions": "1",
-      "traits": ["cura", "manipulação", "perícia"],
-      "description": "Você aplica curativos emergenciais em um aliado adjacente (ou em si mesmo) com 1 ação única, usando a CD de Tratar Ferimentos para restaurar PV imediatamente durante o combate."
-    }
+      "traits": [
+        "cura",
+        "manipulação",
+        "perícia"
+      ],
+      "description": "Você aplica curativos emergenciais em um aliado adjacente (ou em si mesmo) com 1 ação única, usando a CD de Tratar Ferimentos para restaurar PV imediatamente durante o combate.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   }
 ]

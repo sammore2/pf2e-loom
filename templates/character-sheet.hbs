@@ -32,7 +32,9 @@
           <input class="tat-in tat-in-sm hp-stat-in" type="number" name="sd:hp.max" value="{{hp.max}}" title="{{localize "pf2e.sheets.maxHp"}}" />
         </div>
       </div>
-      <div class="tat-pips" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{hp.pct}}">{{#each hp.pips}}<span class="tat-pip{{#if this}} is-on{{/if}}"></span>{{/each}}</div>
+      <div class="tat-hp-bar" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{hp.pct}}">
+        <div class="tat-hp-fill" style="width: {{hp.pct}}%"></div>
+      </div>
 
       {{!-- Dying & Wounded Pip Tracks --}}
       <div class="pf2e-vital-tracks">
@@ -52,6 +54,24 @@
             {{/each}}
           </div>
         </div>
+      </div>
+
+      {{!-- Quick HP Actions: Damage, Heal, Recovery --}}
+      <div class="pf2e-hp-actions">
+        <button type="button" class="tat-btn-xs" data-action="apply-damage" title="{{localize "pf2e.combatTools.damageTitle"}}">
+          <i class="fa-solid fa-burst"></i> {{localize "pf2e.combatTools.damage"}}
+        </button>
+        <button type="button" class="tat-btn-xs" data-action="apply-healing" title="{{localize "pf2e.combatTools.healTitle"}}">
+          <i class="fa-solid fa-heart-pulse"></i> {{localize "pf2e.combatTools.heal"}}
+        </button>
+        {{#if isDying}}
+        <button type="button" class="tat-btn-xs tat-btn-danger" data-action="recovery-check" title="{{localize "pf2e.combatTools.recovery"}}">
+          <i class="fa-solid fa-skull"></i> {{localize "pf2e.combatTools.recovery"}}
+        </button>
+        <button type="button" class="tat-btn-xs tat-btn-warning" data-action="heroic-recovery" title="{{localize "pf2e.spellcasting.heroicRecovery"}}">
+          <i class="fa-solid fa-shield-heart"></i> {{localize "pf2e.spellcasting.heroicRecovery"}}
+        </button>
+        {{/if}}
       </div>
     </section>
 
@@ -205,6 +225,20 @@
     <header class="tat-head">
       <div class="tat-id">
         <input class="tat-in tat-name" type="text" name="name" value="{{name}}" placeholder="{{localize "pf2e.sheets.name"}}" />
+        <div class="tat-id-badges-line">
+          {{#if identity.ancestry}}
+          <button type="button" class="tat-id-badge" data-action="item-open" data-id="{{identity.ancestry.id}}" title="{{localize "pf2e.itemTypes.ancestry"}}">{{identity.ancestry.name}}</button>
+          {{/if}}
+          {{#if identity.heritage}}
+          <button type="button" class="tat-id-badge" data-action="item-open" data-id="{{identity.heritage.id}}" title="{{localize "pf2e.itemTypes.heritage"}}">{{identity.heritage.name}}</button>
+          {{/if}}
+          {{#if identity.class}}
+          <button type="button" class="tat-id-badge tat-id-badge-class" data-action="item-open" data-id="{{identity.class.id}}" title="{{localize "pf2e.itemTypes.class"}}">{{identity.class.name}} {{level}}</button>
+          {{/if}}
+          {{#if identity.background}}
+          <button type="button" class="tat-id-badge" data-action="item-open" data-id="{{identity.background.id}}" title="{{localize "pf2e.itemTypes.background"}}">{{identity.background.name}}</button>
+          {{/if}}
+        </div>
         <div class="tat-hero-header" title="{{localize "pf2e.sheets.hero"}}">
           <span class="tat-hero-lbl">{{localize "pf2e.sheets.hero"}}</span>
           <div class="tat-hero-shields">
@@ -214,6 +248,9 @@
             </button>
             {{/each}}
           </div>
+          <button type="button" class="tat-btn-xs pf2e-spend-hero-btn" data-action="spend-hero-point" title="{{localize "pf2e.spellcasting.spendHeroPoint"}}">
+            <i class="fa-solid fa-star"></i> {{localize "pf2e.spellcasting.spendHeroPoint"}}
+          </button>
         </div>
       </div>
 
@@ -222,9 +259,14 @@
           <span class="lvl-lbl">{{localize "pf2e.sheets.level"}}</span>
           <input class="tat-in lvl-in" type="number" name="sd:level" value="{{level}}" min="1" max="20" />
         </div>
-        <div class="tat-xp{{#if xp.ready}} is-ready{{/if}}" title="{{localize "pf2e.sheets.xpHint"}}">
-          <div class="tat-xp-bar"><span style="width: {{xp.pct}}%"></span></div>
-          <span class="tat-xp-read"><input class="tat-in tat-in-sm" type="number" name="sd:xp.value" value="{{xp.value}}" /> / {{xp.next}}</span>
+        <div class="tat-xp-col">
+          <div class="tat-xp{{#if xp.ready}} is-ready{{/if}}" title="{{localize "pf2e.sheets.xpHint"}}">
+            <div class="tat-xp-bar"><span style="width: {{xp.pct}}%"></span></div>
+            <span class="tat-xp-read"><input class="tat-in tat-in-sm" type="number" name="sd:xp.value" value="{{xp.value}}" /> / {{xp.next}}</span>
+          </div>
+          <button type="button" class="tat-btn-xs tat-levelup-btn{{#if xp.ready}} tat-btn-warning{{/if}}" data-action="level-up" title="{{localize "pf2e.levelup.title"}}">
+            <i class="fa-solid fa-arrow-up"></i> {{localize "pf2e.levelup.button"}}
+          </button>
         </div>
       </div>
     </header>
@@ -233,16 +275,14 @@
     <section class="tat-block tat-attributes-ribbon tat-fixed-attrs">
       <div class="pf2e-section-head">
         <h3 class="tat-label">{{localize "pf2e.sheets.attributes"}}</h3>
-        <button type="button" class="tat-btn-xs" data-action="roll-attribute" data-key="str" title="{{localize "pf2e.sheets.rollCheck"}}">
-          <i class="fa-solid fa-dice-d20"></i> {{localize "pf2e.rollCategories.check"}}
-        </button>
       </div>
       <div class="tat-attr-ribbon-grid">
         {{#each abilities}}
         <div class="tat-ribbon-cell" data-key="{{key}}">
           <div class="tat-ribbon-header-line">
             <button type="button" class="tat-ribbon-key-btn" data-action="roll-attribute" data-key="{{key}}" title="{{localize labelKey}} — {{localize "pf2e.sheets.rollCheck"}}">
-              {{localize (concat "pf2e.sheets.abbr." key)}}
+              <span class="tat-attr-abbr">{{localize (concat "pf2e.sheets.abbr." key)}}</span>
+              <i class="fa-solid fa-dice-d20 tat-attr-dice-icon" aria-hidden="true"></i>
             </button>
             {{#if isKeyAttr}}<i class="fa-solid fa-key tat-key-attr-icon" title="{{localize "pf2e.sheets.keyAttribute"}}"></i>{{/if}}
           </div>
@@ -285,6 +325,9 @@
         <button type="button" class="pf2e-tab-btn" data-action="tab" data-tab="notes" title="{{localize "pf2e.sheets.tabs.notes"}}">
           <i class="fa-solid fa-feather-pointed"></i>
         </button>
+        <button type="button" class="pf2e-tab-btn" data-action="tab" data-tab="effects" title="{{localize "pf2e.sheets.tabs.effects"}}">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </button>
         <button type="button" class="pf2e-tab-btn pf2e-browser-launch-btn" data-action="open-compendium" title="{{localize "pf2e.sheets.compendiumBrowser"}}">
           <i class="fa-solid fa-book"></i>
         </button>
@@ -304,6 +347,9 @@
           </button>
           <div class="profile-details">
             <div class="profile-traits-row">
+              <button type="button" class="tat-btn-xs tat-builder-launch-btn" data-action="open-character-builder" title="{{localize "pf2e.builder.title"}}">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> {{localize "pf2e.builder.title"}}
+              </button>
               {{#each traitsList}}
               <span class="tat-trait-badge">{{this}}</span>
               {{/each}}
@@ -312,33 +358,53 @@
               <div class="identity-item">
                 <span class="id-lbl">{{localize "pf2e.itemTypes.ancestry"}}:</span>
                 {{#if identity.ancestry}}
-                <button type="button" class="tat-pill-btn" data-action="item-open" data-id="{{identity.ancestry.id}}">{{identity.ancestry.name}}</button>
+                <div class="tat-identity-pill-group">
+                  <button type="button" class="tat-pill-btn" data-action="item-open" data-id="{{identity.ancestry.id}}">{{identity.ancestry.name}}</button>
+                  <button type="button" class="tat-pill-del" data-action="item-delete" data-id="{{identity.ancestry.id}}" title="{{localize "pf2e.sheets.delete"}}"><i class="fa-solid fa-xmark"></i></button>
+                </div>
                 {{else}}
-                <span class="tat-pill-empty">—</span>
+                <button type="button" class="tat-pill-add" data-action="item-create" data-type="ancestry" title="{{localize "pf2e.sheets.add"}}">
+                  <i class="fa-solid fa-plus"></i> {{localize "pf2e.itemTypes.ancestry"}}
+                </button>
                 {{/if}}
               </div>
               <div class="identity-item">
                 <span class="id-lbl">{{localize "pf2e.itemTypes.heritage"}}:</span>
                 {{#if identity.heritage}}
-                <button type="button" class="tat-pill-btn" data-action="item-open" data-id="{{identity.heritage.id}}">{{identity.heritage.name}}</button>
+                <div class="tat-identity-pill-group">
+                  <button type="button" class="tat-pill-btn" data-action="item-open" data-id="{{identity.heritage.id}}">{{identity.heritage.name}}</button>
+                  <button type="button" class="tat-pill-del" data-action="item-delete" data-id="{{identity.heritage.id}}" title="{{localize "pf2e.sheets.delete"}}"><i class="fa-solid fa-xmark"></i></button>
+                </div>
                 {{else}}
-                <span class="tat-pill-empty">—</span>
+                <button type="button" class="tat-pill-add" data-action="item-create" data-type="heritage" title="{{localize "pf2e.sheets.add"}}">
+                  <i class="fa-solid fa-plus"></i> {{localize "pf2e.itemTypes.heritage"}}
+                </button>
                 {{/if}}
               </div>
               <div class="identity-item">
                 <span class="id-lbl">{{localize "pf2e.itemTypes.background"}}:</span>
                 {{#if identity.background}}
-                <button type="button" class="tat-pill-btn" data-action="item-open" data-id="{{identity.background.id}}">{{identity.background.name}}</button>
+                <div class="tat-identity-pill-group">
+                  <button type="button" class="tat-pill-btn" data-action="item-open" data-id="{{identity.background.id}}">{{identity.background.name}}</button>
+                  <button type="button" class="tat-pill-del" data-action="item-delete" data-id="{{identity.background.id}}" title="{{localize "pf2e.sheets.delete"}}"><i class="fa-solid fa-xmark"></i></button>
+                </div>
                 {{else}}
-                <span class="tat-pill-empty">—</span>
+                <button type="button" class="tat-pill-add" data-action="item-create" data-type="background" title="{{localize "pf2e.sheets.add"}}">
+                  <i class="fa-solid fa-plus"></i> {{localize "pf2e.itemTypes.background"}}
+                </button>
                 {{/if}}
               </div>
               <div class="identity-item">
                 <span class="id-lbl">{{localize "pf2e.itemTypes.class"}}:</span>
                 {{#if identity.class}}
-                <button type="button" class="tat-pill-btn" data-action="item-open" data-id="{{identity.class.id}}">{{identity.class.name}}</button>
+                <div class="tat-identity-pill-group">
+                  <button type="button" class="tat-pill-btn" data-action="item-open" data-id="{{identity.class.id}}">{{identity.class.name}}</button>
+                  <button type="button" class="tat-pill-del" data-action="item-delete" data-id="{{identity.class.id}}" title="{{localize "pf2e.sheets.delete"}}"><i class="fa-solid fa-xmark"></i></button>
+                </div>
                 {{else}}
-                <span class="tat-pill-empty">—</span>
+                <button type="button" class="tat-pill-add" data-action="item-create" data-type="class" title="{{localize "pf2e.sheets.add"}}">
+                  <i class="fa-solid fa-plus"></i> {{localize "pf2e.itemTypes.class"}}
+                </button>
                 {{/if}}
               </div>
               <div class="identity-item identity-item-full">
@@ -470,22 +536,28 @@
               <button type="button" class="tat-btn-xs" data-action="item-create" data-type="action" data-cost="1">
                 <i class="fa-solid fa-plus"></i> {{localize "pf2e.sheets.createAction"}}
               </button>
-              <button type="button" class="tat-btn-xs pf2e-browser-launch-btn" data-action="open-compendium" data-tab="actions">
-                <i class="fa-solid fa-book"></i> {{localize "pf2e.sheets.browse"}}
+              <button type="button" class="tat-btn-xs pf2e-browser-launch-btn" data-action="open-compendium" data-tab="actions" title="{{localize "pf2e.sheets.browse"}}">
+                <i class="fa-solid fa-book"></i>
               </button>
             </div>
           </div>
           <div class="pf2e-actions-list">
             {{#each singleActions}}
             <div class="pf2e-action-item-card" data-id="{{id}}">
-              <button type="button" class="pf2e-glyph-box glyph-1" data-action="action-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{actions}}</button>
+              <button type="button" class="pf2e-glyph-box glyph-1" data-action="{{#if hasRoll}}action-roll{{else}}action-chat{{/if}}" data-id="{{id}}" title="{{#if hasRoll}}{{localize "pf2e.rolls.roll"}}{{else}}{{localize "pf2e.sheets.sendToChat"}}{{/if}}">{{actions}}</button>
               <div class="pf2e-action-details">
-                <button type="button" class="pf2e-action-name" data-action="action-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{name}}</button>
+                <button type="button" class="pf2e-action-name" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}">{{name}}</button>
                 {{#if traits.length}}
                 <div class="pf2e-action-traits">{{#each traits}}<span class="tat-tag">{{this}}</span>{{/each}}</div>
                 {{/if}}
               </div>
               <div class="pf2e-action-tools">
+                {{#if hasRoll}}
+                <button type="button" class="tat-btn-xs pf2e-action-roll-btn" data-action="action-roll" data-id="{{id}}" title="{{localize "pf2e.rolls.roll"}}"><i class="fa-solid fa-dice-d20"></i> {{localize "pf2e.rolls.roll"}}</button>
+                {{/if}}
+                {{#if hasDamage}}
+                <button type="button" class="tat-btn-xs pf2e-action-damage-btn" data-action="action-damage" data-id="{{id}}" title="{{localize "pf2e.combatTools.damage"}}"><i class="fa-solid fa-burst"></i> {{damage}}</button>
+                {{/if}}
                 <button type="button" class="tat-icon" data-action="action-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}"><i class="fa-solid fa-message"></i></button>
                 <button type="button" class="tat-icon" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}"><i class="fa-solid fa-pen-to-square"></i></button>
                 <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="{{localize "pf2e.sheets.delete"}}"><i class="fa-solid fa-trash"></i></button>
@@ -507,22 +579,28 @@
               <button type="button" class="tat-btn-xs" data-action="item-create" data-type="action" data-cost="2">
                 <i class="fa-solid fa-plus"></i> {{localize "pf2e.sheets.createAction"}}
               </button>
-              <button type="button" class="tat-btn-xs pf2e-browser-launch-btn" data-action="open-compendium" data-tab="actions">
-                <i class="fa-solid fa-book"></i> {{localize "pf2e.sheets.browse"}}
+              <button type="button" class="tat-btn-xs pf2e-browser-launch-btn" data-action="open-compendium" data-tab="actions" title="{{localize "pf2e.sheets.browse"}}">
+                <i class="fa-solid fa-book"></i>
               </button>
             </div>
           </div>
           <div class="pf2e-actions-list">
             {{#each activities}}
             <div class="pf2e-action-item-card" data-id="{{id}}">
-              <button type="button" class="pf2e-glyph-box glyph-act" data-action="action-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{actions}}</button>
+              <button type="button" class="pf2e-glyph-box glyph-act" data-action="{{#if hasRoll}}action-roll{{else}}action-chat{{/if}}" data-id="{{id}}" title="{{#if hasRoll}}{{localize "pf2e.rolls.roll"}}{{else}}{{localize "pf2e.sheets.sendToChat"}}{{/if}}">{{actions}}</button>
               <div class="pf2e-action-details">
-                <button type="button" class="pf2e-action-name" data-action="action-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{name}}</button>
+                <button type="button" class="pf2e-action-name" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}">{{name}}</button>
                 {{#if traits.length}}
                 <div class="pf2e-action-traits">{{#each traits}}<span class="tat-tag">{{this}}</span>{{/each}}</div>
                 {{/if}}
               </div>
               <div class="pf2e-action-tools">
+                {{#if hasRoll}}
+                <button type="button" class="tat-btn-xs pf2e-action-roll-btn" data-action="action-roll" data-id="{{id}}" title="{{localize "pf2e.rolls.roll"}}"><i class="fa-solid fa-dice-d20"></i> {{localize "pf2e.rolls.roll"}}</button>
+                {{/if}}
+                {{#if hasDamage}}
+                <button type="button" class="tat-btn-xs pf2e-action-damage-btn" data-action="action-damage" data-id="{{id}}" title="{{localize "pf2e.combatTools.damage"}}"><i class="fa-solid fa-burst"></i> {{damage}}</button>
+                {{/if}}
                 <button type="button" class="tat-icon" data-action="action-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}"><i class="fa-solid fa-message"></i></button>
                 <button type="button" class="tat-icon" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}"><i class="fa-solid fa-pen-to-square"></i></button>
                 <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="{{localize "pf2e.sheets.delete"}}"><i class="fa-solid fa-trash"></i></button>
@@ -544,22 +622,28 @@
               <button type="button" class="tat-btn-xs" data-action="item-create" data-type="action" data-cost="reaction">
                 <i class="fa-solid fa-plus"></i> {{localize "pf2e.sheets.createReaction"}}
               </button>
-              <button type="button" class="tat-btn-xs pf2e-browser-launch-btn" data-action="open-compendium" data-tab="actions">
-                <i class="fa-solid fa-book"></i> {{localize "pf2e.sheets.browse"}}
+              <button type="button" class="tat-btn-xs pf2e-browser-launch-btn" data-action="open-compendium" data-tab="actions" title="{{localize "pf2e.sheets.browse"}}">
+                <i class="fa-solid fa-book"></i>
               </button>
             </div>
           </div>
           <div class="pf2e-actions-list">
             {{#each reactions}}
             <div class="pf2e-action-item-card" data-id="{{id}}">
-              <button type="button" class="pf2e-glyph-box glyph-react" data-action="action-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">↺</button>
+              <button type="button" class="pf2e-glyph-box glyph-react" data-action="{{#if hasRoll}}action-roll{{else}}action-chat{{/if}}" data-id="{{id}}" title="{{#if hasRoll}}{{localize "pf2e.rolls.roll"}}{{else}}{{localize "pf2e.sheets.sendToChat"}}{{/if}}">↺</button>
               <div class="pf2e-action-details">
-                <button type="button" class="pf2e-action-name" data-action="action-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{name}}</button>
+                <button type="button" class="pf2e-action-name" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}">{{name}}</button>
                 {{#if traits.length}}
                 <div class="pf2e-action-traits">{{#each traits}}<span class="tat-tag">{{this}}</span>{{/each}}</div>
                 {{/if}}
               </div>
               <div class="pf2e-action-tools">
+                {{#if hasRoll}}
+                <button type="button" class="tat-btn-xs pf2e-action-roll-btn" data-action="action-roll" data-id="{{id}}" title="{{localize "pf2e.rolls.roll"}}"><i class="fa-solid fa-dice-d20"></i> {{localize "pf2e.rolls.roll"}}</button>
+                {{/if}}
+                {{#if hasDamage}}
+                <button type="button" class="tat-btn-xs pf2e-action-damage-btn" data-action="action-damage" data-id="{{id}}" title="{{localize "pf2e.combatTools.damage"}}"><i class="fa-solid fa-burst"></i> {{damage}}</button>
+                {{/if}}
                 <button type="button" class="tat-icon" data-action="action-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}"><i class="fa-solid fa-message"></i></button>
                 <button type="button" class="tat-icon" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}"><i class="fa-solid fa-pen-to-square"></i></button>
                 <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="{{localize "pf2e.sheets.delete"}}"><i class="fa-solid fa-trash"></i></button>
@@ -581,22 +665,28 @@
               <button type="button" class="tat-btn-xs" data-action="item-create" data-type="action" data-cost="free">
                 <i class="fa-solid fa-plus"></i> {{localize "pf2e.sheets.createFreeAction"}}
               </button>
-              <button type="button" class="tat-btn-xs pf2e-browser-launch-btn" data-action="open-compendium" data-tab="actions">
-                <i class="fa-solid fa-book"></i> {{localize "pf2e.sheets.browse"}}
+              <button type="button" class="tat-btn-xs pf2e-browser-launch-btn" data-action="open-compendium" data-tab="actions" title="{{localize "pf2e.sheets.browse"}}">
+                <i class="fa-solid fa-book"></i>
               </button>
             </div>
           </div>
           <div class="pf2e-actions-list">
             {{#each freeActions}}
             <div class="pf2e-action-item-card" data-id="{{id}}">
-              <button type="button" class="pf2e-glyph-box glyph-free" data-action="action-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">◇</button>
+              <button type="button" class="pf2e-glyph-box glyph-free" data-action="{{#if hasRoll}}action-roll{{else}}action-chat{{/if}}" data-id="{{id}}" title="{{#if hasRoll}}{{localize "pf2e.rolls.roll"}}{{else}}{{localize "pf2e.sheets.sendToChat"}}{{/if}}">◇</button>
               <div class="pf2e-action-details">
-                <button type="button" class="pf2e-action-name" data-action="action-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{name}}</button>
+                <button type="button" class="pf2e-action-name" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}">{{name}}</button>
                 {{#if traits.length}}
                 <div class="pf2e-action-traits">{{#each traits}}<span class="tat-tag">{{this}}</span>{{/each}}</div>
                 {{/if}}
               </div>
               <div class="pf2e-action-tools">
+                {{#if hasRoll}}
+                <button type="button" class="tat-btn-xs pf2e-action-roll-btn" data-action="action-roll" data-id="{{id}}" title="{{localize "pf2e.rolls.roll"}}"><i class="fa-solid fa-dice-d20"></i> {{localize "pf2e.rolls.roll"}}</button>
+                {{/if}}
+                {{#if hasDamage}}
+                <button type="button" class="tat-btn-xs pf2e-action-damage-btn" data-action="action-damage" data-id="{{id}}" title="{{localize "pf2e.combatTools.damage"}}"><i class="fa-solid fa-burst"></i> {{damage}}</button>
+                {{/if}}
                 <button type="button" class="tat-icon" data-action="action-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}"><i class="fa-solid fa-message"></i></button>
                 <button type="button" class="tat-icon" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}"><i class="fa-solid fa-pen-to-square"></i></button>
                 <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="{{localize "pf2e.sheets.delete"}}"><i class="fa-solid fa-trash"></i></button>
@@ -627,19 +717,25 @@
         <section class="tat-block pf2e-actions-block">
           <div class="pf2e-block-head">
             <h3 class="tat-label">{{localize "pf2e.sheets.explorationActivities"}}</h3>
-            <button type="button" class="tat-btn-xs pf2e-browser-launch-btn" data-action="open-compendium" data-tab="actions">
-              <i class="fa-solid fa-book"></i> {{localize "pf2e.sheets.browse"}}
+            <button type="button" class="tat-btn-xs pf2e-browser-launch-btn" data-action="open-compendium" data-tab="actions" title="{{localize "pf2e.sheets.browse"}}">
+              <i class="fa-solid fa-book"></i>
             </button>
           </div>
           <div class="pf2e-actions-list">
             {{#each explorationActivities}}
-            <div class="pf2e-action-item-card is-standard" data-action-key="{{id}}">
-              <button type="button" class="pf2e-glyph-box glyph-act" data-action="standard-action-chat" data-action-key="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{glyph}}</button>
+            <div class="pf2e-action-item-card is-standard{{#if isActive}} is-active-activity{{/if}}" data-action-key="{{id}}" data-activity="{{id}}">
+              <button type="button" class="pf2e-glyph-box glyph-act" data-action="{{#if hasRoll}}roll-exploration{{else}}standard-action-chat{{/if}}" data-action-key="{{id}}" data-activity="{{id}}" title="{{#if hasRoll}}{{localize "pf2e.rolls.roll"}}{{else}}{{localize "pf2e.sheets.sendToChat"}}{{/if}}">{{glyph}}</button>
               <div class="pf2e-action-details">
                 <button type="button" class="pf2e-action-name" data-action="standard-action-chat" data-action-key="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{name}}</button>
                 <p class="pf2e-action-desc">{{desc}}</p>
               </div>
               <div class="pf2e-action-tools">
+                <button type="button" class="tat-btn-xs pf2e-activity-toggle{{#if isActive}} is-active{{/if}}" data-action="set-exploration" data-activity="{{id}}" title="{{#if isActive}}{{localize "pf2e.sheets.active"}}{{else}}{{localize "pf2e.sheets.activate"}}{{/if}}">
+                  {{#if isActive}}<i class="fa-solid fa-check"></i> {{localize "pf2e.sheets.active"}}{{else}}{{localize "pf2e.sheets.activate"}}{{/if}}
+                </button>
+                {{#if hasRoll}}
+                <button type="button" class="tat-btn-xs pf2e-action-roll-btn" data-action="roll-exploration" data-activity="{{id}}" title="{{localize "pf2e.rolls.roll"}}"><i class="fa-solid fa-dice-d20"></i> {{localize "pf2e.rolls.roll"}}</button>
+                {{/if}}
                 <button type="button" class="tat-icon" data-action="standard-action-chat" data-action-key="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}"><i class="fa-solid fa-message"></i></button>
               </div>
             </div>
@@ -653,19 +749,22 @@
         <section class="tat-block pf2e-actions-block">
           <div class="pf2e-block-head">
             <h3 class="tat-label">{{localize "pf2e.sheets.downtimeActivities"}}</h3>
-            <button type="button" class="tat-btn-xs pf2e-browser-launch-btn" data-action="open-compendium" data-tab="actions">
-              <i class="fa-solid fa-book"></i> {{localize "pf2e.sheets.browse"}}
+            <button type="button" class="tat-btn-xs pf2e-browser-launch-btn" data-action="open-compendium" data-tab="actions" title="{{localize "pf2e.sheets.browse"}}">
+              <i class="fa-solid fa-book"></i>
             </button>
           </div>
           <div class="pf2e-actions-list">
             {{#each downtimeActivities}}
-            <div class="pf2e-action-item-card is-standard" data-action-key="{{id}}">
-              <button type="button" class="pf2e-glyph-box glyph-std" data-action="standard-action-chat" data-action-key="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{glyph}}</button>
+            <div class="pf2e-action-item-card is-standard" data-action-key="{{id}}" data-activity="{{id}}">
+              <button type="button" class="pf2e-glyph-box glyph-std" data-action="downtime-act" data-activity="{{id}}" title="{{localize "pf2e.rolls.roll"}}">{{glyph}}</button>
               <div class="pf2e-action-details">
-                <button type="button" class="pf2e-action-name" data-action="standard-action-chat" data-action-key="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{name}}</button>
+                <button type="button" class="pf2e-action-name" data-action="downtime-act" data-activity="{{id}}" title="{{localize "pf2e.rolls.roll"}}">{{name}}</button>
                 <p class="pf2e-action-desc">{{desc}}</p>
               </div>
               <div class="pf2e-action-tools">
+                <button type="button" class="tat-btn-xs pf2e-action-roll-btn" data-action="downtime-act" data-activity="{{id}}" title="{{localize "pf2e.rolls.roll"}}">
+                  <i class="fa-solid fa-dice-d20"></i> {{localize "pf2e.rolls.roll"}}
+                </button>
                 <button type="button" class="tat-icon" data-action="standard-action-chat" data-action-key="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}"><i class="fa-solid fa-message"></i></button>
               </div>
             </div>
@@ -689,6 +788,24 @@
               <button type="button" class="tat-pip tat-pip-react pf2e-reaction-pip" data-action="reaction-pip" title="{{localize "pf2e.sheets.reaction"}}">↺</button>
             </div>
             <button type="button" class="tat-newturn" data-action="new-turn" title="{{localize "pf2e.sheets.newTurn"}}"><i class="fa-solid fa-rotate-left"></i> {{localize "pf2e.sheets.newTurn"}}</button>
+          </div>
+        </div>
+      </section>
+
+      {{!-- Tactical Roll Options Toggles --}}
+      <section class="tat-block pf2e-toggles-block">
+        <div class="pf2e-toggles-bar">
+          <span class="tat-label"><i class="fa-solid fa-crosshairs"></i> {{localize "pf2e.toggles.title"}}:</span>
+          <div class="pf2e-toggle-chips">
+            <button type="button" class="tat-pill-btn pf2e-toggle-btn{{#if rollOptions.offGuard}} is-active{{/if}}" data-action="toggle-roll-option" data-option="offGuard" title="{{localize "pf2e.toggles.offGuardHint"}}">
+              <i class="fa-solid {{#if rollOptions.offGuard}}fa-circle-check{{else}}fa-circle{{/if}}"></i> {{localize "pf2e.toggles.offGuard"}}
+            </button>
+            <button type="button" class="tat-pill-btn pf2e-toggle-btn{{#if rollOptions.cover}} is-active{{/if}}" data-action="toggle-roll-option" data-option="cover" title="{{localize "pf2e.toggles.coverHint"}}">
+              <i class="fa-solid {{#if rollOptions.cover}}fa-circle-check{{else}}fa-circle{{/if}}"></i> {{localize "pf2e.toggles.cover"}}
+            </button>
+            <button type="button" class="tat-pill-btn pf2e-toggle-btn{{#if rollOptions.flanking}} is-active{{/if}}" data-action="toggle-roll-option" data-option="flanking" title="{{localize "pf2e.toggles.flankingHint"}}">
+              <i class="fa-solid {{#if rollOptions.flanking}}fa-circle-check{{else}}fa-circle{{/if}}"></i> {{localize "pf2e.toggles.flanking"}}
+            </button>
           </div>
         </div>
       </section>
@@ -733,6 +850,30 @@
           </div>
         </div>
         {{/each}}
+      </section>
+
+      {{!-- Persistent Damage Section --}}
+      <section class="tat-block tat-persistent-damage-block">
+        <div class="pf2e-block-head">
+          <h3 class="tat-label">{{localize "pf2e.combatTools.persistentTitle"}}</h3>
+          <button type="button" class="tat-btn-xs" data-action="persistent-add" title="{{localize "pf2e.combatTools.persistentAdd"}}">
+            <i class="fa-solid fa-plus"></i> {{localize "pf2e.combatTools.persistentAdd"}}
+          </button>
+        </div>
+        <div class="tat-persistent-list">
+          {{#each persistentList}}
+          <div class="tat-persistent-item" data-id="{{id}}">
+            <span class="tat-persistent-formula"><strong>{{formula}}</strong></span>
+            <span class="tat-tag tat-tag-damage-type">{{damageType}}</span>
+            <span class="tat-persistent-dc"><small>DC {{dc}}</small></span>
+            <button type="button" class="tat-icon" data-action="persistent-remove" data-id="{{id}}" title="{{localize "pf2e.sheets.delete"}}">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+          {{else}}
+          <p class="tat-empty">{{localize "pf2e.combatTools.noPersistent"}}</p>
+          {{/each}}
+        </div>
       </section>
     </div>
 
@@ -784,30 +925,112 @@
     </div>
 
     {{!-- ═══ 5. SPELLS TAB ═══ --}}
-    <div class="tat-panel" data-tab-content="spells">
+    <div class="tat-panel pf2e-spells-panel" data-tab-content="spells">
       <div class="tat-casting pf2e-spell-casting-bar">
-        <div class="tat-tile tat-def">
-          <strong class="tat-def-value">{{spellDC}}</strong>
-          <span class="tat-def-name">{{localize "pf2e.sheets.spellDC"}}</span>
+        <div class="pf2e-spell-stats-group">
+          <div class="tat-tile tat-def">
+            <strong class="tat-def-value">{{spellDC}}</strong>
+            <span class="tat-def-name">{{localize "pf2e.sheets.spellDC"}}</span>
+          </div>
+          <div class="tat-tile tat-def">
+            <button type="button" class="tat-def-value tat-roll" data-action="roll-spell-attack" title="{{localize "pf2e.sheets.rollSpellAttack"}}">{{spellAttack}}</button>
+            <span class="tat-def-name">{{localize "pf2e.sheets.spellAttack"}}</span>
+          </div>
         </div>
-        <div class="tat-tile tat-def">
-          <button type="button" class="tat-def-value tat-roll" data-action="roll-spell-attack" title="{{localize "pf2e.sheets.rollSpellAttack"}}">{{spellAttack}}</button>
-          <span class="tat-def-name">{{localize "pf2e.sheets.spellAttack"}}</span>
+        <div class="pf2e-spell-controls-group">
+          <div class="pf2e-spell-selectors">
+            <div class="pf2e-spell-type-selector">
+              <span class="tat-label-sm">{{localize "pf2e.spellcasting.spellcastingType"}}:</span>
+              <select class="tat-select tat-select-sm" data-action="set-spellcasting-type">
+                {{#each spellcastingTypes}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{label}}</option>{{/each}}
+              </select>
+            </div>
+            <div class="pf2e-spell-tradition-selector">
+              <span class="tat-label-sm">{{localize "pf2e.spellcasting.tradition"}}:</span>
+              <select class="tat-select tat-select-sm" data-action="set-spellcasting-tradition">
+                {{#each spellcastingTraditions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{label}}</option>{{/each}}
+              </select>
+            </div>
+          </div>
+          <div class="pf2e-spell-rest-actions">
+            <button type="button" class="tat-btn-xs" data-action="refocus" title="{{localize "pf2e.spellcasting.refocusTitle"}}">
+              <i class="fa-solid fa-diamond"></i> {{localize "pf2e.spellcasting.refocus"}}
+            </button>
+            <button type="button" class="tat-btn-xs" data-action="daily-prep" title="{{localize "pf2e.spellcasting.dailyPrepTitle"}}">
+              <i class="fa-solid fa-bed"></i> {{localize "pf2e.spellcasting.dailyPrep"}}
+            </button>
+          </div>
         </div>
       </div>
       {{#each spellsByRank}}
       <section class="tat-block pf2e-spell-rank-block">
         <h3 class="tat-label tat-label-row">{{localize "pf2e.sheets.rank"}} {{rank}}
-          {{#if slots}}<span class="tat-slots"><input class="tat-in tat-in-sm" type="number" name="sd:spellSlots.{{rank}}.value" value="{{slots.value}}" /> / <input class="tat-in tat-in-sm" type="number" name="sd:spellSlots.{{rank}}.max" value="{{slots.max}}" /></span>{{/if}}
+          {{#if slots}}
+          <span class="tat-slots">
+            <button type="button" class="tat-icon-btn tat-slot-btn" data-action="slot-expend" data-rank="{{rank}}" title="{{localize "pf2e.spellcasting.useSlot"}}">−</button>
+            <input class="tat-in tat-in-sm" type="number" name="sd:spellSlots.{{rank}}.value" value="{{slots.value}}" /> / <input class="tat-in tat-in-sm" type="number" name="sd:spellSlots.{{rank}}.max" value="{{slots.max}}" />
+            <button type="button" class="tat-icon-btn tat-slot-btn" data-action="slot-recover" data-rank="{{rank}}" title="{{localize "pf2e.spellcasting.recoverSlot"}}">+</button>
+          </span>
+          {{/if}}
         </h3>
+
+        {{!-- Prepared spell slots for this rank --}}
+        {{#if ../isPreparedCaster}}
+        {{#if hasPreparedSlots}}
+        <div class="pf2e-prepared-slots-box">
+          <div class="pf2e-prepared-slots-title">
+            <i class="fa-solid fa-scroll"></i> {{localize "pf2e.spellcasting.preparedSlots"}}
+          </div>
+          <div class="pf2e-prepared-slots-grid">
+            {{#each preparedSlots}}
+            <div class="pf2e-prepared-slot-card{{#if expended}} is-expended{{/if}}">
+              <span class="pf2e-slot-index">#{{slotNumber}}</span>
+              {{#if hasSpell}}
+              <button type="button" class="pf2e-prepared-slot-name" data-action="toggle-prepared-slot" data-rank="{{../rank}}" data-index="{{index}}" title="{{localize "pf2e.spellcasting.toggleExpended"}}">
+                {{#if expended}}<s class="tat-dim">{{spellName}}</s>{{else}}<b>{{spellName}}</b>{{/if}}
+              </button>
+              <button type="button" class="tat-btn-xs tat-cast-slot-btn" data-action="cast-prepared-slot" data-rank="{{../rank}}" data-index="{{index}}" title="{{localize "pf2e.spellcasting.cast"}}"{{#if expended}} disabled{{/if}}>
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+              </button>
+              <button type="button" class="tat-icon pf2e-unprepare-btn" data-action="unprepare-slot" data-rank="{{../rank}}" data-index="{{index}}" title="{{localize "pf2e.spellcasting.unprepareSlot"}}">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+              {{else}}
+              <select class="tat-select tat-select-sm pf2e-prepare-select" data-action="prepare-slot" data-rank="{{../rank}}" data-index="{{index}}">
+                <option value="">— {{localize "pf2e.spellcasting.emptySlot"}} —</option>
+                {{#each availableSpells}}
+                <option value="{{id}}"{{#if isSelected}} selected{{/if}}>{{name}} (R{{baseRank}})</option>
+                {{/each}}
+              </select>
+              {{/if}}
+            </div>
+            {{/each}}
+          </div>
+        </div>
+        {{/if}}
+        {{/if}}
+
+        {{#if items.length}}
+        <div class="pf2e-spellbook-heading tat-dim" style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; margin-top: 6px; margin-bottom: 2px;">
+          <i class="fa-solid fa-book-open"></i> {{localize "pf2e.spellcasting.spellbook"}}
+        </div>
         {{#each items}}
         <div class="tat-actionrow" data-id="{{id}}">
           <span class="tat-cost pf2e-glyph-cost">{{actions}}</span>
           <button type="button" class="tat-link" data-action="item-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{name}}</button>
+          {{#if hasDamage}}
+          <button type="button" class="tat-btn-xs tat-roll" data-action="roll-spell-damage" data-id="{{id}}" data-rank="{{../rank}}" title="{{damageFormula}}">
+            <i class="fa-solid fa-burst"></i> {{damageFormula}}
+          </button>
+          {{/if}}
+          <button type="button" class="tat-btn-xs tat-cast-btn" data-action="cast-spell" data-id="{{id}}" data-rank="{{../rank}}" title="{{localize "pf2e.spellcasting.cast"}}">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> {{localize "pf2e.spellcasting.cast"}}
+          </button>
           <button type="button" class="tat-icon" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}"><i class="fa-solid fa-pen-to-square"></i></button>
           <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="{{localize "pf2e.sheets.delete"}}"><i class="fa-solid fa-trash"></i></button>
         </div>
         {{/each}}
+        {{/if}}
       </section>
       {{/each}}
       <button type="button" class="tat-add" data-action="item-create" data-type="spell"><i class="fa-solid fa-plus"></i> {{localize "pf2e.sheets.addSpell"}}</button>
@@ -837,58 +1060,166 @@
             <input class="tat-in tat-in-sm" type="number" name="sd:crafting.infusedReagents" value="{{crafting.infusedReagents}}" min="0" />
           </div>
         </div>
+        <div class="pf2e-crafting-actions-bar" style="margin-top: 10px; display: flex; gap: 8px;">
+          <button type="button" class="tat-btn-xs" data-action="downtime-craft">
+            <i class="fa-solid fa-hammer"></i> {{localize "pf2e.downtime.craftTitle"}}
+          </button>
+          <button type="button" class="tat-btn-xs" data-action="downtime-earn-income">
+            <i class="fa-solid fa-coins"></i> {{localize "pf2e.downtime.earnIncomeTitle"}}
+          </button>
+        </div>
       </section>
 
       <section class="tat-block tat-formulas-block">
-        <h3 class="tat-label">{{localize "pf2e.sheets.knownFormulas"}}</h3>
-        {{#each crafting.formulas}}
-        <div class="tat-actionrow" data-id="{{id}}">
-          <span class="tat-cost">{{localize "pf2e.sheets.level"}} {{level}}</span>
-          <button type="button" class="tat-link" data-action="item-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{name}}</button>
-          <button type="button" class="tat-icon" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}"><i class="fa-solid fa-pen-to-square"></i></button>
-          <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="{{localize "pf2e.sheets.delete"}}"><i class="fa-solid fa-trash"></i></button>
+        <div class="pf2e-block-head" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h3 class="tat-label" style="margin:0;">{{localize "pf2e.sheets.knownFormulas"}}</h3>
+          <button type="button" class="tat-btn-xs" data-action="item-create" data-type="formula" data-is-formula="true">
+            <i class="fa-solid fa-plus"></i> {{localize "pf2e.sheets.addFormula"}}
+          </button>
         </div>
-        {{else}}
-        <p class="tat-empty">{{localize "pf2e.sheets.noFormulas"}}</p>
-        {{/each}}
-        <button type="button" class="tat-add" data-action="item-create" data-type="equipment"><i class="fa-solid fa-plus"></i> {{localize "pf2e.sheets.addFormula"}}</button>
+        <div class="pf2e-formulas-list">
+          {{#each crafting.formulas}}
+          <div class="tat-actionrow pf2e-formula-row" data-id="{{id}}">
+            <span class="tat-cost pf2e-formula-level">{{localize "pf2e.sheets.level"}} {{level}}</span>
+            <button type="button" class="tat-link pf2e-item-open-btn" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}">
+              <i class="fa-solid fa-scroll"></i> {{name}}
+            </button>
+            {{#if price}}<span class="pf2e-inv-price">{{price}}</span>{{/if}}
+            <button type="button" class="tat-icon" data-action="item-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}"><i class="fa-solid fa-message"></i></button>
+            <button type="button" class="tat-icon" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="{{localize "pf2e.sheets.delete"}}"><i class="fa-solid fa-trash"></i></button>
+          </div>
+          {{else}}
+          <p class="tat-empty">{{localize "pf2e.sheets.noFormulas"}}</p>
+          {{/each}}
+        </div>
       </section>
     </div>
 
     {{!-- ═══ 7. FEATS TAB (TALENTOS AUTÊNTICOS DO PF2E) ═══ --}}
-    <div class="tat-panel tat-grid-2" data-tab-content="feats">
+    <div class="tat-panel pf2e-feats-panel" data-tab-content="feats">
       {{#each featCategories}}
-      <section class="tat-block">
-        <h3 class="tat-label">{{label}}</h3>
-        {{#each items}}
-        <div class="tat-actionrow" data-id="{{id}}">
-          <button type="button" class="tat-link" data-action="item-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{name}}</button>
-          {{#if sub}}<span class="tat-sub">{{sub}}</span>{{/if}}
-          <button type="button" class="tat-icon" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}"><i class="fa-solid fa-pen-to-square"></i></button>
-          <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="{{localize "pf2e.sheets.delete"}}"><i class="fa-solid fa-trash"></i></button>
+      <section class="tat-block pf2e-feat-category-block">
+        <div class="pf2e-block-head" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h3 class="tat-label" style="margin:0;">{{label}}</h3>
+          <button type="button" class="tat-btn-xs" data-action="item-create" data-type="feat" data-category="{{key}}">
+            <i class="fa-solid fa-plus"></i> {{localize "pf2e.sheets.addFeat"}}
+          </button>
         </div>
-        {{else}}
-        <p class="tat-empty">—</p>
-        {{/each}}
-        <button type="button" class="tat-add" data-action="item-create" data-type="feat"><i class="fa-solid fa-plus"></i> {{localize "pf2e.sheets.addFeat"}}</button>
+        <div class="pf2e-feats-list">
+          {{#each items}}
+          <div class="pf2e-feat-card" data-id="{{id}}">
+            <div class="pf2e-feat-card-main">
+              {{#if actions}}
+              <span class="pf2e-glyph-box glyph-feat">{{actions}}</span>
+              {{else}}
+              <span class="pf2e-feat-icon"><i class="fa-solid fa-medal"></i></span>
+              {{/if}}
+              <div class="pf2e-feat-details">
+                <div class="pf2e-feat-name-row">
+                  <button type="button" class="pf2e-feat-name-btn" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}">
+                    {{name}}
+                  </button>
+                  {{#if level}}<span class="pf2e-feat-level-tag">{{localize "pf2e.sheets.level"}} {{level}}</span>{{/if}}
+                </div>
+                {{#if traits.length}}
+                <div class="pf2e-feat-traits">
+                  {{#each traits}}<span class="pf2e-trait-tag">{{this}}</span>{{/each}}
+                </div>
+                {{/if}}
+                {{#if desc}}<p class="pf2e-feat-desc">{{desc}}</p>{{/if}}
+              </div>
+            </div>
+            <div class="pf2e-feat-actions">
+              <button type="button" class="tat-icon" data-action="item-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">
+                <i class="fa-solid fa-message"></i>
+              </button>
+              <button type="button" class="tat-icon" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="{{localize "pf2e.sheets.delete"}}">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          {{else}}
+          <p class="tat-empty">{{localize "pf2e.sheets.noFeats"}}</p>
+          {{/each}}
+        </div>
       </section>
       {{/each}}
     </div>
 
-    {{!-- ═══ 8. INVENTORY TAB ═══ --}}
-    <div class="tat-panel tat-grid-2" data-tab-content="inventory">
+    {{!-- ═══ 8. INVENTORY TAB (TABELA DE INVENTÁRIO AUTÊNTICA PF2E) ═══ --}}
+    <div class="tat-panel pf2e-inventory-panel" data-tab-content="inventory">
       {{#each inventory}}
-      <section class="tat-block">
-        <h3 class="tat-label">{{localize labelKey}}</h3>
-        {{#each items}}
-        <div class="tat-actionrow" data-id="{{id}}">
-          <button type="button" class="tat-link" data-action="item-open" data-id="{{id}}">{{name}}</button>
-          <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="×"><i class="fa-solid fa-trash"></i></button>
+      <section class="tat-block pf2e-inv-section">
+        <div class="pf2e-inv-section-head">
+          <h3 class="tat-label">{{localize labelKey}}</h3>
+          <button type="button" class="tat-btn-xs" data-action="item-create" data-type="{{type}}">
+            <i class="fa-solid fa-plus"></i> {{localize "pf2e.sheets.add"}}
+          </button>
         </div>
-        {{else}}
-        <p class="tat-empty">—</p>
-        {{/each}}
-        <button type="button" class="tat-add" data-action="item-create" data-type="{{type}}"><i class="fa-solid fa-plus"></i> {{localize "pf2e.sheets.add"}}</button>
+        <table class="pf2e-inv-table">
+          <thead>
+            <tr>
+              <th class="col-name">{{localize "pf2e.sheets.item"}}</th>
+              <th class="col-level">{{localize "pf2e.sheets.level"}}</th>
+              <th class="col-qty">{{localize "pf2e.sheets.quantity"}}</th>
+              <th class="col-bulk">{{localize "pf2e.sheets.bulk"}}</th>
+              <th class="col-price">{{localize "pf2e.sheets.price"}}</th>
+              <th class="col-actions">{{localize "pf2e.sheets.actions"}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each items}}
+            <tr class="pf2e-inv-row" data-id="{{id}}">
+              <td class="col-name">
+                <div class="pf2e-inv-item-info">
+                  {{#if hasImg}}
+                  <img src="{{imgUrl}}" class="pf2e-inv-thumb" alt="" />
+                  {{else}}
+                  <span class="pf2e-inv-icon"><i class="{{imgUrl}}"></i></span>
+                  {{/if}}
+                  <button type="button" class="pf2e-inv-item-name" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}">
+                    {{name}}
+                  </button>
+                </div>
+              </td>
+              <td class="col-level">{{#if level}}{{level}}{{else}}—{{/if}}</td>
+              <td class="col-qty">
+                <div class="pf2e-qty-control">
+                  <button type="button" class="tat-icon-btn pf2e-qty-btn" data-action="item-qty-dec" data-id="{{id}}" title="−">−</button>
+                  <span class="pf2e-qty-value">{{quantity}}</span>
+                  <button type="button" class="tat-icon-btn pf2e-qty-btn" data-action="item-qty-inc" data-id="{{id}}" title="+">+</button>
+                </div>
+              </td>
+              <td class="col-bulk">{{bulk}}</td>
+              <td class="col-price">{{#if price}}{{price}}{{else}}—{{/if}}</td>
+              <td class="col-actions">
+                <div class="pf2e-inv-row-tools">
+                  <button type="button" class="tat-icon pf2e-equip-toggle{{#if equipped}} is-equipped{{/if}}" data-action="item-toggle-equip" data-id="{{id}}" title="{{#if equipped}}{{localize "pf2e.sheets.equipped"}}{{else}}{{localize "pf2e.sheets.unequipped"}}{{/if}}">
+                    <i class="fa-solid {{#if equipped}}fa-shield-halved{{else}}fa-shield{{/if}}"></i>
+                  </button>
+                  <button type="button" class="tat-icon" data-action="item-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">
+                    <i class="fa-solid fa-message"></i>
+                  </button>
+                  <button type="button" class="tat-icon" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                  <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="{{localize "pf2e.sheets.delete"}}">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {{else}}
+            <tr class="pf2e-inv-empty-row">
+              <td colspan="6" class="tat-empty">{{localize "pf2e.sheets.emptyCategory"}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
       </section>
       {{/each}}
     </div>
@@ -896,6 +1227,75 @@
     {{!-- ═══ 9. NOTES TAB ═══ --}}
     <div class="tat-panel" data-tab-content="notes">
       <textarea class="tat-in tat-notes" name="sd:details.biography" placeholder="{{localize "pf2e.sheets.notesPlaceholder"}}">{{biography}}</textarea>
+    </div>
+
+    {{!-- ═══ 10. EFFECTS TAB ═══ --}}
+    <div class="tat-panel tat-effects-panel" data-tab-content="effects">
+      <section class="tat-block">
+        <h3 class="tat-label">{{localize "pf2e.sheets.appliedEffects"}}</h3>
+        <div class="tat-effects-list">
+          {{#each effectItems}}
+          <div class="tat-actionrow tat-effect-row" data-id="{{id}}">
+            <div class="tat-effect-info">
+              <span class="tat-effect-name"><strong>{{name}}</strong></span>
+              {{#if duration}}<span class="tat-tag tat-tag-duration"><i class="fa-solid fa-clock"></i> {{duration}}</span>{{/if}}
+              <button type="button" class="tat-icon" data-action="item-delete" data-id="{{id}}" title="{{localize "pf2e.sheets.delete"}}">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+            {{#if traits.length}}
+            <div class="tat-effect-selectors">
+              {{#each traits}}<span class="tat-tag">{{this}}</span>{{/each}}
+            </div>
+            {{/if}}
+          </div>
+          {{else}}
+          <p class="tat-empty">{{localize "pf2e.sheets.noEffectItems"}}</p>
+          {{/each}}
+        </div>
+      </section>
+
+      <section class="tat-block">
+        <h3 class="tat-label">{{localize "pf2e.sheets.activeModifiers"}}</h3>
+        <div class="tat-effects-list">
+          {{#each ruleModifiers}}
+          <div class="tat-actionrow tat-effect-row">
+            <div class="tat-effect-info">
+              <span class="tat-effect-name"><strong>{{label}}</strong></span>
+              <span class="tat-tag tat-tag-type">{{type}}</span>
+              <span class="tat-effect-val"><b>{{fmtValue}}</b></span>
+            </div>
+            <div class="tat-effect-selectors">
+              {{#each selectors}}<span class="tat-tag">{{this}}</span>{{/each}}
+            </div>
+          </div>
+          {{else}}
+          <p class="tat-empty">{{localize "pf2e.sheets.noEffects"}}</p>
+          {{/each}}
+        </div>
+      </section>
+
+      <section class="tat-block">
+        <h3 class="tat-label">{{localize "pf2e.sheets.derivedResistances"}}</h3>
+        <div class="tat-mitigation-tags">
+          {{#each derivedResistancesList}}
+          <span class="tat-tag">{{type}}: {{value}}</span>
+          {{else}}
+          <p class="tat-empty">{{localize "pf2e.sheets.noResistances"}}</p>
+          {{/each}}
+        </div>
+      </section>
+
+      <section class="tat-block">
+        <h3 class="tat-label">{{localize "pf2e.sheets.derivedWeaknesses"}}</h3>
+        <div class="tat-mitigation-tags">
+          {{#each derivedWeaknessesList}}
+          <span class="tat-tag">{{type}}: {{value}}</span>
+          {{else}}
+          <p class="tat-empty">{{localize "pf2e.sheets.noWeaknesses"}}</p>
+          {{/each}}
+        </div>
+      </section>
     </div>
     </div>
   </div>

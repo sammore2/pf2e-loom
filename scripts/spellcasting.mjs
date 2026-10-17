@@ -108,6 +108,19 @@ export function dailyPreparation(inputSd) {
     }
   }
 
+  // Restore prepared spell slots
+  if (sd.preparedSlots && typeof sd.preparedSlots === 'object') {
+    for (const rank of Object.keys(sd.preparedSlots)) {
+      if (Array.isArray(sd.preparedSlots[rank])) {
+        for (const slot of sd.preparedSlots[rank]) {
+          if (slot && typeof slot === 'object') {
+            slot.expended = false;
+          }
+        }
+      }
+    }
+  }
+
   // Restore Focus
   if (sd.focus) {
     sd.focus.value = num(sd.focus.max);
@@ -166,4 +179,83 @@ export function heroicRecovery(inputSd) {
   sd.conditions.unconscious = true;
 
   return { systemData: sd, success: true };
+}
+
+function scaleDiceFormula(expr, mult) {
+  if (!expr || mult <= 1) return expr || '';
+  return String(expr).replace(/(\d+)d(\d+)/g, (match, count, faces) => {
+    return `${num(count) * mult}d${faces}`;
+  });
+}
+
+function combineFormulas(baseFormula, extraFormula) {
+  if (!baseFormula) return extraFormula || '';
+  if (!extraFormula) return baseFormula;
+  return `${baseFormula} + ${extraFormula}`;
+}
+
+/**
+ * Heightens a spell's data to the given castRank, resolving interval and fixed heightening.
+ * Pure function: does not mutate input; returns heightened clone.
+ *
+ * @param {Record<string, any>} spellData
+ * @param {number} castRank
+ * @returns {Record<string, any>}
+ */
+export function heightenSpell(spellData, castRank = 1) {
+  if (!spellData) return {};
+  const heightened = JSON.parse(JSON.stringify(spellData));
+  const baseRank = num(spellData.rank) || 1;
+  const targetRank = Math.max(baseRank, num(castRank) || baseRank);
+
+  heightened.castRank = targetRank;
+  if (targetRank <= baseRank || !spellData.heightening) {
+    return heightened;
+  }
+
+  const h = spellData.heightening;
+
+  // 1. Interval heightening (e.g. +1d8 per 1 or 2 ranks)
+  if (h.type === 'interval') {
+    const interval = Math.max(1, num(h.interval) || 1);
+    const steps = Math.floor((targetRank - baseRank) / interval);
+    if (steps > 0 && h.damage) {
+      heightened.damage = heightened.damage || {};
+      for (const [key, extraFormula] of Object.entries(h.damage)) {
+        const scaledExtra = scaleDiceFormula(extraFormula, steps);
+        if (heightened.damage[key]) {
+          heightened.damage[key].formula = combineFormulas(heightened.damage[key].formula, scaledExtra);
+        } else {
+          heightened.damage[key] = {
+            formula: scaledExtra,
+            type: 'untyped',
+            applyMod: false,
+          };
+        }
+      }
+    }
+  }
+
+  // 2. Fixed heightening (e.g. levels: { '5': { damage: ... }, '9': { damage: ... } })
+  if (h.type === 'fixed' && h.levels) {
+    const availableLevels = Object.keys(h.levels)
+      .map(Number)
+      .filter((lvl) => Number.isFinite(lvl) && lvl <= targetRank)
+      .sort((a, b) => b - a);
+
+    if (availableLevels.length > 0) {
+      const bestLevel = availableLevels[0];
+      const overrides = h.levels[bestLevel];
+      if (overrides) {
+        if (overrides.damage) {
+          heightened.damage = JSON.parse(JSON.stringify(overrides.damage));
+        }
+        if (overrides.range) heightened.range = overrides.range;
+        if (overrides.target) heightened.target = overrides.target;
+        if (overrides.area) heightened.area = overrides.area;
+      }
+    }
+  }
+
+  return heightened;
 }

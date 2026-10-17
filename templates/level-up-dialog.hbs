@@ -1,0 +1,96 @@
+{{!-- PF2E — Level-Up Wizard Dialog --}}
+<div class="pf2e-panel tat-hud pf2e-levelup-panel">
+
+  {{!-- Header Banner --}}
+  <header class="pf2e-levelup-header">
+    <div class="levelup-title-wrap">
+      <h2 class="levelup-title">{{actorName}}</h2>
+      <div class="levelup-transition">
+        <span class="lvl-badge old-lvl">{{localize "pf2e.sheets.level"}} {{currentLevel}}</span>
+        <i class="fa-solid fa-arrow-right-long lvl-arrow"></i>
+        <span class="lvl-badge new-lvl">{{localize "pf2e.sheets.level"}} {{nextLevel}}</span>
+      </div>
+    </div>
+    <div class="levelup-hp-gain">
+      <span class="hp-lbl">+{{hpGain}} {{localize "pf2e.resources.hp"}}</span>
+      <i class="fa-solid fa-heart-pulse"></i>
+    </div>
+  </header>
+
+  {{!-- Wizard Body --}}
+  <div class="pf2e-levelup-body">
+
+    {{!-- 1. Attribute Boosts (if applicable, e.g. lvls 5, 10, 15, 20) --}}
+    {{#if hasAttributeBoosts}}
+    <section class="tat-block levelup-step-section">
+      <div class="levelup-step-title">
+        <i class="fa-solid fa-bolt"></i> {{localize "pf2e.builder.stepAttributes"}} ({{boostCountNeeded}} {{localize "pf2e.builder.boosts"}})
+      </div>
+      <p class="tat-dim levelup-step-hint">{{localize "pf2e.builder.boostsRemaining"}}: {{boostCountNeeded}}</p>
+      <div class="levelup-boosts-grid">
+        {{#each attributes}}
+        <button type="button" class="levelup-boost-card{{#if isSelected}} is-selected{{/if}}" data-action="toggle-boost" data-attr="{{key}}"{{#unless canSelect}} disabled{{/unless}}>
+          <span class="attr-name">{{localize labelKey}}</span>
+          <span class="attr-mods">{{currentMod}} → <b>{{nextMod}}</b></span>
+          <span class="attr-check">{{#if isSelected}}<i class="fa-solid fa-check"></i>{{else}}+{{/if}}</span>
+        </button>
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+    {{!-- 2. Skill Increase (if applicable) --}}
+    {{#if hasSkillIncrease}}
+    <section class="tat-block levelup-step-section">
+      <div class="levelup-step-title">
+        <i class="fa-solid fa-graduation-cap"></i> {{localize "pf2e.sheets.skillIncrease"}}
+      </div>
+      <p class="tat-dim levelup-step-hint">{{localize "pf2e.builder.stepSkills"}}</p>
+      <div class="levelup-skills-grid">
+        {{#each skills}}
+        {{#if canAdvance}}
+        <button type="button" class="levelup-skill-card{{#if isSelected}} is-selected{{/if}}" data-action="select-skill" data-skill="{{key}}">
+          <span class="skill-name">{{localize labelKey}}</span>
+          <span class="skill-ranks">{{currentRankLabel}} → <b>{{nextRankLabel}}</b></span>
+          <span class="skill-check">{{#if isSelected}}<i class="fa-solid fa-check"></i>{{/if}}</span>
+        </button>
+        {{/if}}
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+    {{!-- 3. Feat Selection (if applicable) --}}
+    {{#if hasFeatChoice}}
+    <section class="tat-block levelup-step-section">
+      <div class="levelup-step-title">
+        <i class="fa-solid fa-award"></i> {{featCategoryLabel}}
+      </div>
+      <div class="levelup-feat-search-wrap">
+        <input type="text" class="tat-in levelup-feat-search" placeholder="{{localize "pf2e.browser.searchPlaceholder"}}" value="{{searchQuery}}" data-action="filter-feats" />
+      </div>
+      <div class="levelup-feats-list">
+        {{#each feats}}
+        <div class="levelup-feat-row{{#if isSelected}} is-selected{{/if}}" data-action="select-feat" data-id="{{id}}">
+          <span class="feat-name">{{name}}</span>
+          <button type="button" class="tat-btn-xs feat-select-btn">
+            {{#if isSelected}}<i class="fa-solid fa-check"></i> {{localize "pf2e.sheets.selected"}}{{else}}{{localize "pf2e.sheets.choose"}}{{/if}}
+          </button>
+        </div>
+        {{else}}
+        <div class="tat-empty"><i class="fa-solid fa-box-open"></i> {{localize "pf2e.browser.noResults"}}</div>
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+  </div>
+
+  {{!-- Wizard Footer --}}
+  <footer class="pf2e-levelup-footer">
+    <button type="button" class="tat-btn-lg tat-confirm-levelup-btn" data-action="confirm-level-up">
+      <i class="fa-solid fa-circle-up"></i> {{localize "pf2e.levelup.button"}} {{nextLevel}}!
+    </button>
+  </footer>
+
+</div>

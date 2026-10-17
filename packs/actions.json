@@ -5,9 +5,13 @@
     "type": "action",
     "data": {
       "actions": "1",
-      "traits": ["ataque"],
-      "description": "Você ataca com uma arma que está empunhando ou com um ataque desarmado, aplicando sua penalidade por ataques múltiplos (MAP) normalmente."
-    }
+      "traits": [
+        "ataque"
+      ],
+      "description": "Você ataca com uma arma que está empunhando ou com um ataque desarmado, aplicando sua penalidade por ataques múltiplos (MAP) normalmente.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-stride",
@@ -15,9 +19,13 @@
     "type": "action",
     "data": {
       "actions": "1",
-      "traits": ["movimento"],
-      "description": "Você se move a uma distância até seu Deslocamento."
-    }
+      "traits": [
+        "movimento"
+      ],
+      "description": "Você se move a uma distância até seu Deslocamento.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-step",
@@ -25,9 +33,13 @@
     "type": "action",
     "data": {
       "actions": "1",
-      "traits": ["movimento"],
-      "description": "Você se move cuidadosamente 1,5 metro (1 quadrado) sem disparar reações como Ataque Reativo."
-    }
+      "traits": [
+        "movimento"
+      ],
+      "description": "Você se move cuidadosamente 1,5 metro (1 quadrado) sem disparar reações como Ataque Reativo.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-raise-shield",
@@ -36,8 +48,10 @@
     "data": {
       "actions": "1",
       "traits": [],
-      "description": "Você posiciona seu escudo para se defender. Você ganha seu bônus de circunstância na CA até o início do seu próximo turno e pode usar a reação Bloqueio com Escudo."
-    }
+      "description": "Você posiciona seu escudo para se defender. Você ganha seu bônus de circunstância na CA até o início do seu próximo turno e pode usar a reação Bloqueio com Escudo.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-take-cover",
@@ -46,8 +60,10 @@
     "data": {
       "actions": "1",
       "traits": [],
-      "description": "Você se abaixa atrás de um obstáculo. Se você tiver cobertura menor, ganha cobertura padrão (+2 CA). Se tiver cobertura padrão, ganha cobertura maior (+4 CA)."
-    }
+      "description": "Você se abaixa atrás de um obstáculo. Se você tiver cobertura menor, ganha cobertura padrão (+2 CA). Se tiver cobertura padrão, ganha cobertura maior (+4 CA).",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-escape",
@@ -55,9 +71,13 @@
     "type": "action",
     "data": {
       "actions": "1",
-      "traits": ["ataque"],
-      "description": "Você tenta se libertar de estar Agarrado, Imobilizado ou Contido usando Atletismo, Acrobacia ou Desarmado contra a CD da criatura ou efeito."
-    }
+      "traits": [
+        "ataque"
+      ],
+      "description": "Você tenta se libertar de estar Agarrado, Imobilizado ou Contido usando Atletismo, Acrobacia ou Desarmado contra a CD da criatura ou efeito.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-grapple",
@@ -65,9 +85,13 @@
     "type": "action",
     "data": {
       "actions": "1",
-      "traits": ["ataque"],
-      "description": "Com uma mão livre, você faz um teste de Atletismo contra a CD de Fortitude do alvo para agarrá-lo."
-    }
+      "traits": [
+        "ataque"
+      ],
+      "description": "Com uma mão livre, você faz um teste de Atletismo contra a CD de Fortitude do alvo para agarrá-lo.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-trip",
@@ -75,9 +99,13 @@
     "type": "action",
     "data": {
       "actions": "1",
-      "traits": ["ataque"],
-      "description": "Você tenta derrubar um oponente no chão com um teste de Atletismo contra a CD de Reflexos dele."
-    }
+      "traits": [
+        "ataque"
+      ],
+      "description": "Você tenta derrubar um oponente no chão com um teste de Atletismo contra a CD de Reflexos dele.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-shove",
@@ -85,9 +113,13 @@
     "type": "action",
     "data": {
       "actions": "1",
-      "traits": ["ataque"],
-      "description": "Você empurra uma criatura para longe com um teste de Atletismo contra a CD de Fortitude dela."
-    }
+      "traits": [
+        "ataque"
+      ],
+      "description": "Você empurra uma criatura para longe com um teste de Atletismo contra a CD de Fortitude dela.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-disarm",
@@ -95,9 +127,13 @@
     "type": "action",
     "data": {
       "actions": "1",
-      "traits": ["ataque"],
-      "description": "Você tenta tirar um item da posse de uma criatura com um teste de Atletismo contra a CD de Reflexos dela."
-    }
+      "traits": [
+        "ataque"
+      ],
+      "description": "Você tenta tirar um item da posse de uma criatura com um teste de Atletismo contra a CD de Reflexos dela.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-demoralize",
@@ -105,9 +141,15 @@
     "type": "action",
     "data": {
       "actions": "1",
-      "traits": ["auditivo", "mental", "emocional"],
-      "description": "Com um rugido ou olhar ameaçador, você faz um teste de Intimidação contra a CD de Vontade do alvo. Em um sucesso, o alvo fica Assustado 1 (Assustado 2 em sucesso crítico)."
-    }
+      "traits": [
+        "auditivo",
+        "mental",
+        "emocional"
+      ],
+      "description": "Com um rugido ou olhar ameaçador, você faz um teste de Intimidação contra a CD de Vontade do alvo. Em um sucesso, o alvo fica Assustado 1 (Assustado 2 em sucesso crítico).",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-feint",
@@ -115,9 +157,13 @@
     "type": "action",
     "data": {
       "actions": "1",
-      "traits": ["mental"],
-      "description": "Você finge um ataque para enganar o inimigo. Faça um teste de Dissimulação contra a CD de Percepção do alvo para deixá-lo Desprevenido."
-    }
+      "traits": [
+        "mental"
+      ],
+      "description": "Você finge um ataque para enganar o inimigo. Faça um teste de Dissimulação contra a CD de Percepção do alvo para deixá-lo Desprevenido.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-recall-knowledge",
@@ -125,9 +171,14 @@
     "type": "action",
     "data": {
       "actions": "1",
-      "traits": ["concentração", "secreto"],
-      "description": "Você tenta lembrar informações sobre um tópico usando uma perícia de conhecimento correspondente (Arcanismo, Natureza, Ocultismo, Religião, Sociedade ou Saber)."
-    }
+      "traits": [
+        "concentração",
+        "secreto"
+      ],
+      "description": "Você tenta lembrar informações sobre um tópico usando uma perícia de conhecimento correspondente (Arcanismo, Natureza, Ocultismo, Religião, Sociedade ou Saber).",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-seek",
@@ -135,9 +186,14 @@
     "type": "action",
     "data": {
       "actions": "1",
-      "traits": ["concentração", "secreto"],
-      "description": "Você vasculha uma área com Percepção para localizar criaturas ou objetos escondidos ou furtivos."
-    }
+      "traits": [
+        "concentração",
+        "secreto"
+      ],
+      "description": "Você vasculha uma área com Percepção para localizar criaturas ou objetos escondidos ou furtivos.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-treat-wounds",
@@ -145,9 +201,14 @@
     "type": "action",
     "data": {
       "actions": "10 min",
-      "traits": ["cura", "manipulação"],
-      "description": "Você gasta 10 minutos tratando uma criatura ferida com Medicina. CD 15 restaura 2d8 PV em um sucesso; graus de CD maiores conferem cura adicional."
-    }
+      "traits": [
+        "cura",
+        "manipulação"
+      ],
+      "description": "Você gasta 10 minutos tratando uma criatura ferida com Medicina. CD 15 restaura 2d8 PV em um sucesso; graus de CD maiores conferem cura adicional.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-aid",
@@ -156,8 +217,10 @@
     "data": {
       "actions": "R",
       "traits": [],
-      "description": "Você prepara para ajudar um aliado durante seu turno e gasta sua reação para conceder um bônus de circunstância +1 (ou +2/+3/+4 com proficiência maior) na jogada dele."
-    }
+      "description": "Você prepara para ajudar um aliado durante seu turno e gasta sua reação para conceder um bônus de circunstância +1 (ou +2/+3/+4 com proficiência maior) na jogada dele.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   },
   {
     "id": "act-delay",
@@ -166,7 +229,9 @@
     "data": {
       "actions": "F",
       "traits": [],
-      "description": "Você aguarda o momento certo para agir, pausando seu turno e reposicionando sua ordem de iniciativa mais tarde na rodada."
-    }
+      "description": "Você aguarda o momento certo para agir, pausando seu turno e reposicionando sua ordem de iniciativa mais tarde na rodada.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   }
 ]

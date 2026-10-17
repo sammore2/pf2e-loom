@@ -11,6 +11,9 @@
       <div class="tat-id-line">
         <span><i class="fa-solid fa-crown"></i> {{localize "pf2e.familiar.master"}}:</span>
         <input class="tat-in tat-master-input" type="text" name="sd:master" value="{{master}}" placeholder="{{localize "pf2e.familiar.masterPlaceholder"}}" />
+        <button type="button" class="tat-btn-xs" data-action="sync-master" title="{{localize "pf2e.familiar.syncMasterTitle"}}">
+          <i class="fa-solid fa-arrows-rotate"></i>
+        </button>
       </div>
     </div>
     <label class="tat-level" title="{{localize "pf2e.sheets.level"}}">
@@ -75,7 +78,7 @@
     </div>
     <div class="tat-speeds-row">
       <label class="speed-field">
-        <span class="speed-lbl">{{localize "pf2e.speeds.land"}} (m/ft):</span>
+        <span class="speed-lbl">{{localize "pf2e.speeds.land"}}:</span>
         <input class="tat-in" type="number" name="sd:speed.value" value="{{speed}}" />
       </label>
       <label class="speed-field">

@@ -275,3 +275,119 @@ export function resolveRecoveryCheck(inputSd, degree) {
     died,
   };
 }
+
+/**
+ * Extracts mitigation parameters (immunities, weaknesses, resistances) from an actor's prepared systemData.
+ *
+ * @param {Record<string, any>} [systemData={}]
+ * @returns {{
+ *   immunities: string[],
+ *   weaknesses: Record<string, number>,
+ *   resistances: Record<string, number>
+ * }}
+ */
+export function mitigationFromActor(systemData = {}) {
+  const sd = systemData || {};
+  const derived = sd.derived || {};
+
+  const rawImmunities = Array.isArray(sd.immunities)
+    ? sd.immunities
+    : Array.isArray(derived.immunities)
+      ? derived.immunities
+      : [];
+
+  const immunities = rawImmunities
+    .map((imm) => (typeof imm === 'object' && imm?.type ? String(imm.type) : String(imm || '')))
+    .filter(Boolean);
+
+  const resistances = { ...(derived.resistances || {}) };
+  const weaknesses = { ...(derived.weaknesses || {}) };
+
+  return {
+    immunities,
+    weaknesses,
+    resistances,
+  };
+}
+
+
+/**
+ * Parses free-text damage input such as "8 fire", "12", "2d6+3 acid" (flat values only).
+ * Dice expressions are not rolled here: pass the final number.
+ *
+ * @param {string} text
+ * @returns {{ amount: number, damageType: string } | null}
+ */
+export function parseDamageInput(text) {
+  const match = String(text ?? '').trim().toLowerCase().match(/^(\d+)\s*([a-z\-]*)$/);
+  if (!match) return null;
+  const amount = parseInt(match[1], 10);
+  if (!Number.isFinite(amount)) return null;
+  return { amount, damageType: match[2] || 'untyped' };
+}
+
+/**
+ * Full incoming-damage pipeline: immunity / weakness / resistance, then temp HP and HP,
+ * then the dying / wounded / doomed transitions. Does not mutate the input.
+ *
+ * @param {Record<string, any>} inputSd Stored actor systemData
+ * @param {{
+ *   amount: number,
+ *   damageType?: string,
+ *   isCritical?: boolean,
+ *   isNpc?: boolean,
+ *   mitigation?: { immunities?: string[], weaknesses?: Record<string, number>, resistances?: Record<string, number> }
+ * }} opts `mitigation` should come from `mitigationFromActor(preparedSystemData)`
+ * @returns {{
+ *   systemData: Record<string, any>,
+ *   report: {
+ *     requested: number, effective: number, absorbed: number, weaknessAdded: number,
+ *     immune: boolean, tempAbsorbed: number, hpLost: number, fellToZero: boolean, died: boolean
+ *   }
+ * }}
+ */
+export function applyIncomingDamage(inputSd, opts = {}) {
+  const requested = Math.max(0, num(opts.amount));
+  const mitigated = calculateDamageMitigation(requested, opts.damageType || 'untyped', opts.mitigation || {});
+  const applied = applyDamageToActor(inputSd, mitigated.effectiveDamage, {
+    isNpc: !!opts.isNpc,
+    isCritical: !!opts.isCritical,
+  });
+  return {
+    systemData: applied.systemData,
+    report: {
+      requested,
+      effective: mitigated.effectiveDamage,
+      absorbed: mitigated.absorbed,
+      weaknessAdded: mitigated.weaknessAdded,
+      immune: mitigated.immune,
+      tempAbsorbed: applied.tempAbsorbed,
+      hpLost: applied.hpLost,
+      fellToZero: applied.fellToZero,
+      died: applied.died,
+    },
+  };
+}
+
+/**
+ * Rolls the recovery flat check for a dying creature (DC 10 + dying value).
+ * A natural 20 improves the degree by one step and a natural 1 worsens it by one step.
+ *
+ * @param {number} dyingValue
+ * @returns {{ natural: number, dc: number, degree: 'critSuccess' | 'success' | 'failure' | 'critFailure' }}
+ */
+export function rollRecoveryFlatCheck(dyingValue) {
+  const dc = 10 + Math.max(1, num(dyingValue));
+  const buf = new Uint32Array(1);
+  crypto.getRandomValues(buf);
+  const natural = (buf[0] % 20) + 1;
+  const order = ['critFailure', 'failure', 'success', 'critSuccess'];
+  let idx;
+  if (natural >= dc + 10) idx = 3;
+  else if (natural >= dc) idx = 2;
+  else if (natural <= dc - 10) idx = 0;
+  else idx = 1;
+  if (natural === 20) idx = Math.min(3, idx + 1);
+  else if (natural === 1) idx = Math.max(0, idx - 1);
+  return { natural, dc, degree: order[idx] };
+}

@@ -5,7 +5,7 @@
 // personagem (debounce, drop, onAction); sem abas.
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager } from '/_loom/sdk/index.js';
 import { ATTRIBUTE_KEYS, CONDITIONS, RANK_KEYS, SAVE_KEYS, SKILL_ABILITIES } from './config.mjs';
-import { fmtMod, setPathValue } from './utils.mjs';
+import { fmtMod, setPathValue, resolveActorPortrait } from './utils.mjs';
 import { getDefaultData } from './schema.mjs';
 import { prepareActorRow } from './prepare-data.mjs';
 import { proficiencyBonus, multipleAttackPenalty } from './rules.mjs';
@@ -14,6 +14,13 @@ import { rollCheck, rollSkill, rollSave, rollPerception, rollAttack, rollDamage 
 import { Pf2eItemSheet } from './item-sheet.mjs';
 import { sendChatCard } from './chat-card.mjs';
 import { localize } from './i18n.mjs';
+import { promptLoomInput } from './character-sheet.mjs';
+import {
+  applyIncomingDamage,
+  applyHealingToActor,
+  parseDamageInput,
+  mitigationFromActor,
+} from './damage.mjs';
 
 function num(v) {
   const n = Number(v);
@@ -59,7 +66,7 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   }
 
   get documentName() { return 'actor'; }
-  get apiRoute() { return '/actors'; }
+  get apiRoute() { return this._apiRouteOverride ?? '/actors'; }
   get dataKey() { return 'systemData'; }
 
   async mount() {
@@ -142,7 +149,21 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
   _onChangeForm(event) {
     const target = event.target;
-    if (!target || !target.name) return;
+    if (!target) return;
+    if (target.dataset?.action === 'cond-add') {
+      const val = target.value;
+      if (!val) return;
+      const sd = this.document?.systemData || {};
+      const conditions = { ...(sd.conditions || {}) };
+      const isValued = CONDITIONS.some((c) => c.id === val && c.valued);
+      conditions[val] = isValued ? 1 : true;
+      void api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, conditions } }).then(() => {
+        target.value = '';
+        return this._reloadDocument();
+      });
+      return;
+    }
+    if (!target.name) return;
     if (target.name !== 'name' && !target.name.startsWith('sd:')) return;
     this._saveFocus();
     const value = target.type === 'checkbox' ? target.checked
@@ -176,6 +197,25 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     return prepareActorRow(row);
   }
 
+  async _updateSystemData(mutate) {
+    await this._reloadDocument();
+    const current = JSON.parse(JSON.stringify(this.document?.systemData || {}));
+    const next = mutate(current);
+    if (next === false) return false;
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: next || current });
+    await this._reloadDocument();
+    return true;
+  }
+
+  async _setCondition(id, value) {
+    const sd = this.document?.systemData || {};
+    const conditions = { ...(sd.conditions || {}) };
+    if (value === null || value === undefined || value === 0 || value === false) delete conditions[id];
+    else conditions[id] = value;
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, conditions } });
+    await this._reloadDocument();
+  }
+
   _attackAttr(sd, idata) {
     const override = String(idata.attackAttribute || '').toLowerCase();
     if (ATTRIBUTE_KEYS.includes(override)) return override;
@@ -186,6 +226,11 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
   _weaponRow(preparedDoc, item) {
     const idata = item.system || item.data || {};
+    let dmgFormula = String(idata.damage || '').trim();
+    if (!dmgFormula && idata.damageRolls) {
+      const rolls = Object.values(idata.damageRolls).map((r) => r.damage || r.formula).filter(Boolean);
+      dmgFormula = rolls.join(' + ');
+    }
     const strike0 = buildStrike(preparedDoc, item, { attackIndex: 0 });
     const strike1 = buildStrike(preparedDoc, item, { attackIndex: 1 });
     const strike2 = buildStrike(preparedDoc, item, { attackIndex: 2 });
@@ -193,8 +238,8 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       id: item.id,
       name: item.name,
       atk: [fmtMod(strike0.total), fmtMod(strike1.total), fmtMod(strike2.total)],
-      damage: String(idata.damage || ''),
-      agile: !!idata.agile,
+      damage: dmgFormula,
+      agile: !!idata.agile || (Array.isArray(idata.traits) && idata.traits.includes('agile')),
     };
   }
 
@@ -248,7 +293,7 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       big: tileKeys[i] === 'ac',
     }));
 
-    const weapons = items.filter((i) => i.type === 'weapon')
+    const weapons = items.filter((i) => i.type === 'weapon' || i.type === 'melee')
       .map((i) => this._weaponRow(row, i));
     const actionItems = items.filter((i) => i.type === 'action').map((i) => ({
       id: i.id, name: i.name, actions: String((i.system || i.data || {}).actions || ''),
@@ -268,13 +313,15 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       ...context,
       defTiles,
       name: (this.document?.name && this.document.name !== 'undefined') ? this.document.name : '',
-      avatarUrl: (this.document?.avatarUrl && this.document.avatarUrl !== '/icons/svg/adventurer.svg')
-        ? this.document.avatarUrl
-        : ((this.document?.img && this.document.img !== '/icons/svg/adventurer.svg') || '/marketplace/rulesets/pf2e/assets/images/default-avatar.svg'),
+      avatarUrl: resolveActorPortrait(this.document, row),
       level,
       hp: { value: num(sd.hp?.value), max: num(sd.hp?.max), temp: num(sd.hp?.temp), pct: hpPct, low: hpPct < 25 },
       abilities,
       conditionsActive,
+      conditionOptions: CONDITIONS.map((c) => ({
+        value: c.id,
+        labelKey: `pf2e.conditions.${c.id}`,
+      })),
       weapons,
       actionItems,
       skills,
@@ -286,7 +333,18 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     return itemsArray(this.document?.items).find((i) => i.id === id) || null;
   }
 
-  onAction(action, id, target) {
+  // Action dispatcher for NPC sheet buttons and triggers
+  async onAction(action, id, target) {
+    if (action === 'cond-inc' || action === 'cond-dec') {
+      const sd = this.document?.systemData || {};
+      const cur = num(sd.conditions?.[id]);
+      void this._setCondition(id, action === 'cond-inc' ? cur + 1 : cur - 1);
+      return;
+    }
+    if (action === 'cond-remove') {
+      void this._setCondition(id, null);
+      return;
+    }
     if (action === 'rank-seal') {
       const sel = target?.parentElement?.querySelector('select.rank-select');
       if (sel) {
@@ -364,6 +422,77 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         data: getDefaultData(target.dataset.type),
         actorId: this.document.id,
       }).then(() => this._reloadDocument());
+      return;
+    }
+    if (action === 'apply-damage' || action === 'apply-damage-crit') {
+      const isCritical = action === 'apply-damage-crit';
+      const input = await promptLoomInput({
+        title: localize('pf2e.combatTools.damageTitle', 'Take Damage'),
+        label: localize('pf2e.combatTools.damageLabel', 'Damage and type (e.g. 8 fire)'),
+        defaultValue: '',
+      });
+      if (input === null || input === undefined) return;
+      const parsed = parseDamageInput(input);
+      if (!parsed) {
+        window.Loom?.showToast?.(localize('pf2e.combatTools.invalid', 'Invalid value'), 'info');
+        return;
+      }
+      const mitigation = mitigationFromActor(this._prepared()?.systemData);
+      let report = null;
+      await this._updateSystemData((sd) => {
+        const out = applyIncomingDamage(sd, {
+          amount: parsed.amount,
+          damageType: parsed.damageType,
+          isCritical,
+          isNpc: true,
+          mitigation,
+        });
+        report = out.report;
+        return out.systemData;
+      });
+      if (report) {
+        const desc = report.immune
+          ? localize('pf2e.combatTools.immune', 'Immune to {type}.', { type: parsed.damageType })
+          : localize('pf2e.combatTools.damageResult', '{requested} {type} damage → {effective} after mitigation ({hp} HP lost, {temp} temp HP absorbed).', {
+            requested: report.requested,
+            type: parsed.damageType,
+            effective: report.effective,
+            hp: report.hpLost,
+            temp: report.tempAbsorbed,
+          });
+        void sendChatCard(this.document, {
+          name: this.document?.name || 'PF2E',
+          glyph: '✦',
+          type: localize('pf2e.combatTools.damage', 'Damage'),
+          desc: report.died ? `${desc} ${localize('pf2e.combatTools.died', 'Dead.')}` : desc,
+        });
+      }
+      return;
+    }
+    if (action === 'apply-healing') {
+      const input = await promptLoomInput({
+        title: localize('pf2e.combatTools.healTitle', 'Heal'),
+        label: localize('pf2e.combatTools.healLabel', 'Hit points to restore'),
+        defaultValue: '',
+      });
+      if (input === null || input === undefined) return;
+      const amount = parseInt(String(input).trim(), 10);
+      if (!Number.isFinite(amount) || amount <= 0) {
+        window.Loom?.showToast?.(localize('pf2e.combatTools.invalid', 'Invalid value'), 'info');
+        return;
+      }
+      let healed = 0;
+      await this._updateSystemData((sd) => {
+        const out = applyHealingToActor(sd, amount);
+        healed = out.healed;
+        return out.systemData;
+      });
+      void sendChatCard(this.document, {
+        name: this.document?.name || 'PF2E',
+        glyph: '✚',
+        type: localize('pf2e.combatTools.heal', 'Heal'),
+        desc: localize('pf2e.combatTools.healResult', '{healed} hit points restored.', { healed }),
+      });
       return;
     }
     if (typeof super.onAction === 'function') super.onAction(action, id, target);

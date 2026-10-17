@@ -29,7 +29,7 @@ function fnv1a(text) {
 }
 
 function iconFor(type, name) {
-  return `assets/pf2e/icons/${(fnv1a(`${type}|${name}`) % ICON_COUNT) + 1}.png`;
+  return `/marketplace/rulesets/pf2e/assets/icons/${(fnv1a(`${type}|${name}`) % ICON_COUNT) + 1}.png`;
 }
 
 let packCount = 0;

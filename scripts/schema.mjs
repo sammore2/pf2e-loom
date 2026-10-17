@@ -165,7 +165,20 @@ export function getDefaultData(type) {
       return { ...defaultBaseItem(), level: 1, category: 'general', actions: '0' };
 
     case 'action':
-      return { ...defaultBaseItem(), actions: '1' };
+      return {
+        ...defaultBaseItem(),
+        actions: '1',
+        actionCategory: 'encounter',
+        actionType: 'action',
+        trigger: '',
+        requirements: '',
+        checkType: 'none',
+        skill: 'athletics',
+        dc: '',
+        formula: '',
+        damage: '',
+        damageType: '',
+      };
 
     case 'weapon':
       return {
@@ -195,6 +208,9 @@ export function getDefaultData(type) {
 
     case 'spell':
       return { ...defaultBaseItem(), rank: 1, traditions: [], actions: '', save: '' };
+
+    case 'formula':
+      return { ...defaultBaseItem(), level: 0, price: '', isFormula: true };
 
     default:
       return {};

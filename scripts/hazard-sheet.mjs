@@ -2,7 +2,7 @@
 // Ficha de Ameaça / Perigo / Armadilha (Hazard).
 // Complexidade (Simples/Complexo), Furtividade (CD), Desativação, Defesas, Reação e Rotina.
 import { LoomHandlebarsMixin, LoomActorSheet, api } from '/_loom/sdk/index.js';
-import { fmtMod, setPathValue } from './utils.mjs';
+import { fmtMod, setPathValue, resolveActorPortrait } from './utils.mjs';
 import { rollCheck, rollSave } from './roll-engine.mjs';
 import { localize } from './i18n.mjs';
 
@@ -38,40 +38,41 @@ export class Pf2eHazardSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     return (n && n !== 'undefined') ? n : localize('pf2e.hazard.title', 'PF2e Hazard');
   }
 
+  get apiRoute() { return this._apiRouteOverride ?? '/actors'; }
+
   async _prepareContext() {
     const doc = this.document || {};
-    const sd = doc.systemData || {};
+    const sd = doc.systemData || doc.data || {};
 
-    const level = num(sd.level) || 1;
-    const hpVal = num(sd.hp?.value);
-    const hpMax = num(sd.hp?.max) || 10;
-    const bt = num(sd.hp?.brokenThreshold) || Math.floor(hpMax / 2);
+    const level = num(sd.level ?? sd.details?.level?.value) || 1;
+    const hpObj = sd.hp || sd.attributes?.hp || {};
+    const hpVal = num(hpObj.value ?? hpObj.max ?? 10);
+    const hpMax = num(hpObj.max) || 10;
+    const bt = num(hpObj.brokenThreshold) || Math.floor(hpMax / 2);
     const hpPct = hpMax > 0 ? Math.max(0, Math.min(100, Math.round((hpVal / hpMax) * 100))) : 0;
 
     return {
       name: (doc.name && doc.name !== 'undefined') ? doc.name : '',
-      avatarUrl: (doc.avatarUrl && doc.avatarUrl !== '/icons/svg/adventurer.svg')
-        ? doc.avatarUrl
-        : (doc.imgUrl || (doc.img && doc.img !== '/icons/svg/adventurer.svg') || '/marketplace/rulesets/pf2e/assets/images/default-avatar.svg'),
+      avatarUrl: resolveActorPortrait(doc),
       level,
-      complexity: sd.complexity || 'simple',
-      isComplex: sd.complexity === 'complex',
+      complexity: sd.complexity || (sd.details?.isComplex ? 'complex' : 'simple'),
+      isComplex: sd.complexity === 'complex' || Boolean(sd.details?.isComplex),
       stealth: {
-        dc: num(sd.stealth?.dc) || 15,
-        extra: num(sd.stealth?.extra),
+        dc: num(sd.stealth?.dc ?? (sd.attributes?.stealth?.value !== undefined ? 10 + num(sd.attributes.stealth.value) : 15)) || 15,
+        extra: num(sd.stealth?.extra ?? sd.attributes?.stealth?.value),
       },
-      disable: sd.disable || '',
-      ac: num(sd.ac) || 10,
-      hardness: num(sd.hardness),
+      disable: sd.disable || sd.details?.disable || '',
+      ac: num(sd.ac ?? sd.attributes?.ac?.value) || 10,
+      hardness: num(sd.hardness ?? sd.attributes?.hardness),
       hp: { value: hpVal, max: hpMax, brokenThreshold: bt, pct: hpPct, low: hpPct < 25 },
       saves: {
         fortitude: fmtMod(num(sd.saves?.fortitude?.total || sd.saves?.fortitude?.value)),
         reflex: fmtMod(num(sd.saves?.reflex?.total || sd.saves?.reflex?.value)),
         will: fmtMod(num(sd.saves?.will?.total || sd.saves?.will?.value)),
       },
-      routine: sd.routine || '',
-      reset: sd.reset || '',
-      description: sd.description || '',
+      routine: sd.routine || sd.details?.routine || '',
+      reset: sd.reset || sd.details?.reset || '',
+      description: sd.description || sd.details?.description || '',
     };
   }
 
@@ -112,7 +113,7 @@ export class Pf2eHazardSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const worldId = currentDoc.worldId;
 
     const baseUpdate = {};
-    const nextSystemData = JSON.parse(JSON.stringify(currentDoc.systemData || {}));
+    const nextSystemData = JSON.parse(JSON.stringify(currentDoc.systemData || currentDoc.data || {}));
 
     for (const [key, value] of pending.entries()) {
       if (key.startsWith('sd:')) {
@@ -123,7 +124,7 @@ export class Pf2eHazardSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     }
 
     try {
-      await api.put(`/actors/${actorId}`, {
+      await api.put(`${this.apiRoute}/${actorId}`, {
         worldId,
         ...baseUpdate,
         systemData: nextSystemData,
@@ -137,8 +138,9 @@ export class Pf2eHazardSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   async _reloadDocument() {
     if (!this.document?.id) return;
     try {
-      const updated = await api.get(`/actors/${this.document.id}`);
+      const updated = await api.get(`${this.apiRoute}/${this.document.id}`);
       if (updated) {
+        if (updated.data && !updated.systemData) updated.systemData = updated.data;
         this.document = updated;
         this.render?.();
       }
@@ -153,7 +155,7 @@ export class Pf2eHazardSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         type: 'image',
         current: this.document?.avatarUrl,
         onSelect: async (path) => {
-          await api.put(`/actors/${this.document.id}`, { avatarUrl: path });
+          await api.put(`${this.apiRoute}/${this.document.id}`, { avatarUrl: path });
           await this._reloadDocument();
         },
       });

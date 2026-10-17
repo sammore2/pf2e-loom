@@ -7,6 +7,9 @@
   "author": "Rob Sammore",
   "scripts": {
     "test": "node --test tests/*.test.mjs tests/**/*.test.mjs",
-    "check": "node --check pf2e.mjs scripts/*.mjs"
+    "check": "node --check pf2e.mjs scripts/*.mjs",
+    "enrich": "node scripts/enrich-packs.mjs",
+    "packs:export": "node scripts/pack-sources.mjs export",
+    "packs:build": "node scripts/pack-sources.mjs build"
   }
 }

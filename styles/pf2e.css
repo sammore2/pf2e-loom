@@ -95,57 +95,107 @@
   box-sizing: border-box;
 }
 
-.loom-window.pf2e-ui>.loom-window-header {
-  background: transparent !important;
-  border-bottom: 1px solid rgba(92, 64, 30, 0.28) !important;
-  box-shadow: none !important;
+.loom-window.pf2e-ui>.loom-window-header,
+.loom-window.pf2e-ui .loom-window-header,
+.loom-window.pf2e-sheet>.loom-window-header,
+.loom-window.pf2e-sheet .loom-window-header,
+.loom-window.pf2e-builder-window-shell>.loom-window-header,
+.loom-window.pf2e-builder-window-shell .loom-window-header {
+  background: linear-gradient(90deg, #2b0809 0%, #4a1013 50%, #2b0809 100%) !important;
+  border-bottom: 2px solid #a47c34 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4) !important;
   padding: 6px 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
 }
 
-.loom-window.pf2e-ui .loom-window-title {
+.loom-window.pf2e-ui .loom-window-title,
+.loom-window.pf2e-sheet .loom-window-title,
+.loom-window.pf2e-builder-window-shell .loom-window-title {
   font-family: var(--tat-engraved), serif !important;
-  font-weight: 600 !important;
-  font-size: 1rem !important;
-  letter-spacing: 0.14em !important;
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
+  letter-spacing: 0.12em !important;
   text-transform: uppercase !important;
-  color: #3e2612 !important;
-  text-shadow: 0 1px 0 rgba(255, 240, 210, 0.6) !important;
+  color: #f6e6bf !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
 }
 
-.loom-window.pf2e-ui>.loom-window-header .loom-window-controls {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+.loom-window.pf2e-ui .loom-window-controls,
+.loom-window.pf2e-sheet .loom-window-controls,
+.loom-window.pf2e-builder-window-shell .loom-window-controls {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
 }
 
-.loom-window.pf2e-ui>.loom-window-header .loom-window-controls button,
-.loom-window.pf2e-ui>.loom-window-header .loom-window-controls button.header-control,
-.loom-window.pf2e-ui>.loom-window-header .loom-window-controls .loom-window-control-btn,
-.loom-window.pf2e-ui>.loom-window-header .loom-window-controls .loom-window-close {
-  background: rgba(92, 64, 30, 0.1) !important;
-  border: 1px solid rgba(92, 64, 30, 0.35) !important;
-  border-radius: 3px !important;
-  box-shadow: none !important;
-  color: #4a3218 !important;
-  opacity: 0.85;
-  transition: all 120ms ease;
-  padding: 4px 6px !important;
-  cursor: pointer;
+.loom-window.pf2e-ui .loom-window-controls button,
+.loom-window.pf2e-ui .loom-window-controls button.header-control,
+.loom-window.pf2e-ui .loom-window-controls .loom-window-control-btn,
+.loom-window.pf2e-sheet .loom-window-controls button,
+.loom-window.pf2e-sheet .loom-window-controls .loom-window-control-btn,
+.loom-window.pf2e-builder-window-shell .loom-window-controls button,
+.loom-window.pf2e-builder-window-shell .loom-window-controls .loom-window-control-btn {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(216, 180, 106, 0.5) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+  color: #f6e6bf !important;
+  opacity: 1 !important;
+  font-size: 0.85rem !important;
+  padding: 3px 8px !important;
+  min-width: 26px !important;
+  height: 24px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 120ms ease !important;
 }
 
-.loom-window.pf2e-ui>.loom-window-header .loom-window-controls button:hover,
-.loom-window.pf2e-ui>.loom-window-header .loom-window-controls button.header-control:hover,
-.loom-window.pf2e-ui>.loom-window-header .loom-window-controls .loom-window-control-btn:hover {
-  opacity: 1;
-  background: rgba(92, 64, 30, 0.22) !important;
-  color: #2b1c0c !important;
+.loom-window.pf2e-ui .loom-window-controls button i,
+.loom-window.pf2e-sheet .loom-window-controls button i,
+.loom-window.pf2e-builder-window-shell .loom-window-controls button i {
+  color: inherit !important;
+  font-size: 0.85rem !important;
+  line-height: 1 !important;
 }
 
-.loom-window.pf2e-ui>.loom-window-header .loom-window-controls .loom-window-close:hover {
-  opacity: 1;
-  background: rgba(184, 69, 60, 0.85) !important;
-  border-color: #6e1512 !important;
-  color: #fbf4e6 !important;
+.loom-window.pf2e-ui .loom-window-controls button:hover,
+.loom-window.pf2e-ui .loom-window-controls button.header-control:hover,
+.loom-window.pf2e-ui .loom-window-controls .loom-window-control-btn:hover,
+.loom-window.pf2e-sheet .loom-window-controls button:hover,
+.loom-window.pf2e-sheet .loom-window-controls .loom-window-control-btn:hover,
+.loom-window.pf2e-builder-window-shell .loom-window-controls button:hover,
+.loom-window.pf2e-builder-window-shell .loom-window-controls .loom-window-control-btn:hover {
+  background: rgba(216, 180, 106, 0.3) !important;
+  border-color: #ffd778 !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+.loom-window.pf2e-ui .loom-window-controls .loom-window-close,
+.loom-window.pf2e-sheet .loom-window-controls .loom-window-close,
+.loom-window.pf2e-builder-window-shell .loom-window-controls .loom-window-close,
+.loom-window.pf2e-ui .loom-window-controls button[data-action="close"],
+.loom-window.pf2e-sheet .loom-window-controls button[data-action="close"],
+.loom-window.pf2e-builder-window-shell .loom-window-controls button[data-action="close"] {
+  background: rgba(220, 38, 38, 0.28) !important;
+  border: 1px solid rgba(239, 68, 68, 0.65) !important;
+  color: #fecaca !important;
+}
+
+.loom-window.pf2e-ui .loom-window-controls .loom-window-close:hover,
+.loom-window.pf2e-sheet .loom-window-controls .loom-window-close:hover,
+.loom-window.pf2e-builder-window-shell .loom-window-controls .loom-window-close:hover,
+.loom-window.pf2e-ui .loom-window-controls button[data-action="close"]:hover,
+.loom-window.pf2e-sheet .loom-window-controls button[data-action="close"]:hover,
+.loom-window.pf2e-builder-window-shell .loom-window-controls button[data-action="close"]:hover {
+  background: #dc2626 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
 }
 
 .loom-window.pf2e-ui>.loom-window-body {
@@ -228,23 +278,53 @@
 /* ── 5. FORM CONTROLS & ENTRADAS DE DADOS ── */
 .pf2e-ui input.tat-in,
 .pf2e-ui select.tat-in,
-.pf2e-ui textarea.tat-in {
-  background: rgba(0, 0, 0, 0.25);
-  color: var(--tat-text);
-  border: 1px solid var(--tat-line);
-  border-radius: 3px;
-  padding: 3px 6px;
-  font-family: var(--tat-cond-font);
-  font-size: 0.88rem;
-  box-sizing: border-box;
-  transition: border-color 120ms ease, box-shadow 120ms ease;
+.pf2e-ui textarea.tat-in,
+.pf2e-ui input[type="text"],
+.pf2e-ui input[type="search"] {
+  background: #ffffff !important;
+  color: #1f140a !important;
+  border: 1.5px solid #845c24 !important;
+  border-radius: 4px !important;
+  padding: 4px 8px !important;
+  font-family: var(--tat-cond-font), -apple-system, sans-serif !important;
+  font-size: 0.92rem !important;
+  box-sizing: border-box !important;
+  box-shadow: inset 0 1px 2px rgba(60, 30, 10, 0.1) !important;
+  transition: border-color 120ms ease, box-shadow 120ms ease !important;
+}
+
+.pf2e-ui input.tat-in::placeholder,
+.pf2e-ui textarea.tat-in::placeholder,
+.pf2e-ui input[type="text"]::placeholder,
+.pf2e-ui input[type="search"]::placeholder {
+  color: #7c6853 !important;
+  opacity: 0.85 !important;
 }
 
 .pf2e-ui input.tat-in:focus,
 .pf2e-ui select.tat-in:focus,
-.pf2e-ui textarea.tat-in:focus {
-  border-color: var(--tat-amber);
-  box-shadow: 0 0 6px rgba(232, 199, 122, 0.4);
+.pf2e-ui textarea.tat-in:focus,
+.pf2e-ui input[type="text"]:focus,
+.pf2e-ui input[type="search"]:focus {
+  background: #ffffff !important;
+  border-color: #5c1412 !important;
+  box-shadow: 0 0 0 2px rgba(92, 20, 18, 0.25), inset 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+  outline: none !important;
+}
+
+/* Tactical Left Rail Inputs (on dark crimson cards) */
+.tat-rail input.tat-in,
+.tat-rail select.tat-in {
+  background: rgba(0, 0, 0, 0.35) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(216, 180, 106, 0.4) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+}
+
+.tat-rail input.tat-in:focus,
+.tat-rail select.tat-in:focus {
+  border-color: #ffd778 !important;
+  box-shadow: 0 0 6px rgba(255, 215, 120, 0.4) !important;
 }
 
 .pf2e-ui input[type="number"].tat-in {
@@ -408,6 +488,7 @@
   padding: 5px 8px;
   margin: 0 !important;
   box-sizing: border-box;
+  flex-shrink: 0 !important;
 }
 
 .pf2e-ui .tat-rail > .tat-block > .tat-label,
@@ -516,6 +597,30 @@
 .pf2e-ui .tat-rest-btn:hover {
   color: #ffffff;
   transform: scale(1.15);
+}
+
+.pf2e-ui .tat-hp-bar {
+  width: 100%;
+  height: 9px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(216, 180, 106, 0.45);
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 5px 0 6px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.pf2e-ui .tat-hp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #991b1b 0%, #dc2626 55%, #ef4444 100%);
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.55);
+  border-radius: 4px;
+  transition: width 220ms ease;
+}
+
+.pf2e-ui .tat-hp-card.is-low .tat-hp-fill {
+  background: linear-gradient(90deg, #7f1d1d 0%, #b91c1c 100%);
+  box-shadow: 0 0 8px rgba(220, 38, 38, 0.8);
 }
 
 .pf2e-ui .tat-meter {
@@ -782,17 +887,22 @@
   color: #ffffff !important;
 }
 
-.pf2e-ui .stat-rank-tag {
-  padding: 3px 8px;
-  font-family: var(--tat-cond-font);
-  font-size: 0.76rem;
-  font-weight: 800;
+.pf2e-ui .stat-rank-tag,
+.pf2e-ui .stat-rank-tag.tat-seal-pill {
+  width: auto !important;
+  min-width: 44px !important;
+  height: 26px !important;
+  padding: 0 8px !important;
+  font-family: var(--tat-cond-font) !important;
+  font-size: 0.76rem !important;
+  font-weight: 800 !important;
   color: #fff4da !important;
   background: rgba(0, 0, 0, 0.45) !important;
   border: 1px solid #d4a74e !important;
-  border-radius: 3px;
-  cursor: pointer;
-  white-space: nowrap;
+  border-radius: 3px !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
 }
 
 .pf2e-ui .senses-pill-group {
@@ -839,7 +949,26 @@
   width: 100% !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
-  overflow: hidden !important;
+  overflow: visible !important;
+  flex-shrink: 0 !important;
+}
+
+.pf2e-ui .tat-saves-card > .tat-row-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin: 0 0 4px 0 !important;
+}
+
+.pf2e-ui .tat-saves-card > .tat-row-header .tat-label {
+  color: #ffd778 !important;
+  font-family: var(--tat-engraved), serif !important;
+  font-size: 0.85rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+  margin: 0 !important;
 }
 
 .pf2e-ui .tat-saves-3col {
@@ -1136,6 +1265,10 @@
 }
 
 .pf2e-ui .tat-fixed-attrs .tat-ribbon-key-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 3px !important;
   font-family: var(--tat-engraved), serif !important;
   font-size: 0.82rem !important;
   font-weight: 800 !important;
@@ -1143,6 +1276,7 @@
   margin-bottom: 1px !important;
   cursor: pointer !important;
   line-height: 1.1 !important;
+  transition: color 0.15s ease !important;
 }
 
 .pf2e-ui .tat-fixed-attrs input.tat-attr-mod {
@@ -1168,39 +1302,126 @@
 }
 
 .pf2e-ui .tat-head input.tat-name,
+.pf2e-ui .tat-main input.tat-name,
 .pf2e-ui input.tat-name {
-  font-family: var(--tat-engraved), serif !important;
-  font-size: 1.45rem !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.04em;
-  color: #ffffff !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
-  width: 100%;
-  padding: 3px 8px !important;
-  background: rgba(0, 0, 0, 0.28) !important;
-  border: none !important;
-  border-bottom: 2px solid #d4a74e !important;
-  border-radius: 2px !important;
-  box-shadow: none !important;
+  font-family: var(--tat-engraved), 'Georgia', serif !important;
+  font-size: 1.35rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  color: #1f140a !important;
+  text-shadow: none !important;
+  filter: none !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  width: 100% !important;
+  height: 36px !important;
+  padding: 3px 10px !important;
+  background: #ffffff !important;
+  border: 1.5px solid #845c24 !important;
+  border-radius: 4px !important;
+  box-shadow: inset 0 1px 3px rgba(60, 30, 10, 0.12) !important;
 }
 
-.pf2e-ui .tat-head input.tat-name::placeholder {
-  color: #e2cca2 !important;
-  opacity: 0.85 !important;
+.pf2e-ui .tat-head input.tat-name::placeholder,
+.pf2e-ui .tat-main input.tat-name::placeholder,
+.pf2e-ui input.tat-name::placeholder {
+  color: #8c765c !important;
+  opacity: 0.75 !important;
+  text-shadow: none !important;
 }
 
-.pf2e-ui .tat-head input.tat-name:focus {
-  background: rgba(0, 0, 0, 0.45) !important;
-  border-bottom-color: #ffd778 !important;
-  box-shadow: 0 1px 6px rgba(255, 215, 120, 0.4) !important;
+.pf2e-ui .tat-head input.tat-name:focus,
+.pf2e-ui .tat-main input.tat-name:focus,
+.pf2e-ui input.tat-name:focus {
+  background: #ffffff !important;
+  border-color: #5c1412 !important;
+  box-shadow: 0 0 0 2px rgba(92, 20, 18, 0.25), inset 0 1px 2px rgba(0, 0, 0, 0.1) !important;
   outline: none !important;
+  text-shadow: none !important;
+}
+
+.pf2e-ui .tat-id-badges-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 3px;
+}
+
+.pf2e-ui .tat-id-badge {
+  font-family: var(--tat-cond-font), -apple-system, sans-serif !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  color: #ffd875 !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(216, 180, 106, 0.45) !important;
+  border-radius: 3px !important;
+  padding: 1px 7px !important;
+  cursor: pointer !important;
+  transition: all 0.12s ease !important;
+}
+
+.pf2e-ui .tat-id-badge:hover {
+  background: rgba(216, 180, 106, 0.35) !important;
+  border-color: #ffd875 !important;
+  color: #ffffff !important;
+}
+
+.pf2e-ui .tat-id-badge-class {
+  background: rgba(216, 180, 106, 0.28) !important;
+  border-color: #ffd875 !important;
+  color: #fffdf5 !important;
+}
+
+.pf2e-ui .tat-identity-pill-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pf2e-ui .tat-pill-del {
+  font-size: 0.75rem;
+  color: #8c7355;
+  cursor: pointer;
+  padding: 2px 4px;
+  background: transparent;
+  border: none;
+}
+
+.pf2e-ui .tat-pill-del:hover {
+  color: #a81c1c;
+}
+
+.pf2e-ui .tat-pill-add {
+  cursor: pointer !important;
+  font-size: 0.76rem !important;
+  font-weight: 700 !important;
+  color: #5c1412 !important;
+  background: rgba(92, 20, 18, 0.08) !important;
+  border: 1px dashed #a47c34 !important;
+  border-radius: 4px !important;
+  padding: 2px 8px !important;
+  transition: all 0.12s ease !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.pf2e-ui .tat-pill-add:hover {
+  background: rgba(92, 20, 18, 0.2) !important;
+  color: #8a151b !important;
+  border-style: solid !important;
 }
 
 .pf2e-ui .tat-hero-header {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 6px;
-  margin-top: 1px;
+  margin-top: 2px;
 }
 
 .pf2e-ui .tat-hero-lbl {
@@ -1218,7 +1439,7 @@
 }
 
 .pf2e-ui .tat-hero-shield {
-  font-size: 1rem !important;
+  font-size: 0.95rem !important;
   color: rgba(255, 255, 255, 0.35) !important;
   background: transparent;
   border: none;
@@ -1233,11 +1454,34 @@
   text-shadow: 0 0 8px #ef4444, 0 0 14px rgba(239, 68, 68, 0.8) !important;
 }
 
+.pf2e-ui .pf2e-spend-hero-btn {
+  padding: 1px 7px !important;
+  font-size: 0.68rem !important;
+  height: 20px !important;
+}
+
 .pf2e-ui .tat-head-right {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex: none;
+}
+
+.pf2e-ui .tat-xp-col {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3px;
+  width: 108px;
+}
+
+.pf2e-ui .tat-head-right .tat-levelup-btn {
+  width: 100% !important;
+  justify-content: center !important;
+  padding: 2px 6px !important;
+  font-size: 0.66rem !important;
+  height: 20px !important;
+  white-space: nowrap !important;
 }
 
 .pf2e-ui .tat-level-badge {
@@ -1248,31 +1492,37 @@
   background: linear-gradient(180deg, #521c1f 0%, #300e10 100%) !important;
   border: 2px solid #d4a74e !important;
   border-radius: 4px;
-  padding: 2px 6px;
+  padding: 3px 6px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-  min-width: 38px;
+  min-width: 44px;
+  height: 52px;
+  box-sizing: border-box;
 }
 
 .pf2e-ui .lvl-lbl {
   font-family: var(--tat-engraved), serif;
-  font-size: 0.62rem !important;
+  font-size: 0.6rem !important;
   letter-spacing: 0.08em;
   color: #ffd778 !important;
   font-weight: 800 !important;
   text-transform: uppercase;
+  line-height: 1;
 }
 
+.pf2e-ui .tat-head .tat-level-badge input.tat-in.lvl-in,
 .pf2e-ui .tat-head input.lvl-in,
 .pf2e-ui input.lvl-in {
   width: 2.2em !important;
-  text-align: center;
-  font-size: 1.25rem !important;
+  height: 24px !important;
+  text-align: center !important;
+  font-size: 1.3rem !important;
   font-weight: 800 !important;
   color: #ffffff !important;
   background: transparent !important;
   border: none !important;
-  padding: 0;
+  padding: 0 !important;
   box-shadow: none !important;
+  line-height: 1 !important;
 }
 
 .pf2e-ui .tat-xp {
@@ -1280,7 +1530,7 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 2px;
-  width: 95px;
+  width: 100%;
 }
 
 .pf2e-ui .tat-xp-bar {
@@ -1299,21 +1549,29 @@
 }
 
 .pf2e-ui .tat-xp-read {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: #f5eed8 !important;
   font-weight: 700 !important;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  width: 100%;
 }
 
+.pf2e-ui .tat-head .tat-xp-read input.tat-in.tat-in-sm,
 .pf2e-ui .tat-head input.tat-in-sm {
-  width: 2.8em !important;
-  text-align: center;
+  width: 3.2em !important;
+  height: 19px !important;
+  font-size: 0.75rem !important;
+  text-align: center !important;
   color: #ffffff !important;
-  background: rgba(0, 0, 0, 0.35) !important;
+  background: rgba(0, 0, 0, 0.45) !important;
   border: 1px solid #d4a74e !important;
   border-radius: 3px !important;
   font-weight: 700 !important;
-  padding: 0 !important;
+  padding: 0 2px !important;
 }
 
 /* ── 9. FAIXA DE ABAS COM ÍCONES CIRCULARES COMPACTOS (FIXA SEM SCROLL) ── */
@@ -1394,6 +1652,10 @@
   min-height: 24px !important;
   font-size: 0.74rem !important;
   color: #ffd778 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
 }
 
 /* ── CORPO ROLÁVEL DAS ABAS (ROLAGEM EXCLUSIVA NO BLOCO DA ABA) ── */
@@ -1511,14 +1773,14 @@
 .pf2e-ui .profile-card-inner {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
 }
 
 .pf2e-ui .tat-portrait-frame {
-  width: 68px;
-  height: 68px;
+  width: 116px;
+  height: 134px;
   border: 2px solid #b8860b;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(255, 215, 120, 0.3);
   border-radius: 6px;
   overflow: hidden;
   flex: none;
@@ -1529,12 +1791,35 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  transition: border-color 0.15s ease, transform 0.15s ease;
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .pf2e-ui .tat-portrait-frame:hover {
-  border-color: #f5e1a4;
+  border-color: #ffd778;
+  box-shadow: 0 4px 16px rgba(212, 167, 78, 0.5), inset 0 0 0 1px rgba(255, 215, 120, 0.6);
   transform: translateY(-1px);
+}
+
+.pf2e-ui .tat-portrait-frame::after {
+  content: '\f030';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background: rgba(30, 8, 10, 0.75);
+  color: #ffd778;
+  border: 1px solid rgba(216, 180, 106, 0.6);
+  border-radius: 4px;
+  font-size: 0.68rem;
+  padding: 2px 5px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.pf2e-ui .tat-portrait-frame:hover::after {
+  opacity: 1;
 }
 
 .pf2e-ui .tat-portrait-frame img {
@@ -1581,27 +1866,42 @@
 .pf2e-ui .profile-identity-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px 12px;
+  gap: 6px 10px;
 }
 
 .pf2e-ui .identity-item {
   display: flex;
-  align-items: center;
-  gap: 6px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
   font-size: 0.82rem;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .pf2e-ui .identity-item.identity-item-full {
   grid-column: span 2;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
 }
 
 .pf2e-ui .identity-item .id-lbl {
   color: #5c1412;
   font-family: var(--tat-engraved), serif;
-  font-size: 0.76rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.05em;
+  text-transform: uppercase;
   white-space: nowrap;
+}
+
+.pf2e-ui .identity-item .tat-identity-pill-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
 }
 
 .pf2e-ui .tat-pill-btn {
@@ -1611,13 +1911,15 @@
   padding: 2px 8px;
   color: #1f140a !important;
   font-weight: 700 !important;
-  font-size: 0.84rem !important;
+  font-size: 0.82rem !important;
   cursor: pointer;
   transition: all 120ms ease;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 160px;
+  max-width: 100%;
+  flex: 1;
+  text-align: left;
 }
 
 .pf2e-ui .tat-pill-btn:hover {
@@ -1802,6 +2104,10 @@
 }
 
 .pf2e-ui .tat-ribbon-key-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
   font-family: var(--tat-engraved), serif;
   font-size: 0.95rem !important;
   font-weight: 800 !important;
@@ -1810,6 +2116,22 @@
   border: none;
   cursor: pointer;
   padding: 0;
+  transition: color 0.15s ease;
+}
+
+.pf2e-ui .tat-attr-dice-icon {
+  font-size: 0.65rem !important;
+  color: #8c6a46;
+  opacity: 0.75;
+  pointer-events: none;
+  transition: transform 0.15s ease, opacity 0.15s ease, color 0.15s ease;
+}
+
+.pf2e-ui .tat-ribbon-key-btn:hover .tat-attr-dice-icon,
+.pf2e-ui .tat-ribbon-cell:hover .tat-attr-dice-icon {
+  opacity: 1 !important;
+  color: #8b1d19 !important;
+  transform: scale(1.18);
 }
 
 .pf2e-ui .tat-key-attr-icon {
@@ -2470,9 +2792,42 @@
 /* ── 12. ABAS MAGIAS, AÇÕES, MANUFATURA & TALENTOS ── */
 .pf2e-ui .pf2e-spell-casting-bar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
   margin-bottom: 12px;
+  padding: 8px 12px;
+  background: rgba(22, 14, 12, 0.55);
+  border: 1px solid rgba(216, 180, 106, 0.3);
+  border-radius: 4px;
+}
+
+.pf2e-ui .pf2e-spell-stats-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.pf2e-ui .pf2e-spell-controls-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pf2e-ui .pf2e-spell-selectors {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pf2e-ui .pf2e-spell-rest-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .pf2e-ui .pf2e-spell-casting-bar .tat-def {
@@ -2515,6 +2870,357 @@
   text-transform: uppercase;
   white-space: nowrap;
   margin: 0 !important;
+}
+
+/* ── TALENTOS (FEATS) ── */
+.pf2e-ui .pf2e-feats-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pf2e-ui .pf2e-feat-category-block {
+  margin-bottom: 4px;
+}
+
+.pf2e-ui .pf2e-feats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pf2e-ui .pf2e-feat-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 10px;
+  background: rgba(28, 20, 16, 0.55);
+  border: 1px solid rgba(216, 180, 106, 0.2);
+  border-radius: 4px;
+  transition: all 120ms ease;
+}
+
+.pf2e-ui .pf2e-feat-card:hover {
+  background: rgba(45, 30, 22, 0.75);
+  border-color: rgba(216, 180, 106, 0.45);
+}
+
+.pf2e-ui .pf2e-feat-card-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pf2e-ui .pf2e-feat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #d8b46a;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.pf2e-ui .pf2e-feat-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pf2e-ui .pf2e-feat-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pf2e-ui .pf2e-feat-name-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--tat-cond-font), sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffd778;
+  text-align: left;
+  cursor: pointer;
+  transition: color 120ms ease;
+}
+
+.pf2e-ui .pf2e-feat-name-btn:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.pf2e-ui .pf2e-feat-level-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #d8b46a;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(216, 180, 106, 0.3);
+}
+
+.pf2e-ui .pf2e-feat-traits {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.pf2e-ui .pf2e-trait-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 1px 5px;
+  background: #3b2219;
+  color: #f7e7c4;
+  border: 1px solid #73452b;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.pf2e-ui .pf2e-feat-desc {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #cfc2b2;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pf2e-ui .pf2e-feat-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* ── INVENTÁRIO (INVENTORY TABLE) ── */
+.pf2e-ui .pf2e-inventory-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pf2e-ui .pf2e-inv-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pf2e-ui .pf2e-inv-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pf2e-ui .pf2e-inv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+  background: rgba(20, 14, 11, 0.35);
+  border: 1px solid rgba(216, 180, 106, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pf2e-ui .pf2e-inv-table th {
+  background: linear-gradient(180deg, #341a18 0%, #201010 100%);
+  color: #d8b46a;
+  font-family: var(--tat-engraved), serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1.5px solid rgba(216, 180, 106, 0.4);
+}
+
+.pf2e-ui .pf2e-inv-table th.col-level,
+.pf2e-ui .pf2e-inv-table th.col-qty,
+.pf2e-ui .pf2e-inv-table th.col-bulk,
+.pf2e-ui .pf2e-inv-table th.col-price {
+  text-align: center;
+}
+
+.pf2e-ui .pf2e-inv-table th.col-actions {
+  text-align: right;
+  padding-right: 10px;
+}
+
+.pf2e-ui .pf2e-inv-row {
+  border-bottom: 1px solid rgba(216, 180, 106, 0.12);
+  transition: background 100ms ease;
+}
+
+.pf2e-ui .pf2e-inv-row:hover {
+  background: rgba(216, 180, 106, 0.08);
+}
+
+.pf2e-ui .pf2e-inv-row td {
+  padding: 6px 8px;
+  vertical-align: middle;
+}
+
+.pf2e-ui .pf2e-inv-row td.col-level,
+.pf2e-ui .pf2e-inv-row td.col-bulk,
+.pf2e-ui .pf2e-inv-row td.col-price {
+  text-align: center;
+  color: #cfc2b2;
+}
+
+.pf2e-ui .pf2e-inv-item-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pf2e-ui .pf2e-inv-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  border: 1px solid rgba(216, 180, 106, 0.3);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.pf2e-ui .pf2e-inv-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #d8b46a;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.pf2e-ui .pf2e-inv-item-name {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #ffd778;
+  text-align: left;
+  cursor: pointer;
+  transition: color 120ms ease;
+}
+
+.pf2e-ui .pf2e-inv-item-name:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.pf2e-ui .pf2e-qty-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.pf2e-ui .pf2e-qty-btn {
+  width: 18px !important;
+  height: 18px !important;
+  font-size: 0.75rem !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(216, 180, 106, 0.3) !important;
+  color: #ffd778 !important;
+  border-radius: 2px !important;
+  cursor: pointer;
+}
+
+.pf2e-ui .pf2e-qty-btn:hover {
+  background: #5c1412 !important;
+  border-color: #ffd778 !important;
+  color: #ffffff !important;
+}
+
+.pf2e-ui .pf2e-qty-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  min-width: 18px;
+  text-align: center;
+}
+
+.pf2e-ui .pf2e-inv-row-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.pf2e-ui .pf2e-equip-toggle {
+  color: #887a6b;
+  transition: all 120ms ease;
+}
+
+.pf2e-ui .pf2e-equip-toggle.is-equipped {
+  color: #60a5fa !important;
+  text-shadow: 0 0 6px rgba(96, 165, 250, 0.6);
+}
+
+.pf2e-ui .pf2e-equip-toggle:hover {
+  color: #ffffff !important;
+}
+
+.pf2e-ui .pf2e-formula-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  background: rgba(28, 20, 16, 0.45);
+  border: 1px solid rgba(216, 180, 106, 0.2);
+  border-radius: 3px;
+  margin-bottom: 4px;
+}
+
+.pf2e-ui .pf2e-formula-level {
+  font-weight: 700;
+  color: #d8b46a;
+  font-size: 0.82rem;
+  min-width: 60px;
+}
+
+.pf2e-ui .pf2e-item-open-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #ffd778;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pf2e-ui .pf2e-item-open-btn:hover {
+  color: #ffffff;
+  text-decoration: underline;
 }
 
 /* ── COMPONENTES DO RAIL ESQUERDO: PERCEPÇÃO, INICIATIVA, SALVAGUARDAS & MITIGAÇÕES ── */
@@ -3105,6 +3811,81 @@
   flex-shrink: 0;
 }
 
+.pf2e-ui .pf2e-action-roll-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 2px 7px !important;
+  border-radius: 4px !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  background: #5c1412 !important;
+  color: #fbf5e6 !important;
+  border: 1px solid rgba(200, 155, 60, 0.5) !important;
+  transition: all 120ms ease !important;
+}
+
+.pf2e-ui .pf2e-action-roll-btn:hover {
+  background: #7a1b18 !important;
+  color: #ffffff !important;
+}
+
+.pf2e-ui .pf2e-action-damage-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 2px 7px !important;
+  border-radius: 4px !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  background: #8a3c00 !important;
+  color: #fff8f0 !important;
+  border: 1px solid rgba(255, 170, 50, 0.5) !important;
+  transition: all 120ms ease !important;
+}
+
+.pf2e-ui .pf2e-action-damage-btn:hover {
+  background: #a64900 !important;
+  color: #ffffff !important;
+}
+
+.pf2e-ui .pf2e-activity-toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 2px 8px !important;
+  border-radius: 4px !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  background: rgba(92, 20, 18, 0.08) !important;
+  color: #5c1412 !important;
+  border: 1px solid rgba(92, 20, 18, 0.25) !important;
+  transition: all 120ms ease !important;
+}
+
+.pf2e-ui .pf2e-activity-toggle.is-active {
+  background: #1b4d2e !important;
+  color: #e8f5e9 !important;
+  border-color: #2e7d32 !important;
+  box-shadow: 0 0 6px rgba(46, 125, 50, 0.35) !important;
+}
+
+.pf2e-ui .pf2e-activity-toggle:hover {
+  background: rgba(92, 20, 18, 0.18) !important;
+}
+
+.pf2e-ui .pf2e-activity-toggle.is-active:hover {
+  background: #143a22 !important;
+}
+
+.pf2e-ui .pf2e-action-item-card.is-active-activity {
+  background: rgba(46, 125, 50, 0.08) !important;
+  border-color: #2e7d32 !important;
+}
+
 /* 12.2 Aba Manufatura & Fórmulas */
 .pf2e-ui .tat-crafting-panel {
   display: flex;
@@ -3268,8 +4049,9 @@
   color: #2b1810 !important;
   font-family: var(--tat-engraved), serif !important;
   font-size: 1.25rem !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   padding: 4px 8px !important;
+  text-shadow: none !important;
   box-shadow: inset 0 1px 3px rgba(60, 30, 10, 0.25) !important;
 }
 
@@ -3452,6 +4234,11 @@
   gap: 6px !important;
 }
 
+.pf2e-ui .pf2e-familiar-sheet .tat-defenses {
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  gap: 4px !important;
+}
+
 .pf2e-ui .tat-npc .tat-defenses .tat-tile.tat-def,
 .pf2e-ui .pf2e-familiar-sheet .tat-defenses .tat-tile.tat-def,
 .pf2e-ui .pf2e-vehicle-sheet .tat-defenses .tat-tile.tat-def,
@@ -3460,9 +4247,190 @@
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
+  gap: 4px !important;
   padding: 6px 4px !important;
-  min-height: 72px !important;
+  min-height: 70px !important;
   grid-column: span 1 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.pf2e-ui .tat-defenses .tat-tile.tat-def input.tat-def-in,
+.pf2e-ui .tat-defenses .tat-tile.tat-def .tat-def-value {
+  width: 54px !important;
+  max-width: 100% !important;
+  height: 32px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  font-family: var(--tat-cond-font), sans-serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  color: #2b1810 !important;
+  background: #fffdf8 !important;
+  border: 1.5px solid #845c24 !important;
+  border-radius: 4px !important;
+  padding: 0 2px !important;
+  box-shadow: inset 0 1px 3px rgba(60, 30, 10, 0.25) !important;
+}
+
+.pf2e-ui .tat-defenses .tat-tile.tat-def.tat-def-ac input.tat-def-in,
+.pf2e-ui .tat-defenses .tat-tile.tat-def.tat-def-ac .tat-def-value {
+  color: #6a1a17 !important;
+  border-color: #d4a74e !important;
+}
+
+.pf2e-ui .tat-defenses .tat-tile.tat-def .tat-def-name {
+  font-family: var(--tat-engraved), serif !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  color: #ffd778 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+  line-height: 1.1 !important;
+}
+
+.pf2e-ui .pf2e-familiar-sheet .tat-defenses .tat-tile.tat-def .tat-def-name {
+  font-size: 0.6rem !important;
+  letter-spacing: 0.01em !important;
+}
+
+.pf2e-ui .pf2e-familiar-sheet .tat-defenses .tat-tile.tat-def .tat-def-value {
+  width: 44px !important;
+  height: 28px !important;
+  font-size: 1.1rem !important;
+}
+
+/* Familiar & Vehicle Compact Grids & Inline Fields */
+.pf2e-ui .pf2e-familiar-sheet .tat-master-input {
+  flex: 1 !important;
+  max-width: 200px !important;
+  height: 26px !important;
+  font-size: 0.85rem !important;
+  padding: 2px 6px !important;
+}
+
+.pf2e-ui .pf2e-vehicle-sheet .tat-price-input {
+  width: 90px !important;
+  height: 26px !important;
+  font-size: 0.85rem !important;
+  padding: 2px 6px !important;
+}
+
+.pf2e-ui .pf2e-familiar-sheet .tat-speeds-row,
+.pf2e-ui .pf2e-vehicle-sheet .tat-vehicle-capacity-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  align-items: end !important;
+}
+
+.pf2e-ui .pf2e-familiar-sheet .speed-field,
+.pf2e-ui .pf2e-vehicle-sheet .cap-field {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+}
+
+.pf2e-ui .pf2e-familiar-sheet .speed-lbl,
+.pf2e-ui .pf2e-vehicle-sheet .cap-lbl {
+  font-family: var(--tat-engraved), serif !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  color: #ffd778 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.pf2e-ui .pf2e-familiar-sheet .speed-field input.tat-in,
+.pf2e-ui .pf2e-vehicle-sheet .cap-field input.tat-in {
+  width: 100% !important;
+  height: 30px !important;
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  padding: 2px 6px !important;
+}
+
+.pf2e-ui .pf2e-familiar-sheet .tat-familiar-abilities > .tat-label-row {
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+.pf2e-ui .pf2e-familiar-sheet .tat-abilities-limit {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 0.74rem !important;
+  color: #f5eed8 !important;
+}
+
+.pf2e-ui .pf2e-familiar-sheet .tat-abilities-limit input.tat-in-sm {
+  width: 42px !important;
+  height: 24px !important;
+  text-align: center !important;
+  font-weight: 800 !important;
+  padding: 0 2px !important;
+}
+
+.pf2e-ui .pf2e-vehicle-sheet .tat-piloting-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.pf2e-ui .pf2e-vehicle-sheet .tat-piloting-row > input.tat-in {
+  flex: 1 !important;
+  height: 32px !important;
+}
+
+.pf2e-ui .pf2e-vehicle-sheet .piloting-dc-field {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex: none !important;
+  font-family: var(--tat-engraved), serif !important;
+  font-size: 0.8rem !important;
+  font-weight: 800 !important;
+  color: #ffd778 !important;
+}
+
+.pf2e-ui .pf2e-vehicle-sheet .piloting-dc-field input.tat-in-sm {
+  width: 52px !important;
+  height: 32px !important;
+  text-align: center !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+}
+
+.pf2e-ui .pf2e-hazard-sheet .tat-hazard-field {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  margin-bottom: 8px !important;
+}
+
+.pf2e-ui .pf2e-hazard-sheet .tat-hazard-field:last-child {
+  margin-bottom: 0 !important;
+}
+
+.pf2e-ui .pf2e-hazard-sheet .tat-hazard-field .tat-label-sm {
+  font-family: var(--tat-engraved), serif !important;
+  font-size: 0.74rem !important;
+  font-weight: 700 !important;
+  color: #ffd778 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
 }
 
 /* ── 14. FICHA DE GRUPO (ROSTER & TESOURO COMPARTILHADO) ── */
@@ -3856,8 +4824,24 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--tat-line);
+  padding: 8px 10px;
+  background: linear-gradient(180deg, #420f12, #290809);
+  border: 1.5px solid #845c24;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.pf2e-ui .tat-item-head .tat-id-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+  font-family: var(--tat-engraved), serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffd778 !important;
 }
 
 .pf2e-ui .tat-item-icon {
@@ -3866,9 +4850,9 @@
   flex: none;
   display: grid;
   place-items: center;
-  border: 2px solid var(--tat-iron);
-  box-shadow: inset 0 0 0 1px var(--tat-amber), 0 4px 8px rgba(0, 0, 0, 0.4);
-  border-radius: 3px;
+  border: 2px solid #d4a74e;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
+  border-radius: 4px;
   background: linear-gradient(160deg, #3a2c1e, #1c140d);
   color: var(--tat-amber);
   font-size: 1.4rem;
@@ -3883,17 +4867,309 @@
 
 .pf2e-ui .tat-fieldgrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px 12px;
+  align-items: end;
 }
 
 .pf2e-ui .tat-field {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  font-size: 0.78rem;
+  gap: 3px;
+  font-family: var(--tat-engraved), serif;
+  font-size: 0.72rem;
   font-weight: 700;
-  color: #5c1412;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #ffd778 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+.pf2e-ui .tat-field:has(> input[type="checkbox"]) {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(216, 180, 106, 0.3);
+  border-radius: 4px;
+  padding: 6px 10px;
+  height: 32px;
+  box-sizing: border-box;
+}
+
+.pf2e-ui .tat-field input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #d4a74e;
+  cursor: pointer;
+  margin: 0;
+}
+
+.pf2e-ui .tat-item .tat-traits {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(216, 180, 106, 0.25);
+}
+
+.pf2e-ui .tat-item .tat-traits input[name="new-trait"] {
+  flex: 1;
+  min-width: 140px;
+  height: 30px !important;
+}
+
+.pf2e-ui .tat-item .tat-traits .tat-add {
+  height: 30px;
+  padding: 0 12px;
+  background: linear-gradient(180deg, #521c1f 0%, #300e10 100%);
+  border: 1px solid #d4a74e;
+  border-radius: 4px;
+  color: #ffd778;
+  font-family: var(--tat-engraved), serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pf2e-ui .tat-item .tat-traits .tat-add:hover {
+  background: linear-gradient(180deg, #6e272a 0%, #421316 100%);
+  color: #ffffff;
+}
+
+/* ── 15.1. ACTIVE EFFECTS & BUFFS UI (CONTRASTE & TEMA ESCURO) ── */
+/* Abas da ficha de item: sem adereço circular, formato limpo e legível */
+.pf2e-ui .tat-item .tat-tabs {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 6px !important;
+  background: rgba(30, 10, 12, 0.75) !important;
+  border: 1px solid rgba(216, 180, 106, 0.4) !important;
+  border-radius: 4px !important;
+  padding: 4px 6px !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.pf2e-ui .tat-item .tat-tabs .pf2e-tab-btn {
+  width: auto !important;
+  height: 28px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  border-radius: 3px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 12px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(216, 180, 106, 0.25) !important;
+  color: #d8c29d !important;
+  font-family: inherit !important;
+  font-size: 0.76rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  transition: all 120ms ease !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.pf2e-ui .tat-item .tat-tabs .pf2e-tab-btn:hover,
+.pf2e-ui .tat-item .tat-tabs .sdrn-item-tab-btn:hover {
+  background: rgba(212, 175, 55, 0.18) !important;
+  border-color: #d4af37 !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
+  transform: none !important;
+}
+
+.pf2e-ui .tat-item .tat-tabs .pf2e-tab-btn.active,
+.pf2e-ui .tat-item .tat-tabs .sdrn-item-tab-btn.active {
+  background: linear-gradient(180deg, #781e1c 0%, #4a1010 100%) !important;
+  border: 1px solid #d4af37 !important;
+  color: #fff2d1 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4) !important;
+  transform: none !important;
+}
+
+.sdrn-item-name-btn:hover {
+  color: #f3e3ba !important;
+  text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+}
+
+.pf2e-item-effects-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pf2e-effects-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pf2e-effects-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--tat-line, rgba(212, 175, 55, 0.2));
+  padding-bottom: 6px;
+}
+
+.pf2e-effects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pf2e-effect-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(27, 25, 21, 0.95);
+  border: 1px solid #3d3527;
+  border-radius: 6px;
+  padding: 8px 12px;
+  gap: 12px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.pf2e-effect-card:hover {
+  border-color: #d4af37;
+  background: rgba(35, 31, 25, 0.98);
+  box-shadow: 0 3px 10px rgba(212, 175, 55, 0.15);
+}
+
+.pf2e-effect-card-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pf2e-effect-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.pf2e-effect-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pf2e-effect-fallback-icon {
+  color: #ffd700;
+  font-size: 1.1rem;
+}
+
+.pf2e-effect-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.pf2e-effect-name {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #f3e3ba;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+
+.pf2e-effect-sub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  color: #a39b89;
+  flex-wrap: wrap;
+}
+
+.pf2e-effect-duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #dcd4c0;
+}
+
+.pf2e-effect-cond-badge {
+  background: rgba(212, 175, 55, 0.15);
+  color: #e6c875;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.pf2e-effect-visual-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--fx-color, #ffd700);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--fx-color, #ffd700);
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+.pf2e-effect-desc {
+  font-size: 0.76rem;
+  color: #bfb7a4;
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.pf2e-effect-changes {
+  font-size: 0.72rem;
+  color: #7dd3fc;
+  margin-top: 3px;
+  font-family: monospace;
+}
+
+.pf2e-effect-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pf2e-effect-config-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  color: #d4af37;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pf2e-effect-config-btn:hover {
+  background: rgba(212, 175, 55, 0.25);
+  color: #fff;
+  border-color: #ffd700;
 }
 
 /* ── 16. NAVEGADOR DE COMPÊNDIO ── */
@@ -4098,6 +5374,10 @@
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   margin: 6px 0;
+  width: 100% !important;
+  min-height: 48px !important;
+  display: block !important;
+  box-sizing: border-box !important;
 }
 
 .pf2e-chat-card-header {
@@ -4485,6 +5765,104 @@
   font-style: italic;
 }
 
+/* ── 17.2 DAMAGE APPLICATION ACTION BAR ── */
+.pf2e-damage-application-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 4px 6px;
+  background: #f4ebd8;
+  border-left: 1px solid rgba(92, 20, 18, 0.25);
+  border-right: 1px solid rgba(92, 20, 18, 0.25);
+  border-bottom: 1px solid rgba(92, 20, 18, 0.25);
+  border-radius: 0 0 5px 5px;
+}
+
+.pf2e-dmg-apply-btn {
+  background: #ffffff;
+  border: 1px solid rgba(92, 20, 18, 0.35);
+  border-radius: 4px;
+  color: #5c1412;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+}
+
+.pf2e-dmg-apply-btn:hover {
+  background: #5c1412;
+  color: #fbf5e6;
+  border-color: #5c1412;
+}
+
+.pf2e-dmg-apply-btn.pf2e-heal-btn {
+  color: #166534;
+  border-color: rgba(22, 101, 52, 0.4);
+}
+
+.pf2e-dmg-apply-btn.pf2e-heal-btn:hover {
+  background: #166534;
+  color: #ffffff;
+  border-color: #166534;
+}
+
+/* ── 17.3 TACTICAL TOGGLES BAR ── */
+.pf2e-toggles-block {
+  padding: 6px 10px;
+  background: linear-gradient(180deg, #fdfaf3 0%, #f4ebd8 100%);
+  border: 1px solid rgba(92, 20, 18, 0.2);
+  border-radius: 5px;
+  margin-bottom: 8px;
+}
+
+.pf2e-toggles-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pf2e-toggle-chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pf2e-toggle-btn {
+  background: #ffffff;
+  border: 1px solid #d4c2a5;
+  color: #5c1412;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.pf2e-toggle-btn:hover {
+  background: #fdfaf3;
+  border-color: #5c1412;
+}
+
+.pf2e-toggle-btn.is-active {
+  background: #5c1412;
+  color: #fbf5e6;
+  border-color: #3b090a;
+  box-shadow: 0 1px 3px rgba(92, 20, 18, 0.3);
+}
+
+.pf2e-toggle-btn.is-active i {
+  color: #4ade80;
+}
+
 /* ── 18. DIÁLOGO DE CONFIGURAÇÃO DE ROLAGEM ── */
 .pf2e-roll-dialog {
   display: flex;
@@ -4505,4 +5883,835 @@
   font-size: 0.78rem;
   color: var(--tat-dim);
   text-align: center;
+}
+
+/* ── 19. ABA DE EFEITOS E MODIFICADORES ATIVOS ── */
+.tat-effects-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tat-effects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.tat-effect-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(92, 64, 30, 0.15);
+  border-radius: 4px;
+  padding: 6px 8px;
+}
+
+.tat-effect-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tat-effect-name {
+  font-size: 0.88rem;
+  color: #2b1f14;
+}
+
+.tat-effect-val {
+  font-size: 0.95rem;
+  color: var(--tat-amber, #8c2a26);
+  font-weight: 700;
+}
+
+.tat-effect-selectors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.tat-tag-type {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  background: rgba(92, 20, 18, 0.1);
+  color: #5c1412;
+  border: 1px solid rgba(92, 20, 18, 0.2);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.pf2e-ui .pf2e-hp-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+  justify-content: stretch;
+}
+
+.pf2e-ui .pf2e-hp-actions .tat-btn-xs {
+  flex: 1;
+  text-align: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  padding: 2px 4px;
+}
+
+.pf2e-ui .tat-persistent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.pf2e-ui .tat-persistent-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+}
+
+.pf2e-ui .tat-persistent-item strong {
+  color: #8c2a26;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CHARACTER BUILDER WIZARD STYLES
+   ══════════════════════════════════════════════════════════════════════════ */
+.pf2e-builder-window {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--tat-parchment, #fdfbf7);
+  color: #2b1f14;
+  overflow: hidden;
+}
+
+.pf2e-builder-stepper {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  background: #3b090a;
+  border-bottom: 2px solid #a47c34;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.builder-step-tab {
+  min-width: 0;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 4px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f0dec0 !important;
+  font-family: var(--tat-engraved), serif;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  opacity: 0.88;
+}
+
+.builder-step-tab:hover {
+  opacity: 1 !important;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.builder-step-tab .step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.builder-step-tab.active {
+  background: rgba(216, 180, 106, 0.3) !important;
+  color: #ffd875 !important;
+  opacity: 1 !important;
+  font-weight: 700 !important;
+  box-shadow: inset 0 -3px 0 #ffd875 !important;
+}
+
+.builder-step-tab.active .step-num {
+  background: #d4a74e !important;
+  color: #1a0809 !important;
+  font-weight: 800;
+}
+
+.builder-step-tab.done {
+  color: #d8b46a !important;
+  opacity: 1 !important;
+}
+
+.builder-step-tab.done .step-num {
+  background: rgba(216, 180, 106, 0.35) !important;
+  color: #ffd875 !important;
+}
+
+.pf2e-builder-body {
+  flex: 1;
+  padding: 14px 18px;
+  overflow-y: auto;
+}
+
+.builder-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #d4c5a9;
+  padding-bottom: 6px;
+}
+
+.builder-header h2 {
+  font-family: var(--tat-engraved), serif;
+  font-size: 1.15rem;
+  color: #5c1412;
+  margin: 0;
+}
+
+.builder-search {
+  width: 260px !important;
+  height: 32px !important;
+  background: #ffffff !important;
+  color: #1f140a !important;
+  border: 1.5px solid #845c24 !important;
+  border-radius: 4px !important;
+  padding: 4px 10px !important;
+  font-size: 0.88rem !important;
+  box-shadow: inset 0 1px 2px rgba(60, 30, 10, 0.12) !important;
+}
+
+.builder-search::placeholder {
+  color: #7c6853 !important;
+  opacity: 0.85 !important;
+}
+
+.builder-search:focus {
+  border-color: #5c1412 !important;
+  box-shadow: 0 0 0 2px rgba(92, 20, 18, 0.25) !important;
+  outline: none !important;
+}
+
+.builder-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px;
+}
+
+.builder-card {
+  padding: 10px 12px;
+  background: #fff;
+  border: 1.5px solid #d4c5a9;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.builder-card:hover {
+  border-color: #5c1412;
+  box-shadow: 0 2px 6px rgba(92, 20, 18, 0.15);
+}
+
+.builder-card.is-selected {
+  border-color: #5c1412;
+  background: #fdf5e6;
+  box-shadow: 0 0 0 1.5px #5c1412;
+}
+
+.builder-card .card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.builder-attr-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.builder-attr-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1.5px solid #d4c5a9;
+  border-radius: 6px;
+}
+
+.builder-attr-card .attr-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.builder-attr-card .attr-val {
+  font-size: 1.2rem;
+  color: #5c1412;
+  min-width: 28px;
+  text-align: center;
+}
+
+.builder-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.builder-skill-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #fff;
+  border: 1.5px solid #d4c5a9;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2b1f14;
+  transition: all 0.12s ease;
+}
+
+.builder-skill-pill.is-trained {
+  background: #5c1412;
+  border-color: #3b090a;
+  color: #fff;
+}
+
+.pf2e-builder-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: #f4ede1;
+  border-top: 1px solid #d4c5a9;
+}
+
+/* ═══ GM TOOLS & ENCOUNTER CALCULATOR ═══ */
+.pf2e-gm-tools-window {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: var(--pf2e-sheet-bg, #fdfbf7);
+  color: var(--pf2e-sheet-text, #2b1f14);
+  font-family: var(--pf2e-font, sans-serif);
+}
+
+.gm-tools-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 2px solid #5c1412;
+  padding-bottom: 12px;
+}
+
+.gm-tools-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gm-tools-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-family: var(--tat-engraved), serif;
+  color: #5c1412;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gm-party-config-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.gm-cfg-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.gm-threat-badge {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.gm-budgets-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.gm-budget-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  background: #f4ede1;
+  border: 1px solid #d4c5a9;
+  border-radius: 4px;
+}
+
+.gm-budget-card .b-lbl {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #6b5c4c;
+}
+
+.gm-budget-card .b-val {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #2b1f14;
+}
+
+.gm-creatures-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.gm-creature-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: #ffffff;
+  border: 1px solid #e2d7c5;
+  border-radius: 4px;
+}
+
+.gm-creature-row .cr-name {
+  flex: 1;
+  font-weight: 600;
+}
+
+.gm-creature-row .cr-badge {
+  font-size: 0.75rem;
+  background: #e2d7c5;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.gm-creature-row .cr-count {
+  font-weight: 700;
+  color: #5c1412;
+}
+
+.gm-creature-row .cr-xp {
+  font-weight: 700;
+  min-width: 60px;
+  text-align: right;
+}
+
+.gm-add-creature-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gm-treasure-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.treasure-box {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  background: #f4ede1;
+  border: 1px solid #d4c5a9;
+  border-radius: 4px;
+}
+
+.treasure-box.wide {
+  grid-column: span 2;
+}
+
+.treasure-box .t-lbl {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #6b5c4c;
+}
+
+.treasure-box .t-val {
+  font-size: 0.95rem;
+  color: #2b1f14;
+}
+
+/* Prepared Spell Slots UI */
+.pf2e-prepared-slots-box {
+  margin: 6px 0 10px;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px dashed rgba(124, 104, 83, 0.4);
+  border-radius: 4px;
+}
+
+.pf2e-prepared-slots-title {
+  font-family: var(--tat-engraved, serif);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #5c1412;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pf2e-prepared-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px;
+}
+
+.pf2e-prepared-slot-card {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: #fffdf8;
+  border: 1px solid #c9bda8;
+  border-radius: 4px;
+  transition: all 120ms ease;
+}
+
+.pf2e-prepared-slot-card.is-expended {
+  background: #f0ebe1;
+  opacity: 0.75;
+  border-color: #d6ccba;
+}
+
+.pf2e-slot-index {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #8c7355;
+  font-family: var(--tat-cond-font);
+}
+
+.pf2e-prepared-slot-name {
+  flex: 1;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.85rem;
+  color: #2b1f14;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf2e-prepared-slot-name:hover {
+  color: #8a151b;
+}
+
+.pf2e-prepare-select {
+  flex: 1;
+  font-size: 0.8rem;
+  padding: 2px 4px;
+  background: #fff;
+  border: 1px solid #7c6853;
+  border-radius: 3px;
+  color: #2b1f14;
+}
+
+.tat-cast-slot-btn {
+  padding: 2px 6px;
+  background: #5c1412 !important;
+  color: #fff !important;
+  border: 1px solid #d4a74e !important;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.tat-cast-slot-btn:hover:not(:disabled) {
+  background: #8a151b !important;
+}
+
+.pf2e-unprepare-btn {
+  background: transparent;
+  border: none;
+  color: #8c7355;
+  cursor: pointer;
+  padding: 2px 4px;
+  font-size: 0.8rem;
+}
+
+.pf2e-unprepare-btn:hover {
+  color: #a81c1c;
+}
+
+/* Level-Up Wizard Window */
+.pf2e-levelup-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 14px;
+  background: #fbf7ee;
+  color: #2b1f14;
+  overflow: hidden;
+}
+
+.pf2e-levelup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #5c1412;
+  margin-bottom: 12px;
+}
+
+.levelup-title {
+  margin: 0;
+  font-family: var(--tat-engraved, serif);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #5c1412;
+}
+
+.levelup-transition {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.lvl-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  font-family: var(--tat-cond-font);
+}
+
+.lvl-badge.old-lvl {
+  background: #e8ded1;
+  color: #6b5c4c;
+}
+
+.lvl-badge.new-lvl {
+  background: #5c1412;
+  color: #ffd778;
+}
+
+.lvl-arrow {
+  color: #8c7355;
+  font-size: 0.9rem;
+}
+
+.levelup-hp-gain {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #e8f5e9;
+  border: 1.5px solid #2e7d32;
+  color: #1b5e20;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.pf2e-levelup-body {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 4px;
+}
+
+.levelup-step-section {
+  padding: 10px 14px;
+  background: #fffdf8;
+  border: 1px solid #d4c5a9;
+  border-radius: 4px;
+}
+
+.levelup-step-title {
+  font-family: var(--tat-engraved, serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #5c1412;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.levelup-step-hint {
+  font-size: 0.8rem;
+  margin: 2px 0 8px;
+}
+
+.levelup-boosts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.levelup-boost-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #fbf7ee;
+  border: 1.5px solid #c9bda8;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.levelup-boost-card:hover:not(:disabled) {
+  border-color: #5c1412;
+  transform: translateY(-1px);
+}
+
+.levelup-boost-card.is-selected {
+  background: #5c1412;
+  color: #fff;
+  border-color: #ffd778;
+}
+
+.levelup-boost-card.is-selected .attr-name,
+.levelup-boost-card.is-selected .attr-mods b {
+  color: #ffd778;
+}
+
+.levelup-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.levelup-skill-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: #fbf7ee;
+  border: 1.5px solid #c9bda8;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.levelup-skill-card:hover {
+  border-color: #5c1412;
+}
+
+.levelup-skill-card.is-selected {
+  background: #5c1412;
+  color: #fff;
+  border-color: #ffd778;
+}
+
+.levelup-skill-card.is-selected .skill-name,
+.levelup-skill-card.is-selected .skill-ranks b {
+  color: #ffd778;
+}
+
+.levelup-feat-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+}
+
+.levelup-feats-list {
+  max-height: 180px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.levelup-feat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: #fbf7ee;
+  border: 1px solid #d4c5a9;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.levelup-feat-row.is-selected {
+  background: #5c1412;
+  color: #fff;
+  border-color: #ffd778;
+}
+
+.levelup-feat-row.is-selected .feat-name {
+  color: #ffd778;
+  font-weight: 700;
+}
+
+.pf2e-levelup-footer {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1.5px solid #d4c5a9;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tat-confirm-levelup-btn {
+  padding: 8px 18px;
+  background: linear-gradient(180deg, #6e1c20 0%, #4a1013 100%) !important;
+  color: #fff !important;
+  border: 1.5px solid #d4a74e !important;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.tat-confirm-levelup-btn:hover {
+  background: linear-gradient(180deg, #8a242a 0%, #5c1418 100%) !important;
+  border-color: #ffd778 !important;
 }

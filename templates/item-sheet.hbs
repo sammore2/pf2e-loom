@@ -18,6 +18,8 @@
   <nav class="tat-tabs">
     <button type="button" class="pf2e-tab-btn" data-action="tab" data-tab="details">{{localize "pf2e.sheets.details"}}</button>
     <button type="button" class="pf2e-tab-btn" data-action="tab" data-tab="description">{{localize "pf2e.sheets.description"}}</button>
+    <button type="button" class="pf2e-tab-btn" data-action="tab" data-tab="rules">{{localize "pf2e.ruleElements.rules"}} ({{rulesCount}})</button>
+    <button type="button" class="pf2e-tab-btn sdrn-item-tab-btn" data-action="tab" data-tab="effects">EFFECTS ({{effectsCount}})</button>
   </nav>
 
   <div class="tat-panel" data-tab-content="details">
@@ -27,6 +29,39 @@
         {{#if hasCost}}
         <label class="tat-field">{{localize "pf2e.sheets.cost"}}
           <select class="tat-in" name="sd:actions">{{#each costOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{value}}</option>{{/each}}</select>
+        </label>
+        {{/if}}
+        {{#if isAction}}
+        <label class="tat-field">{{localize "pf2e.sheets.actionCategory"}}
+          <select class="tat-in" name="sd:actionCategory">{{#each actionCategoryOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{label}}</option>{{/each}}</select>
+        </label>
+        <label class="tat-field">{{localize "pf2e.sheets.checkType"}}
+          <select class="tat-in" name="sd:checkType">{{#each checkTypeOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{label}}</option>{{/each}}</select>
+        </label>
+        {{#if (eq checkType "skill")}}
+        <label class="tat-field">{{localize "pf2e.sheets.skill"}}
+          <select class="tat-in" name="sd:skill">{{#each skillOptions}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{label}}</option>{{/each}}</select>
+        </label>
+        {{/if}}
+        {{#if (or (eq checkType "attack") (eq checkType "custom"))}}
+        <label class="tat-field">{{localize "pf2e.sheets.formula"}}
+          <input class="tat-in" type="text" name="sd:formula" value="{{formula}}" placeholder="ex: 1d20+8 ou 2d6" />
+        </label>
+        {{/if}}
+        <label class="tat-field">{{localize "pf2e.sheets.dc"}} (CD)
+          <input class="tat-in" type="text" name="sd:dc" value="{{dc}}" placeholder="ex: 15" />
+        </label>
+        <label class="tat-field">{{localize "pf2e.sheets.damage"}}
+          <input class="tat-in" type="text" name="sd:damage" value="{{damage}}" placeholder="ex: 1d8+4" />
+        </label>
+        <label class="tat-field">{{localize "pf2e.sheets.damageType"}}
+          <input class="tat-in" type="text" name="sd:damageType" value="{{damageType}}" placeholder="ex: cortante, fogo" />
+        </label>
+        <label class="tat-field tat-field-full">{{localize "pf2e.sheets.trigger"}}
+          <input class="tat-in" type="text" name="sd:trigger" value="{{trigger}}" placeholder="ex: Uma criatura se move..." />
+        </label>
+        <label class="tat-field tat-field-full">{{localize "pf2e.sheets.requirements"}}
+          <input class="tat-in" type="text" name="sd:requirements" value="{{requirements}}" placeholder="ex: Empunhando uma arma..." />
         </label>
         {{/if}}
 
@@ -127,5 +162,114 @@
 
   <div class="tat-panel" data-tab-content="description">
     <textarea class="tat-in tat-notes" name="sd:description" placeholder="{{localize "pf2e.sheets.description"}}">{{description}}</textarea>
+  </div>
+
+  <div class="tat-panel pf2e-item-rules-panel" data-tab-content="rules">
+    <div class="pf2e-rules-list">
+      {{#each rules}}
+      <div class="pf2e-rule-card">
+        <div class="pf2e-rule-card-head">
+          <span class="pf2e-rule-badge">{{key}}</span>
+          <button type="button" class="tat-icon pf2e-rule-del-btn" data-action="rule-remove" data-index="{{index}}" title="{{localize "pf2e.ruleElements.deleteRule"}}">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+        <div class="pf2e-rule-card-fields">
+          {{#if (eq key "FlatModifier")}}
+          <label class="tat-field-inline"><b>{{localize "pf2e.ruleElements.selector"}}:</b> <input class="tat-in tat-in-sm" type="text" name="sd:rules.{{index}}.selector" value="{{selector}}" placeholder="athletics, ac..." /></label>
+          <label class="tat-field-inline"><b>{{localize "pf2e.ruleElements.value"}}:</b> <input class="tat-in tat-in-sm" type="number" name="sd:rules.{{index}}.value" value="{{value}}" /></label>
+          <label class="tat-field-inline"><b>{{localize "pf2e.ruleElements.type"}}:</b> <input class="tat-in tat-in-sm" type="text" name="sd:rules.{{index}}.type" value="{{type}}" placeholder="item, status..." /></label>
+          {{/if}}
+
+          {{#if (eq key "Resistance")}}
+          <label class="tat-field-inline"><b>{{localize "pf2e.ruleElements.damageType"}}:</b> <input class="tat-in tat-in-sm" type="text" name="sd:rules.{{index}}.type" value="{{type}}" placeholder="fire, slashing..." /></label>
+          <label class="tat-field-inline"><b>{{localize "pf2e.ruleElements.value"}}:</b> <input class="tat-in tat-in-sm" type="number" name="sd:rules.{{index}}.value" value="{{value}}" /></label>
+          {{/if}}
+
+          {{#if (eq key "Weakness")}}
+          <label class="tat-field-inline"><b>{{localize "pf2e.ruleElements.damageType"}}:</b> <input class="tat-in tat-in-sm" type="text" name="sd:rules.{{index}}.type" value="{{type}}" placeholder="fire, cold..." /></label>
+          <label class="tat-field-inline"><b>{{localize "pf2e.ruleElements.value"}}:</b> <input class="tat-in tat-in-sm" type="number" name="sd:rules.{{index}}.value" value="{{value}}" /></label>
+          {{/if}}
+
+          {{#if (eq key "Immunity")}}
+          <label class="tat-field-inline"><b>{{localize "pf2e.ruleElements.damageType"}}:</b> <input class="tat-in tat-in-sm" type="text" name="sd:rules.{{index}}.type" value="{{type}}" placeholder="bleed, poison..." /></label>
+          {{/if}}
+
+          {{#if (eq key "DamageDice")}}
+          <label class="tat-field-inline"><b>{{localize "pf2e.ruleElements.selector"}}:</b> <input class="tat-in tat-in-sm" type="text" name="sd:rules.{{index}}.selector" value="{{selector}}" placeholder="strike-damage..." /></label>
+          <label class="tat-field-inline"><b>{{localize "pf2e.ruleElements.diceNumber"}}:</b> <input class="tat-in tat-in-sm" type="number" name="sd:rules.{{index}}.diceNumber" value="{{diceNumber}}" /></label>
+          <label class="tat-field-inline"><b>{{localize "pf2e.ruleElements.dieSize"}}:</b> <input class="tat-in tat-in-sm" type="text" name="sd:rules.{{index}}.dieSize" value="{{dieSize}}" placeholder="d6" /></label>
+          <label class="tat-field-inline"><b>{{localize "pf2e.ruleElements.damageType"}}:</b> <input class="tat-in tat-in-sm" type="text" name="sd:rules.{{index}}.damageType" value="{{damageType}}" placeholder="fire" /></label>
+          {{/if}}
+        </div>
+      </div>
+      {{else}}
+      <div class="tat-empty"><i class="fa-solid fa-code-fork"></i> {{localize "pf2e.ruleElements.noRules"}}</div>
+      {{/each}}
+    </div>
+
+    <button type="button" class="tat-add pf2e-add-rule-btn" data-action="rule-add">
+      <i class="fa-solid fa-plus"></i> {{localize "pf2e.ruleElements.addRule"}}
+    </button>
+
+    <details class="pf2e-rules-raw-json-wrap" style="margin-top: 12px;">
+      <summary class="tat-label-sm" style="cursor: pointer;"><i class="fa-solid fa-code"></i> {{localize "pf2e.ruleElements.rawJson"}}</summary>
+      <textarea class="tat-in tat-notes pf2e-raw-json-textarea" name="raw-rules-json" rows="6">{{rawRulesJson}}</textarea>
+      <button type="button" class="tat-btn-xs" data-action="rules-json-save" style="margin-top: 4px;">
+        <i class="fa-solid fa-floppy-disk"></i> {{localize "pf2e.ruleElements.saveJson"}}
+      </button>
+    </details>
+  </div>
+
+  <div class="tat-panel pf2e-item-effects-panel" data-tab-content="effects" style="display:none;">
+    <div class="pf2e-effects-container">
+      <div class="pf2e-effects-header">
+        <h3 class="tat-label"><i class="fa-solid fa-wand-magic-sparkles"></i> ACTIVE EFFECTS &amp; BUFFS</h3>
+      </div>
+      <div class="pf2e-effects-list">
+        {{#each effects}}
+        <div class="pf2e-effect-card sdrn-effect-card">
+          <div class="pf2e-effect-card-main">
+            <div class="pf2e-effect-icon-wrap">
+              {{#if icon}}
+              <img src="{{icon}}" alt="" class="pf2e-effect-img" />
+              {{else}}
+              <i class="fa-solid fa-sparkles pf2e-effect-fallback-icon"></i>
+              {{/if}}
+            </div>
+            <div class="pf2e-effect-details">
+              <div class="pf2e-effect-name sdrn-item-name-btn">{{name}}</div>
+              <div class="pf2e-effect-sub">
+                <span class="pf2e-effect-duration"><i class="fa-regular fa-clock"></i> {{durationLabel}}</span>
+                {{#if conditionId}}
+                <span class="pf2e-effect-cond-badge"><i class="fa-solid fa-tag"></i> {{conditionId}}</span>
+                {{/if}}
+                {{#if hasVisual}}
+                <span class="pf2e-effect-visual-badge" style="--fx-color: {{visualColor}};">
+                  <i class="fa-solid fa-circle-dot"></i> {{visualKind}}
+                </span>
+                {{/if}}
+              </div>
+              {{#if description}}
+              <div class="pf2e-effect-desc">{{description}}</div>
+              {{/if}}
+              {{#if changesSummary}}
+              <div class="pf2e-effect-changes"><i class="fa-solid fa-sliders"></i> {{changesSummary}}</div>
+              {{/if}}
+            </div>
+          </div>
+          <div class="pf2e-effect-actions">
+            {{#if id}}
+            <button type="button" class="tat-icon pf2e-effect-config-btn" data-action="open-effect-config" data-effect-id="{{id}}" data-id="{{id}}" title="Open Loom Advanced Effect Config">
+              <i class="fa-solid fa-sliders"></i>
+            </button>
+            {{/if}}
+          </div>
+        </div>
+        {{else}}
+        <div class="tat-empty"><i class="fa-solid fa-wand-magic-sparkles"></i> No active effects attached to this item.</div>
+        {{/each}}
+      </div>
+    </div>
   </div>
 </div>

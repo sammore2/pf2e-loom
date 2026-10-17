@@ -5,7 +5,7 @@
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager } from '/_loom/sdk/index.js';
 import { Pf2eCharacterSheet } from './character-sheet.mjs';
 import { Pf2eItemSheet } from './item-sheet.mjs';
-import { setPathValue } from './utils.mjs';
+import { setPathValue, resolveActorPortrait } from './utils.mjs';
 import { localize } from './i18n.mjs';
 
 function num(v) {
@@ -59,7 +59,7 @@ export class Pf2ePartySheet extends LoomHandlebarsMixin(LoomActorSheet) {
   }
 
   get documentName() { return 'actor'; }
-  get apiRoute() { return '/actors'; }
+  get apiRoute() { return this._apiRouteOverride ?? '/actors'; }
   get dataKey() { return 'systemData'; }
 
   async mount() {
@@ -136,9 +136,7 @@ export class Pf2ePartySheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const classFallback = localize('pf2e.itemTypes.class', 'Class');
       members.push({
         id: actor.id,
-        avatarUrl: (actor.avatarUrl && actor.avatarUrl !== '/icons/svg/adventurer.svg')
-          ? actor.avatarUrl
-          : ((actor.img && actor.img !== '/icons/svg/adventurer.svg') || '/marketplace/rulesets/pf2e/assets/images/default-avatar.svg'),
+        avatarUrl: resolveActorPortrait(actor),
         level: lvl,
         ancestryClass: `${mSd.ancestryName || ancestryFallback} · ${mSd.className || classFallback}`,
         hp: { value: hpVal, max: hpMax, temp: hpTemp, pct: hpPct },

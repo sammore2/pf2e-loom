@@ -1,6 +1,6 @@
 // PF2E — scripts/rules.mjs
-// Pure rule functions for the tactical d20 MVP. No SDK imports so this
-// module runs under plain Node for tests.
+// Pure core rule functions for Pathfinder 2e Remaster (proficiency, MAP, degrees of success, HP, XP).
+// Pure module with zero engine dependencies for reliable execution in both browser and headless environments.
 
 export const RANKS = ['U', 'T', 'E', 'M', 'L'];
 

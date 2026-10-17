@@ -10,11 +10,18 @@
       "range": "10ft",
       "agile": true,
       "finesse": true,
-      "traits": ["agile", "finesse", "thrown", "versatile S"],
+      "traits": [
+        "agile",
+        "finesse",
+        "thrown",
+        "versatile S"
+      ],
       "bulk": "L",
       "price": "2 sp",
-      "description": "Uma lâmina curta de dois gumes para combate corpo a corpo ou arremesso."
-    }
+      "description": "Uma lâmina curta de dois gumes para combate corpo a corpo ou arremesso.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
   },
   {
     "id": "eq-shortsword",
@@ -27,11 +34,17 @@
       "range": "",
       "agile": true,
       "finesse": true,
-      "traits": ["agile", "finesse", "versatile S"],
+      "traits": [
+        "agile",
+        "finesse",
+        "versatile S"
+      ],
       "bulk": "L",
       "price": "9 sp",
-      "description": "Uma lâmina leve e equilibrada, adequada para esgrima ágil."
-    }
+      "description": "Uma lâmina leve e equilibrada, adequada para esgrima ágil.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
   },
   {
     "id": "eq-longsword",
@@ -44,11 +57,15 @@
       "range": "",
       "agile": false,
       "finesse": false,
-      "traits": ["versatile P"],
+      "traits": [
+        "versatile P"
+      ],
       "bulk": "1",
       "price": "1 gp",
-      "description": "A arma marcial tradicional de uma mão, confiável e letal."
-    }
+      "description": "A arma marcial tradicional de uma mão, confiável e letal.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
   },
   {
     "id": "eq-greatsword",
@@ -61,11 +78,16 @@
       "range": "",
       "agile": false,
       "finesse": false,
-      "traits": ["versatile P", "two-handed"],
+      "traits": [
+        "versatile P",
+        "two-handed"
+      ],
       "bulk": "2",
       "price": "2 gp",
-      "description": "Uma espada imensa de duas mãos capaz de desferir golpes devastadores."
-    }
+      "description": "Uma espada imensa de duas mãos capaz de desferir golpes devastadores.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
   },
   {
     "id": "eq-rapier",
@@ -78,11 +100,17 @@
       "range": "",
       "agile": false,
       "finesse": true,
-      "traits": ["deadly d8", "disarm", "finesse"],
+      "traits": [
+        "deadly d8",
+        "disarm",
+        "finesse"
+      ],
       "bulk": "1",
       "price": "2 gp",
-      "description": "Uma lâmina longa e estreita para estocadas precisas e críticas."
-    }
+      "description": "Uma lâmina longa e estreita para estocadas precisas e críticas.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
   },
   {
     "id": "eq-shortbow",
@@ -95,11 +123,15 @@
       "range": "60ft",
       "agile": false,
       "finesse": false,
-      "traits": ["deadly d10"],
+      "traits": [
+        "deadly d10"
+      ],
       "bulk": "1",
       "price": "3 gp",
-      "description": "Um arco portátil e rápido disparado com duas mãos sem recarga."
-    }
+      "description": "Um arco portátil e rápido disparado com duas mãos sem recarga.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
   },
   {
     "id": "eq-longbow",
@@ -112,11 +144,16 @@
       "range": "100ft",
       "agile": false,
       "finesse": false,
-      "traits": ["deadly d10", "volley 30ft"],
+      "traits": [
+        "deadly d10",
+        "volley 30ft"
+      ],
       "bulk": "2",
       "price": "6 gp",
-      "description": "Um arco maciço para combate a longa distância com enorme impacto crítico."
-    }
+      "description": "Um arco maciço para combate a longa distância com enorme impacto crítico.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
   },
   {
     "id": "eq-warhammer",
@@ -129,11 +166,15 @@
       "range": "",
       "agile": false,
       "finesse": false,
-      "traits": ["shove"],
+      "traits": [
+        "shove"
+      ],
       "bulk": "1",
       "price": "1 gp",
-      "description": "Uma cabeça de metal pesada para esmagar armaduras e empurrar inimigos."
-    }
+      "description": "Uma cabeça de metal pesada para esmagar armaduras e empurrar inimigos.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/weapon.svg"
   },
   {
     "id": "eq-leather-armor",
@@ -147,8 +188,10 @@
       "category": "light",
       "bulk": "1",
       "price": "2 gp",
-      "description": "Couro tratado para proteção leve sem restringir agilidade."
-    }
+      "description": "Couro tratado para proteção leve sem restringir agilidade.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/armor.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/armor.svg"
   },
   {
     "id": "eq-chain-shirt",
@@ -162,8 +205,10 @@
       "category": "light",
       "bulk": "1",
       "price": "5 gp",
-      "description": "Uma cota de malha leve usada sob roupas ou sobre acolchoamento."
-    }
+      "description": "Uma cota de malha leve usada sob roupas ou sobre acolchoamento.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/armor.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/armor.svg"
   },
   {
     "id": "eq-breastplate",
@@ -177,8 +222,10 @@
       "category": "medium",
       "bulk": "2",
       "price": "8 gp",
-      "description": "Uma couraça sólida que protege o torso com excelente defesa contra golpes."
-    }
+      "description": "Uma couraça sólida que protege o torso com excelente defesa contra golpes.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/armor.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/armor.svg"
   },
   {
     "id": "eq-full-plate",
@@ -192,8 +239,10 @@
       "category": "heavy",
       "bulk": "4",
       "price": "30 gp",
-      "description": "Placas de metal articuladas cobrindo o corpo inteiro com proteção máxima e Bulwark (+3 em saves de Reflexos contra efeitos de área)."
-    }
+      "description": "Placas de metal articuladas cobrindo o corpo inteiro com proteção máxima e Bulwark (+3 em saves de Reflexos contra efeitos de área).",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/armor.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/armor.svg"
   },
   {
     "id": "eq-wooden-shield",
@@ -202,11 +251,16 @@
     "data": {
       "acBonus": 2,
       "hardness": 3,
-      "hp": { "value": 12, "max": 12 },
+      "hp": {
+        "value": 12,
+        "max": 12
+      },
       "bulk": "1",
       "price": "1 gp",
-      "description": "Um escudo básico de carvalho reforçado. Concede +2 na CA ao Erguer o Escudo."
-    }
+      "description": "Um escudo básico de carvalho reforçado. Concede +2 na CA ao Erguer o Escudo.",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/shield.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/shield.svg"
   },
   {
     "id": "eq-steel-shield",
@@ -215,10 +269,264 @@
     "data": {
       "acBonus": 2,
       "hardness": 5,
-      "hp": { "value": 20, "max": 20 },
+      "hp": {
+        "value": 20,
+        "max": 20
+      },
       "bulk": "1",
       "price": "2 gp",
-      "description": "Um escudo metálico robusto para Bloqueio com Escudo (Dureza 5)."
-    }
+      "description": "Um escudo metálico robusto para Bloqueio com Escudo (Dureza 5).",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/shield.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/shield.svg"
+  },
+  {
+    "id": "eq-po-o-de-cura-healing-potion",
+    "name": "Poção de Cura (Healing Potion)",
+    "type": "consumable",
+    "data": {
+      "bulk": "L",
+      "quantity": 1,
+      "price": "3 gp",
+      "description": "Restaura pontos de vida instantaneamente ao ser ingerida.",
+      "effects": [
+        {
+          "name": "Poção de Cura",
+          "icon": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg",
+          "description": "Restaura pontos de vida instantaneamente ao ser ingerida.",
+          "durationUnit": "permanent",
+          "duration": -1,
+          "conditionId": "potion-healing",
+          "removeOnCombatEnd": true,
+          "transfer": false,
+          "changes": [],
+          "visual": {
+            "kind": "glow",
+            "color": "#ff3366",
+            "intensity": 0.9,
+            "speed": 1.2,
+            "size": 1.2
+          }
+        }
+      ],
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg"
+  },
+  {
+    "id": "eq-elixir-da-vida-elixir-of-life",
+    "name": "Elixir da Vida (Elixir of Life)",
+    "type": "consumable",
+    "data": {
+      "bulk": "L",
+      "quantity": 1,
+      "price": "3 gp",
+      "description": "Cura 1d6 PV e concede +1 de bônus de item em salvaguardas contra veneno e doença por 10 min.",
+      "effects": [
+        {
+          "name": "Elixir da Vida Menor",
+          "icon": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg",
+          "description": "Cura 1d6 PV e concede +1 de bônus de item em salvaguardas contra veneno e doença por 10 min.",
+          "durationUnit": "minutes",
+          "duration": 10,
+          "conditionId": "elixir-of-life",
+          "removeOnCombatEnd": false,
+          "transfer": false,
+          "changes": [
+            {
+              "key": "saves.fortitude.extra",
+              "mode": "add",
+              "value": 1,
+              "priority": 10
+            }
+          ],
+          "visual": {
+            "kind": "aura",
+            "color": "#00fa9a",
+            "intensity": 0.7,
+            "speed": 1,
+            "size": 1.2
+          }
+        }
+      ],
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg"
+  },
+  {
+    "id": "eq-elixir-da-chita-cheetah-s-elixir",
+    "name": "Elixir da Chita (Cheetah's Elixir)",
+    "type": "consumable",
+    "data": {
+      "bulk": "L",
+      "quantity": 1,
+      "price": "3 gp",
+      "description": "+5 pés de bônus de status na Velocidade terrestre por 1 minuto.",
+      "effects": [
+        {
+          "name": "Elixir da Chita Menor",
+          "icon": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg",
+          "description": "+5 pés de bônus de status na Velocidade terrestre por 1 minuto.",
+          "durationUnit": "minutes",
+          "duration": 1,
+          "conditionId": "cheetah-speed",
+          "removeOnCombatEnd": true,
+          "transfer": false,
+          "changes": [
+            {
+              "key": "speed.extra",
+              "mode": "add",
+              "value": 5,
+              "priority": 10
+            }
+          ],
+          "visual": {
+            "kind": "aura",
+            "color": "#ff8c00",
+            "intensity": 0.8,
+            "speed": 2,
+            "size": 1.2
+          }
+        }
+      ],
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg"
+  },
+  {
+    "id": "eq-ant-doto-menor-lesser-antidote",
+    "name": "Antídoto Menor (Lesser Antidote)",
+    "type": "consumable",
+    "data": {
+      "bulk": "L",
+      "quantity": 1,
+      "price": "3 gp",
+      "description": "+2 de bônus de item em salvaguardas de Fortitude contra venenos por 6 horas.",
+      "effects": [
+        {
+          "name": "Antídoto Menor",
+          "icon": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg",
+          "description": "+2 de bônus de item em salvaguardas de Fortitude contra venenos por 6 horas.",
+          "durationUnit": "hours",
+          "duration": 6,
+          "conditionId": "antidote",
+          "removeOnCombatEnd": false,
+          "transfer": false,
+          "changes": [
+            {
+              "key": "saves.fortitude.extra",
+              "mode": "add",
+              "value": 2,
+              "priority": 10
+            }
+          ],
+          "visual": {
+            "kind": "tint",
+            "color": "#32cd32",
+            "intensity": 0.5,
+            "speed": 1,
+            "size": 1
+          }
+        }
+      ],
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg"
+  },
+  {
+    "id": "eq-anel-de-prote-o-ring-of-protection",
+    "name": "Anel de Proteção (Ring of Protection)",
+    "type": "equipment",
+    "data": {
+      "bulk": "L",
+      "quantity": 1,
+      "price": "3 gp",
+      "description": "+1 de bônus de item na CA e todas as salvaguardas.",
+      "effects": [
+        {
+          "name": "Anel de Proteção",
+          "icon": "/marketplace/rulesets/pf2e/assets/icons/svg/items/equipment.svg",
+          "description": "+1 de bônus de item na CA e todas as salvaguardas.",
+          "durationUnit": "permanent",
+          "duration": -1,
+          "conditionId": "ring-protection",
+          "transfer": true,
+          "changes": [
+            {
+              "key": "armor.extra",
+              "mode": "add",
+              "value": 1,
+              "priority": 10
+            },
+            {
+              "key": "saves.fortitude.extra",
+              "mode": "add",
+              "value": 1,
+              "priority": 10
+            },
+            {
+              "key": "saves.reflex.extra",
+              "mode": "add",
+              "value": 1,
+              "priority": 10
+            },
+            {
+              "key": "saves.will.extra",
+              "mode": "add",
+              "value": 1,
+              "priority": 10
+            }
+          ],
+          "visual": {
+            "kind": "glow",
+            "color": "#4169e1",
+            "intensity": 0.6,
+            "speed": 1,
+            "size": 1.1
+          }
+        }
+      ],
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/equipment.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/equipment.svg"
+  },
+  {
+    "id": "eq-botas-de-velocidade-boots-of-speed",
+    "name": "Botas de Velocidade (Boots of Speed)",
+    "type": "equipment",
+    "data": {
+      "bulk": "L",
+      "quantity": 1,
+      "price": "3 gp",
+      "description": "+10 pés de bônus de status na Velocidade.",
+      "effects": [
+        {
+          "name": "Botas de Velocidade",
+          "icon": "/marketplace/rulesets/pf2e/assets/icons/svg/items/equipment.svg",
+          "description": "+10 pés de bônus de status na Velocidade.",
+          "durationUnit": "permanent",
+          "duration": -1,
+          "conditionId": "boots-speed",
+          "transfer": true,
+          "changes": [
+            {
+              "key": "speed.extra",
+              "mode": "add",
+              "value": 10,
+              "priority": 10
+            }
+          ],
+          "visual": {
+            "kind": "aura",
+            "color": "#ffd700",
+            "intensity": 0.7,
+            "speed": 1.8,
+            "size": 1.2
+          }
+        }
+      ],
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/equipment.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/equipment.svg"
   }
 ]

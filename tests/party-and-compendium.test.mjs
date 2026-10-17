@@ -2,11 +2,13 @@
 // Unit tests for Compendium Packs, Party Actor Schema, and Phase 2 Actor Types.
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getDefaultData } from '../scripts/schema.mjs';
 import { prepareActorRow } from '../scripts/prepare-data.mjs';
+import { resolveActorPortrait } from '../scripts/utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -136,5 +138,132 @@ test('Character Sheet — Continuous Banner Rail & Tabletop Layout Scheme', () =
   assert.ok(styles.includes('.profile-traits-row'), 'Must style traits pills row');
   assert.ok(styles.includes('.profile-demographics-grid'), 'Must style demographics grid');
 });
+
+test('Portrait Resolution — Compendium Actor fallback from imgUrl to portrait', () => {
+  const compendiumNpc = {
+    id: 'rqNNvJO0XEVHWwbW',
+    name: 'Wizard Sponge (Underwater)',
+    type: 'npc',
+    imgUrl: '/marketplace/rulesets/pf2e/assets/icons/30.png',
+    data: {
+      abilities: { str: { mod: 3 } },
+      imgUrl: '/marketplace/rulesets/pf2e/assets/icons/30.png',
+    },
+  };
+
+  const portrait = resolveActorPortrait(compendiumNpc);
+  assert.equal(portrait, '/marketplace/rulesets/pf2e/assets/icons/30.png');
+
+  const prepared = prepareActorRow(compendiumNpc);
+  assert.equal(prepared.avatarUrl, '/marketplace/rulesets/pf2e/assets/icons/30.png');
+});
+
+test('Character Sheet & Items — Actions Economy, Rolls & Exploration Activities', () => {
+  const template = fs.readFileSync(path.join(__dirname, '../templates/character-sheet.hbs'), 'utf8');
+  const itemSheetTemplate = fs.readFileSync(path.join(__dirname, '../templates/item-sheet.hbs'), 'utf8');
+  const styles = fs.readFileSync(path.join(__dirname, '../styles/pf2e.css'), 'utf8');
+
+  // Action cards support rolls, damage, and opening item sheet for editing
+  assert.ok(template.includes('data-action="action-roll"'), 'Action card must have roll button');
+  assert.ok(template.includes('data-action="action-damage"'), 'Action card must have damage button');
+  assert.ok(template.includes('pf2e-action-name" data-action="item-open"'), 'Clicking action name must open item sheet for editing');
+
+  // Exploration activities support activation and rolling checks
+  assert.ok(template.includes('data-action="set-exploration"'), 'Exploration activity must have activation button');
+  assert.ok(template.includes('data-action="roll-exploration"'), 'Exploration activity must have roll button');
+  assert.ok(template.includes('pf2e-activity-toggle'), 'Exploration activity must have toggle button styling');
+
+  // Compendium launch buttons must not have overflowing cut text inside
+  assert.ok(!template.includes('<i class="fa-solid fa-book"></i> {{localize "pf2e.sheets.browse"}}'), 'Browser button must not embed text that clips in 24px icon box');
+
+  // Item sheet contains action configuration fields
+  assert.ok(itemSheetTemplate.includes('name="sd:actionCategory"'), 'Item sheet must configure actionCategory');
+  assert.ok(itemSheetTemplate.includes('name="sd:checkType"'), 'Item sheet must configure checkType');
+  assert.ok(itemSheetTemplate.includes('name="sd:skill"'), 'Item sheet must configure skill');
+  assert.ok(itemSheetTemplate.includes('name="sd:formula"'), 'Item sheet must configure formula');
+  assert.ok(itemSheetTemplate.includes('name="sd:damage"'), 'Item sheet must configure damage');
+
+  // Chat cards must have explicit width and min-height to prevent 0-height empty line collapse
+  assert.ok(styles.includes('min-height: 48px !important;'), 'Chat cards must enforce min-height');
+  assert.ok(styles.includes('width: 100% !important;'), 'Chat cards must enforce full width');
+});
+
+test('Compendium Pack Canonical Types & Formula Item Schema', () => {
+  const rulesetRaw = fs.readFileSync(path.join(__dirname, '../ruleset.json'), 'utf8');
+  const ruleset = JSON.parse(rulesetRaw);
+
+  // All packs must declare canonical Loom type 'Item' (no subtypes like feat, spell, equipment, action)
+  for (const pack of ruleset.packs) {
+    assert.equal(pack.type, 'Item', `Pack ${pack.name} must declare canonical type 'Item'`);
+  }
+  assert.ok(ruleset.itemTypes.includes('formula'), 'ruleset.itemTypes must include formula');
+
+  // Formula default schema
+  const formulaData = getDefaultData('formula');
+  assert.equal(formulaData.isFormula, true, 'Formula default schema must set isFormula: true');
+  assert.equal(formulaData.level, 0, 'Formula default level must be 0');
+});
+
+test('Character Sheet — Inventory Table, Feats Cards, Formulas & Downtime', () => {
+  const template = fs.readFileSync(path.join(__dirname, '../templates/character-sheet.hbs'), 'utf8');
+  const styles = fs.readFileSync(path.join(__dirname, '../styles/pf2e.css'), 'utf8');
+
+  // Inventory Table
+  assert.ok(template.includes('table class="pf2e-inv-table"'), 'Must render inventory table');
+  assert.ok(template.includes('data-action="item-toggle-equip"'), 'Must have equip toggle');
+  assert.ok(template.includes('data-action="item-qty-inc"'), 'Must have quantity increment');
+  assert.ok(template.includes('data-action="item-qty-dec"'), 'Must have quantity decrement');
+
+  // Feats Cards & Category Tracking
+  assert.ok(template.includes('pf2e-feats-panel'), 'Must have feats panel');
+  assert.ok(template.includes('pf2e-feat-card'), 'Must render individual feat cards');
+  assert.ok(template.includes('data-action="item-create" data-type="feat" data-category="{{key}}"'), 'Add feat must pass category');
+
+  // Crafting Formulas
+  assert.ok(template.includes('data-action="item-create" data-type="formula" data-is-formula="true"'), 'Add formula must create formula type');
+
+  // Spell Casting Bar Layout Wrap
+  assert.ok(template.includes('pf2e-spell-stats-group'), 'Spells tab must wrap stats');
+  assert.ok(template.includes('pf2e-spell-controls-group'), 'Spells tab must wrap controls');
+
+  // Downtime Activities
+  assert.ok(template.includes('data-action="downtime-act"'), 'Downtime activities must have downtime-act action');
+
+  // CSS verification
+  assert.ok(styles.includes('.pf2e-inv-table'), 'Must include inventory table styling');
+  assert.ok(styles.includes('.pf2e-feat-card'), 'Must include feat card styling');
+  assert.ok(styles.includes('.pf2e-spell-casting-bar'), 'Must include spell casting bar styling');
+});
+
+test('Bestiary Ability Glossaries and Effects — pack_meta.type is Item and entries preserve subtypes', () => {
+  const packs = [
+    { file: 'bestiary-ability-glossary-srd.sqlite', expectedEntryType: 'action' },
+    { file: 'bestiary-family-ability-glossary.sqlite', expectedEntryType: 'action' },
+    { file: 'bestiary-effects.sqlite', expectedEntryType: 'effect' },
+  ];
+
+  const dirs = ['../packs', '../packs-orc'];
+
+  for (const dir of dirs) {
+    for (const { file, expectedEntryType } of packs) {
+      const fullPath = path.resolve(__dirname, dir, file);
+      if (!fs.existsSync(fullPath)) continue;
+
+      const db = new DatabaseSync(fullPath, { readOnly: true });
+      try {
+        const meta = db.prepare('SELECT name, type, locked FROM pack_meta').get();
+        assert.ok(meta, `pack_meta must exist in ${dir}/${file}`);
+        assert.equal(meta.type, 'Item', `pack_meta.type in ${dir}/${file} must be Item, got ${meta.type}`);
+
+        const types = db.prepare('SELECT DISTINCT type FROM entries').all().map((r) => r.type);
+        assert.ok(types.includes(expectedEntryType), `entries in ${dir}/${file} must contain type '${expectedEntryType}'`);
+        assert.ok(!types.includes('character') && !types.includes('npc'), `entries in ${dir}/${file} must not be actors`);
+      } finally {
+        db.close();
+      }
+    }
+  }
+});
+
 
 

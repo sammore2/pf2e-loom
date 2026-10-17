@@ -1,0 +1,95 @@
+<div class="pf2e-gm-tools-window">
+  {{!-- Header & Party Setup --}}
+  <header class="gm-tools-header">
+    <div class="gm-tools-title-row">
+      <h2 class="gm-tools-title"><i class="fa-solid fa-dragon"></i> {{localize "pf2e.gmTools.title"}}</h2>
+      <button type="button" class="tat-btn-xs" data-action="post-encounter" title="{{localize "pf2e.gmTools.postChatTitle"}}">
+        <i class="fa-solid fa-comment-dots"></i> {{localize "pf2e.gmTools.postChat"}}
+      </button>
+    </div>
+    <div class="gm-party-config-bar">
+      <div class="gm-cfg-field">
+        <label>{{localize "pf2e.gmTools.partyLevel"}}</label>
+        <input type="number" class="tat-in tat-in-sm" min="1" max="20" value="{{partyLevel}}" data-action="set-party-level" />
+      </div>
+      <div class="gm-cfg-field">
+        <label>{{localize "pf2e.gmTools.partySize"}}</label>
+        <input type="number" class="tat-in tat-in-sm" min="1" max="12" value="{{partySize}}" data-action="set-party-size" />
+      </div>
+      <div class="gm-threat-badge" style="background-color: {{threatColor}};">
+        <span class="threat-label">{{threatLabel}}</span>
+        <span class="threat-xp">{{totalXP}} XP</span>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Budget Progress Bar --}}
+  <section class="tat-block gm-budget-block">
+    <h3 class="tat-label">{{localize "pf2e.gmTools.budgetsTitle"}}</h3>
+    <div class="gm-budgets-grid">
+      {{#each budgets}}
+      <div class="gm-budget-card">
+        <span class="b-lbl">{{label}}</span>
+        <span class="b-val">{{value}} XP</span>
+      </div>
+      {{/each}}
+    </div>
+  </section>
+
+  {{!-- Encounter Creatures List --}}
+  <section class="tat-block gm-creatures-block">
+    <div class="gm-block-head">
+      <h3 class="tat-label">{{localize "pf2e.gmTools.creaturesTitle"}}</h3>
+      {{#if creatures.length}}
+      <button type="button" class="tat-btn-xs" data-action="clear-creatures">{{localize "pf2e.gmTools.clearAll"}}</button>
+      {{/if}}
+    </div>
+
+    <div class="gm-creatures-list">
+      {{#each creatures}}
+      <div class="gm-creature-row" data-index="{{index}}">
+        <span class="cr-name">{{name}}</span>
+        <span class="cr-badge">{{localize "pf2e.sheets.level"}} {{level}}</span>
+        <span class="cr-count">× {{count}}</span>
+        <span class="cr-xp">{{totalXP}} XP</span>
+        <button type="button" class="tat-icon" data-action="remove-creature" data-index="{{index}}" title="Remove"><i class="fa-solid fa-trash"></i></button>
+      </div>
+      {{else}}
+      <p class="tat-empty">{{localize "pf2e.gmTools.noCreatures"}}</p>
+      {{/each}}
+    </div>
+
+    {{!-- Add Creature Form --}}
+    <div class="gm-add-creature-bar">
+      <input type="text" class="tat-in" name="new-creature-name" placeholder="{{localize "pf2e.gmTools.creatureName"}}" />
+      <input type="number" class="tat-in tat-in-sm" name="new-creature-level" value="{{partyLevel}}" min="-1" max="25" title="{{localize "pf2e.sheets.level"}}" />
+      <input type="number" class="tat-in tat-in-sm" name="new-creature-count" value="1" min="1" max="20" title="{{localize "pf2e.gmTools.count"}}" />
+      <button type="button" class="tat-btn-xs" data-action="add-creature">
+        <i class="fa-solid fa-plus"></i> {{localize "pf2e.gmTools.addCreature"}}
+      </button>
+    </div>
+  </section>
+
+  {{!-- Party Treasure Recommendation --}}
+  <section class="tat-block gm-treasure-block">
+    <h3 class="tat-label">{{localize "pf2e.gmTools.treasureTitle"}} ({{localize "pf2e.sheets.level"}} {{treasure.level}})</h3>
+    <div class="gm-treasure-grid">
+      <div class="treasure-box">
+        <span class="t-lbl">{{localize "pf2e.gmTools.currency"}}</span>
+        <b class="t-val">{{treasure.currencyGp}} gp</b>
+      </div>
+      <div class="treasure-box">
+        <span class="t-lbl">{{localize "pf2e.gmTools.totalValue"}}</span>
+        <b class="t-val">{{treasure.totalGp}} gp</b>
+      </div>
+      <div class="treasure-box wide">
+        <span class="t-lbl">{{localize "pf2e.gmTools.permanentItems"}}</span>
+        <span class="t-val">{{treasure.permanent}}</span>
+      </div>
+      <div class="treasure-box wide">
+        <span class="t-lbl">{{localize "pf2e.gmTools.consumables"}}</span>
+        <span class="t-val">{{treasure.consumables}}</span>
+      </div>
+    </div>
+  </section>
+</div>

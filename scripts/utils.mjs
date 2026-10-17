@@ -167,3 +167,25 @@ export function readDropPayload(event) {
   } catch {}
   return data;
 }
+
+/**
+ * Resolves the display portrait/avatar for an actor document, checking all possible
+ * fields from compendiums and world actors (avatarUrl, imgUrl, img, data.imgUrl, prototypeToken)
+ * before falling back to the default avatar.
+ */
+export function resolveActorPortrait(doc, row) {
+  const isDefault = (url) => !url || typeof url !== 'string' || url === '/icons/svg/adventurer.svg' || url.includes('default-avatar.svg');
+  if (doc?.avatarUrl && !isDefault(doc.avatarUrl)) return doc.avatarUrl;
+  if (row?.avatarUrl && !isDefault(row.avatarUrl)) return row.avatarUrl;
+  if (doc?.imgUrl && !isDefault(doc.imgUrl)) return doc.imgUrl;
+  if (row?.imgUrl && !isDefault(row.imgUrl)) return row.imgUrl;
+  if (doc?.img && !isDefault(doc.img)) return doc.img;
+  if (row?.img && !isDefault(row.img)) return row.img;
+  if (doc?.systemData?.imgUrl && !isDefault(doc.systemData.imgUrl)) return doc.systemData.imgUrl;
+  if (row?.systemData?.imgUrl && !isDefault(row.systemData.imgUrl)) return row.systemData.imgUrl;
+  if (doc?.data?.imgUrl && !isDefault(doc.data.imgUrl)) return doc.data.imgUrl;
+  if (row?.data?.imgUrl && !isDefault(row.data.imgUrl)) return row.data.imgUrl;
+  if (doc?.systemData?.prototypeToken?.texture?.src) return doc.systemData.prototypeToken.texture.src;
+  if (row?.systemData?.prototypeToken?.texture?.src) return row.systemData.prototypeToken.texture.src;
+  return '/marketplace/rulesets/pf2e/assets/images/default-avatar.svg';
+}

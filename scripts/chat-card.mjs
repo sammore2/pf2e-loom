@@ -1,5 +1,12 @@
 import { degreeOfSuccess } from './rules.mjs';
 import { localize } from './i18n.mjs';
+import { resolveActorPortrait } from './utils.mjs';
+import {
+  applyIncomingDamage,
+  applyHealingToActor,
+  calculateShieldBlock,
+  mitigationFromActor,
+} from './damage.mjs';
 
 function num(v) {
   const n = Number(v);
@@ -254,6 +261,35 @@ export function renderPf2eRollCard(roll, esc) {
   const formulaStr = roll?.formula ? safeEsc(roll.formula) : '';
   const totalCaption = localize('pf2e.rolls.total', 'Total');
 
+  // Damage Application Action Bar (if rollType is damage)
+  let damageActionBar = '';
+  const rollTypeLower = String(meta.rollType || '').toLowerCase();
+  const catLower = String(category || '').toLowerCase();
+  const isDamage = rollTypeLower === 'damage'
+    || String(meta.pf2e?.rollType || '').toLowerCase() === 'damage'
+    || Boolean(meta.damageType)
+    || catLower.includes('damage')
+    || catLower.includes('dano');
+
+  if (isDamage && total > 0) {
+    const dmgType = meta.damageType || meta.pf2e?.damageType || '';
+    const fullTitle = localize('pf2e.chat.applyFullDamage', 'Apply Full Damage (1x)');
+    const halfTitle = localize('pf2e.chat.applyHalfDamage', 'Apply Half Damage (0.5x)');
+    const doubleTitle = localize('pf2e.chat.applyDoubleDamage', 'Apply Double Damage (2x)');
+    const shieldTitle = localize('pf2e.chat.applyShieldBlock', 'Shield Block');
+    const healTitle = localize('pf2e.chat.applyHealing', 'Apply Healing');
+
+    damageActionBar = `
+      <div class="pf2e-damage-application-bar" data-damage="${total}" data-damage-type="${safeEsc(dmgType)}">
+        <button type="button" class="pf2e-dmg-apply-btn" data-action="apply-damage" data-multiplier="1" title="${safeEsc(fullTitle)}">1×</button>
+        <button type="button" class="pf2e-dmg-apply-btn" data-action="apply-damage" data-multiplier="0.5" title="${safeEsc(halfTitle)}">½</button>
+        <button type="button" class="pf2e-dmg-apply-btn" data-action="apply-damage" data-multiplier="2" title="${safeEsc(doubleTitle)}">2×</button>
+        <button type="button" class="pf2e-dmg-apply-btn" data-action="apply-damage" data-multiplier="1" data-shield="true" title="${safeEsc(shieldTitle)}">🛡️</button>
+        <button type="button" class="pf2e-dmg-apply-btn pf2e-heal-btn" data-action="apply-heal" data-multiplier="1" title="${safeEsc(healTitle)}">💚</button>
+      </div>
+    `.trim();
+  }
+
   return `
     <div class="pf2e-roll-card">
       <header class="pf2e-roll-header">
@@ -281,6 +317,7 @@ export function renderPf2eRollCard(roll, esc) {
       </div>
       ${degreeHtml}
       ${breakdownHtml}
+      ${damageActionBar}
     </div>
   `.trim();
 }
@@ -317,11 +354,13 @@ export async function sendChatCard(actor, { name, glyph = '◆', traits = [], de
     </div>
   `.trim();
 
+  const actorAvatar = actor ? resolveActorPortrait(actor, actor) : '';
   const speaker = {
     actor: actor?.id || null,
     actorId: actor?.id || null,
     actorName,
     alias: actorName,
+    actorAvatar,
   };
 
   const payload = {
@@ -388,6 +427,136 @@ export async function sendChatCard(actor, { name, glyph = '◆', traits = [], de
   return payload;
 }
 
+let chatClickListener = null;
+
+/**
+ * Applies damage or healing from a chat card button click to selected tokens / targets.
+ */
+export async function applyDamageFromChat(btn) {
+  if (typeof window === 'undefined' || !window.Loom?.api) return;
+  const bar = btn.closest('.pf2e-damage-application-bar');
+  if (!bar) return;
+
+  const rawDmg = Number(bar.dataset.damage) || 0;
+  const damageType = String(bar.dataset.damageType || 'untyped').toLowerCase();
+  const mult = Number(btn.dataset.multiplier) || 1;
+  const isHeal = btn.dataset.action === 'apply-heal';
+  const isShield = btn.dataset.shield === 'true';
+
+  const amount = Math.floor(rawDmg * mult);
+
+  // Discover targets from LoomVTT
+  const targetIds = [];
+  if (Array.isArray(window.Loom?.targets)) {
+    for (const t of window.Loom.targets) {
+      const tid = t?.castId || t?.actorId || t?.id || t;
+      if (tid && !targetIds.includes(tid)) targetIds.push(tid);
+    }
+  }
+  const controlled = window.Loom?.canvas?.tokens?.controlled
+    || window.Loom?.canvas?.selectedTokens
+    || window.Loom?.selectedTokens;
+  if (Array.isArray(controlled)) {
+    for (const tok of controlled) {
+      const tid = tok?.castId || tok?.actorId || tok?.id;
+      if (tid && !targetIds.includes(tid)) targetIds.push(tid);
+    }
+  }
+
+  if (targetIds.length === 0) {
+    const msg = localize('pf2e.chat.noTargetSelected', 'Select at least one token on the canvas to apply damage or healing!');
+    if (typeof window.Loom?.showToast === 'function') {
+      window.Loom.showToast(msg, 'warning');
+    }
+    return;
+  }
+
+  for (const tid of targetIds) {
+    try {
+      let cast = null;
+      try {
+        cast = await window.Loom.api.get(`/cast/${encodeURIComponent(tid)}`);
+      } catch {
+        // May be an actor directly
+      }
+      const linked = cast?.isLinked && cast?.actorId;
+      const holderPath = linked
+        ? `/actors/${encodeURIComponent(cast.actorId)}`
+        : (cast ? `/cast/${encodeURIComponent(tid)}` : `/actors/${encodeURIComponent(tid)}`);
+
+      const holder = linked
+        ? await window.Loom.api.get(holderPath)
+        : (cast || await window.Loom.api.get(holderPath));
+      if (!holder) continue;
+
+      const sd = holder.systemData || {};
+      const holderName = holder.name || 'Target';
+
+      if (isHeal) {
+        const { systemData: updatedSd, healed } = applyHealingToActor(sd, amount);
+        await window.Loom.api.put(holderPath, { systemData: updatedSd });
+        const curHp = updatedSd.hp?.value ?? 0;
+        const maxHp = updatedSd.hp?.max ?? 0;
+        const note = localize('pf2e.chat.healingApplied', `${holderName} recovered ${healed} HP (${curHp}/${maxHp})`, {
+          name: holderName,
+          amount: healed,
+          current: curHp,
+          max: maxHp,
+        });
+        window.Loom?.showToast?.(note, 'success');
+      } else {
+        let shieldBlockOpts = null;
+        if (isShield) {
+          const items = Array.isArray(holder.items) ? holder.items : (holder.items?.contents || []);
+          const shieldItem = items.find((i) => i.type === 'shield' || (i.system?.category === 'shield' || i.data?.category === 'shield'));
+          const shieldData = shieldItem ? (shieldItem.system ?? shieldItem.data ?? {}) : {};
+          const hardness = Number(shieldData.hardness) || Number(sd.shield?.hardness) || 0;
+          const shieldHp = Number(shieldData.hp?.value ?? shieldData.hp) || Number(sd.shield?.hp?.value ?? sd.shield?.hp) || 0;
+          const bt = Number(shieldData.hp?.brokenThreshold) || Math.floor(shieldHp / 2);
+
+          const blockRes = calculateShieldBlock({
+            damage: amount,
+            hardness,
+            shieldHp,
+            brokenThreshold: bt,
+          });
+
+          if (shieldItem?.id && blockRes.damageToShield > 0) {
+            try {
+              const updatedItemData = { ...shieldData, hp: { ...shieldData.hp, value: blockRes.newShieldHp } };
+              await window.Loom.api.put(`/items/${encodeURIComponent(shieldItem.id)}`, { data: updatedItemData });
+            } catch (err) {
+              console.warn('[pf2e] Could not update shield item HP:', err);
+            }
+          }
+          shieldBlockOpts = blockRes;
+        }
+
+        const effectiveDmg = shieldBlockOpts ? shieldBlockOpts.damageToCharacter : amount;
+        const mitigation = mitigationFromActor(sd);
+        const { systemData: updatedSd, report } = applyIncomingDamage(sd, {
+          amount: effectiveDmg,
+          damageType,
+          mitigation,
+        });
+
+        await window.Loom.api.put(holderPath, { systemData: updatedSd });
+        const curHp = updatedSd.hp?.value ?? 0;
+        const maxHp = updatedSd.hp?.max ?? 0;
+        const note = localize('pf2e.chat.damageApplied', `${holderName} took ${report.hpLost} damage (${curHp}/${maxHp})`, {
+          name: holderName,
+          amount: report.hpLost,
+          current: curHp,
+          max: maxHp,
+        });
+        window.Loom?.showToast?.(note, 'info');
+      }
+    } catch (err) {
+      console.error(`[pf2e] Failed to apply damage/heal to target ${tid}:`, err);
+    }
+  }
+}
+
 /**
  * Intercepts Loom's renderRollCard and renderMessage to display PF2e cards and degree badges cleanly.
  * Idempotent: calling multiple times will not register duplicate interceptors.
@@ -400,9 +569,18 @@ export function registerChatWrapper() {
   if (!unwrapMsgHandle && wrapMsg && typeof wrapMsg.wrap === 'function') {
     unwrapMsgHandle = wrapMsg.wrap((wrapped, msg, ctx) => {
       const cardHtml = msg?.flags?.pf2e?.cardHtml;
-      if (cardHtml) return cardHtml;
-      if (typeof msg?.content === 'string' && msg.content.includes('pf2e-chat-card')) {
-        return msg.content;
+      const isPf2eCard = Boolean(cardHtml) || (typeof msg?.content === 'string' && msg.content.includes('pf2e-chat-card'));
+
+      if (isPf2eCard) {
+        const actualCard = cardHtml || msg.content;
+        const base = typeof wrapped === 'function' ? wrapped(msg, ctx) : '';
+        if (base && base.includes('sidebar-message-body')) {
+          return base.replace(
+            /(<div class="sidebar-message-body">)[\s\S]*?(<\/div>\s*<\/div>\s*$)/,
+            `$1${actualCard}$2`
+          );
+        }
+        return actualCard;
       }
       return wrapped(msg, ctx);
     });
@@ -415,13 +593,30 @@ export function registerChatWrapper() {
       if (roll?.meta?.customCard) {
         return roll.meta.customCard;
       }
-      const isPf2e = roll?.meta?.system === 'pf2e' || !!roll?.meta?.pf2e || !!roll?.meta?.rollType;
+      const isPf2e = roll?.meta?.system === 'pf2e'
+        || !!roll?.meta?.pf2e
+        || !!roll?.meta?.rollType
+        || !!roll?.meta?.combatInitiativeFor
+        || Boolean(window.Loom?.world?.system === 'pf2e');
       if (!isPf2e) {
         return wrapped(roll, esc);
       }
 
       return renderPf2eRollCard(roll, esc);
     });
+  }
+
+  // 3. Global delegated listener for damage application buttons
+  if (!chatClickListener && typeof document !== 'undefined') {
+    chatClickListener = (e) => {
+      const btn = e.target?.closest?.('.pf2e-dmg-apply-btn');
+      if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        void applyDamageFromChat(btn);
+      }
+    };
+    document.addEventListener('click', chatClickListener);
   }
 
   return { unwrapRollHandle, unwrapMsgHandle };
@@ -435,5 +630,9 @@ export function unregisterChatWrapper() {
   if (unwrapMsgHandle) {
     unwrapMsgHandle();
     unwrapMsgHandle = null;
+  }
+  if (chatClickListener && typeof document !== 'undefined') {
+    document.removeEventListener('click', chatClickListener);
+    chatClickListener = null;
   }
 }

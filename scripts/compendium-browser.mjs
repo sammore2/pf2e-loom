@@ -34,6 +34,8 @@ const EQUIPMENT_TYPES = new Set(['equipment', 'weapon', 'armor', 'shield', 'cons
 function categoryFor(type) {
   if (EQUIPMENT_TYPES.has(type)) return 'equipment';
   if (type === 'action' || type === 'spell' || type === 'feat') return type;
+  if (type === 'npc') return 'bestiary';
+  if (type === 'hazard') return 'hazard';
   return type || 'other';
 }
 
@@ -146,10 +148,20 @@ function toDisplayFields(data, type) {
   if (actionType === 'reaction' || actionType === 'free') actions = actionType;
   else if (actionCount !== undefined && actionCount !== null) actions = String(actionCount);
 
-  const traits = readValue(d.traits);
-  const description = readValue(d.description);
+  let traits = readValue(d.traits);
+  if (traits && typeof traits === 'object' && Array.isArray(traits.value)) {
+    traits = traits.value;
+  }
+
+  let description = readValue(d.description);
+  if (!description && d.details) {
+    description = d.details.publicNotes || d.details.description || d.details.blurb || '';
+  }
+
   const damage = readDamage(d.damage);
-  const level = readValue(d.level);
+  const level = readValue(d.details?.level) ?? readValue(d.level);
+  const ac = readValue(d.attributes?.ac) ?? readValue(d.acBonus);
+  const hp = readValue(d.attributes?.hp?.max) ?? readValue(d.attributes?.hp?.value);
 
   return {
     actions,
@@ -157,7 +169,8 @@ function toDisplayFields(data, type) {
     description: typeof description === 'string' ? description : '',
     damage: damage.formula,
     damageType: damage.type,
-    acBonus: readValue(d.acBonus) ?? '',
+    acBonus: ac ?? '',
+    hp: hp ?? '',
     dexCap: readValue(d.dexCap),
     save: capitalize(d.defense?.save?.statistic),
     price: formatPrice(d.price),
@@ -183,8 +196,11 @@ function getTypeLabel(type) {
     case 'armor': return localize('pf2e.itemTypes.armor', 'Armadura');
     case 'shield': return localize('pf2e.itemTypes.shield', 'Escudo');
     case 'equipment': return localize('pf2e.itemTypes.equipment', 'Item');
+    case 'consumable': return localize('pf2e.itemTypes.consumable', 'Consumível');
     case 'spell': return localize('pf2e.itemTypes.spell', 'Magia');
     case 'feat': return localize('pf2e.itemTypes.feat', 'Talento');
+    case 'npc': return localize('pf2e.itemTypes.npc', 'Criatura');
+    case 'hazard': return localize('pf2e.itemTypes.hazard', 'Perigo');
     default: return localize(`pf2e.itemTypes.${type}`, type || 'Item');
   }
 }
@@ -208,10 +224,12 @@ function escapeHtml(value) {
 
 // Row markup: same structure and data-attributes as templates/compendium-browser.hbs.
 function rowHtml(item, selectedId) {
+  const isActor = item.type === 'npc' || item.type === 'hazard';
   const fields = toDisplayFields(_entryCache.get(item.id), item.type);
   const traits = fields.traits.map((t) => `<span class="tat-tag">${escapeHtml(t)}</span>`).join('');
   const id = escapeHtml(item.id);
-  const title = escapeHtml(localize('pf2e.browser.addToSheet', 'Adicionar à ficha'));
+  const title = escapeHtml(isActor ? localize('pf2e.browser.importToWorld', 'Importar para o mundo') : localize('pf2e.browser.addToSheet', 'Adicionar à ficha'));
+  const icon = isActor ? 'fa-file-import' : 'fa-plus';
   return `<div class="pf2e-browser-row${item.id === selectedId ? ' is-selected' : ''}" data-id="${id}" data-action="select-item" draggable="true">`
     + '<div class="pf2e-browser-row-left">'
     + `<span class="pf2e-glyph-cost">${escapeHtml(formatGlyphCost(fields.actions))}</span>`
@@ -220,7 +238,7 @@ function rowHtml(item, selectedId) {
     + '<div class="pf2e-browser-row-right">'
     + `<div class="pf2e-row-traits">${traits}</div>`
     + `<span class="pf2e-row-type-badge">${escapeHtml(getTypeLabel(item.type))}</span>`
-    + `<button type="button" class="tat-add pf2e-row-add-btn" data-action="add-to-sheet" data-id="${id}" title="${title}"><i class="fa-solid fa-plus"></i></button>`
+    + `<button type="button" class="tat-add pf2e-row-add-btn" data-action="add-to-sheet" data-id="${id}" title="${title}"><i class="fa-solid ${icon}"></i></button>`
     + '</div>'
     + '</div>';
 }
@@ -288,12 +306,18 @@ export class Pf2eCompendiumBrowser extends LoomHandlebarsMixin(BaseWindow) {
       equipment: this._items.filter((i) => i.category === 'equipment' || i.type === 'weapon' || i.type === 'armor' || i.type === 'shield').length,
       spell: this._items.filter((i) => i.category === 'spell' || i.type === 'spell').length,
       feat: this._items.filter((i) => i.category === 'feat' || i.type === 'feat').length,
+      bestiary: this._items.filter((i) => i.category === 'bestiary' || i.type === 'npc').length,
+      hazard: this._items.filter((i) => i.category === 'hazard' || i.type === 'hazard').length,
     };
 
     this._filtered = this._items.filter((item) => {
       if (tab !== 'all') {
         if (tab === 'equipment') {
           if (item.category !== 'equipment' && item.type !== 'weapon' && item.type !== 'armor' && item.type !== 'shield') return false;
+        } else if (tab === 'bestiary') {
+          if (item.category !== 'bestiary' && item.type !== 'npc') return false;
+        } else if (tab === 'hazard') {
+          if (item.category !== 'hazard' && item.type !== 'hazard') return false;
         } else if (item.category !== tab && item.type !== tab) {
           return false;
         }
@@ -346,6 +370,7 @@ export class Pf2eCompendiumBrowser extends LoomHandlebarsMixin(BaseWindow) {
         damage: fields.damage,
         damageType: fields.damageType,
         acBonus: fields.acBonus,
+        hp: fields.hp,
         dexCap: fields.dexCap,
         save: fields.save,
         price: fields.price,
@@ -494,14 +519,19 @@ export class Pf2eCompendiumBrowser extends LoomHandlebarsMixin(BaseWindow) {
           e.preventDefault();
           return;
         }
-        e.dataTransfer.setData('text/plain', JSON.stringify({
-          type: 'Item',
+        const isActor = item.type === 'npc' || item.type === 'hazard';
+        const payload = JSON.stringify({
+          type: isActor ? 'Actor' : 'Item',
           data: {
             name: item.name,
             type: item.type,
+            imgUrl: item.imgUrl || '',
+            systemData: data,
             data,
           },
-        }));
+        });
+        e.dataTransfer.setData('application/json', payload);
+        e.dataTransfer.setData('text/plain', payload);
       };
     });
   }
@@ -538,20 +568,43 @@ export class Pf2eCompendiumBrowser extends LoomHandlebarsMixin(BaseWindow) {
       const item = this._items.find((i) => i.id === itemId);
       if (!item) return;
 
+      let data;
+      try {
+        data = await loadEntryData(item);
+      } catch (err) {
+        console.warn('[PF2E Compendium] Could not load entry:', err);
+        return;
+      }
+
+      const isActor = item.type === 'npc' || item.type === 'hazard';
+      if (isActor) {
+        try {
+          await api.post('/actors', {
+            worldId: window.Loom?.world?.id,
+            name: item.name,
+            type: item.type,
+            imgUrl: item.imgUrl || '',
+            systemData: data,
+            data,
+          });
+          const msg = `${localize('pf2e.browser.actorImported', 'Importado com sucesso: ')}${item.name}`;
+          if (window.Loom?.ui?.notifications?.info) {
+            window.Loom.ui.notifications.info(msg);
+          } else {
+            console.log('[PF2E Compendium]', msg);
+          }
+        } catch (err) {
+          console.error('[PF2E Compendium] Could not import actor:', err);
+        }
+        return;
+      }
+
       // Find active actor or target actor from windowManager
       const targetActor = window.Loom?.character || window.Loom?.selectedActor || null;
       const actorId = targetActor?.id || targetActor?._id;
 
       if (!actorId) {
         alert(localize('pf2e.browser.selectSheetPrompt', 'Abra ou selecione uma ficha de personagem para adicionar este item.'));
-        return;
-      }
-
-      let data;
-      try {
-        data = await loadEntryData(item);
-      } catch (err) {
-        console.warn('[PF2E Compendium] Could not load entry to add to sheet:', err);
         return;
       }
 

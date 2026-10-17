@@ -44,13 +44,17 @@ export async function applyItemEffect(actor, item) {
   const bonuses = item?.system?.bonuses ?? item?.data?.bonuses;
   const changes = bonusesToChanges(bonuses);
   if (!actor || !changes.length) return null;
-  return effects.create({
+  const rawDur = item?.system?.duration ?? item?.data?.duration;
+  const durVal = typeof rawDur === 'object' && rawDur !== null ? Number(rawDur.value) : Number(rawDur);
+  const payload = {
     actorId: actor.id,
     itemId: item.id,
     name: item.name,
     origin: item.id,
     changes,
-  });
+  };
+  if (Number.isFinite(durVal) && durVal > 0) payload.duration = durVal;
+  return effects.create(payload);
 }
 
 /** Removes every buff originated from an item (e.g. on unequip). */
@@ -128,3 +132,111 @@ export async function syncPermanentBonusEffect(item) {
 
   await applyItemEffect({ id: item.actorId }, item);
 }
+
+/** Sincroniza os templates declarados em `item.data.effects` criando os buffs de modelo (sem actorId). */
+export async function syncItemEffectTemplates(item) {
+  if (!item?.id) return [];
+  const idata = item.system || item.data || {};
+  const effectDefs = Array.isArray(idata.effects) ? idata.effects : [];
+  if (!effectDefs.length) return [];
+
+  let existing = [];
+  try {
+    if (typeof effects?.forItem === 'function') {
+      existing = await effects.forItem(item.id);
+    }
+  } catch {
+    existing = [];
+  }
+
+  const createdOrExisting = [];
+  for (const def of effectDefs) {
+    const found = (existing || []).find((b) => b.name === def.name || (def.conditionId && b.conditionId === def.conditionId));
+    if (found) {
+      createdOrExisting.push(found);
+    } else if (typeof effects?.create === 'function') {
+      try {
+        const buff = await effects.create({
+          itemId: item.id,
+          name: def.name,
+          icon: def.icon || item.imgUrl || '',
+          description: def.description || '',
+          durationUnit: def.durationUnit || 'permanent',
+          duration: typeof def.duration === 'number' ? def.duration : -1,
+          expireOn: def.expireOn || 'turn-end',
+          conditionId: def.conditionId || '',
+          removeOnCombatEnd: !!def.removeOnCombatEnd,
+          transfer: !!def.transfer,
+          changes: Array.isArray(def.changes) ? def.changes : [],
+          visual: def.visual || {},
+        });
+        createdOrExisting.push(buff);
+      } catch (err) {
+        console.warn(`[pf2e] Failed to create effect template "${def.name}" for item ${item.id}:`, err);
+      }
+    }
+  }
+  return createdOrExisting;
+}
+
+/** Aplica os templates de efeito de uma magia ou item nos alvos designados ou no conjurador. */
+export async function applySpellOrItemEffects(actor, item, options = {}) {
+  if (!item?.id) return [];
+  const templates = await syncItemEffectTemplates(item);
+  if (!templates.length) return [];
+
+  let targetList = [];
+  if (Array.isArray(options.targets) && options.targets.length) {
+    targetList = options.targets;
+  } else if (options.targetCastId) {
+    targetList = [{ castId: options.targetCastId }];
+  } else if (options.targetActorId) {
+    targetList = [{ actorId: options.targetActorId }];
+  } else if (typeof window !== 'undefined' && Array.isArray(window.Loom?.targets) && window.Loom.targets.length) {
+    targetList = window.Loom.targets;
+  } else if (actor?.id) {
+    targetList = [{ actorId: actor.id }];
+  }
+
+  const results = [];
+  for (const template of templates) {
+    if (template.disabled) continue;
+
+    for (const target of targetList) {
+      const targetPayload = {};
+      const tCastId = target?.castId || target?.id;
+      const tActorId = target?.actorId || (!target?.castId ? target?.id : null);
+      if (tCastId) targetPayload.targetCastId = tCastId;
+      else if (tActorId) targetPayload.targetActorId = tActorId;
+      else if (actor?.id) targetPayload.targetActorId = actor.id;
+
+      try {
+        if (typeof effects?.apply === 'function') {
+          const res = await effects.apply({
+            templateId: template.templateId || template.id,
+            sourceId: actor?.id,
+            ...targetPayload,
+          });
+          results.push({ template, res, target });
+
+          const toast = globalThis.Loom?.showToast;
+          if (toast) {
+            if (res?.status === 'applied') {
+              toast(`Efeito "${template.name}" aplicado!`, 'success');
+            } else if (res?.status === 'pending') {
+              toast(`Efeito "${template.name}" aguardando aprovação do Mestre.`, 'info');
+            } else if (res?.status === 'blocked') {
+              toast(`Efeito "${template.name}" já está ativo no alvo.`, 'warning');
+            } else if (res?.status === 'error') {
+              console.warn(`[pf2e] Error applying effect "${template.name}":`, res.error);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn(`[pf2e] Exception applying effect "${template.name}":`, err);
+      }
+    }
+  }
+  return results;
+}
+

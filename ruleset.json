@@ -30,25 +30,25 @@
     {
       "name": "actions",
       "label": "Ações e Manobras",
-      "type": "action",
+      "type": "Item",
       "path": "packs/actions.json"
     },
     {
       "name": "equipment",
       "label": "Equipamentos e Armas",
-      "type": "equipment",
+      "type": "Item",
       "path": "packs/equipment.json"
     },
     {
       "name": "spells",
       "label": "Magias e Truques",
-      "type": "spell",
+      "type": "Item",
       "path": "packs/spells.json"
     },
     {
       "name": "feats",
       "label": "Talentos",
-      "type": "feat",
+      "type": "Item",
       "path": "packs/feats.json"
     }
   ],
@@ -64,7 +64,8 @@
     "shield",
     "equipment",
     "consumable",
-    "spell"
+    "spell",
+    "formula"
   ],
   "languages": [
     {

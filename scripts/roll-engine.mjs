@@ -3,6 +3,7 @@ import { multipleAttackPenalty } from './rules.mjs';
 import { buildStrike, buildDamage } from './checks.mjs';
 import { prepareActorRow } from './prepare-data.mjs';
 import { localize } from './i18n.mjs';
+import { heightenSpell } from './spellcasting.mjs';
 
 function num(v) {
   const n = Number(v);
@@ -20,9 +21,34 @@ function getPreparedActor(actor) {
 }
 
 async function baseRoll({ label, modifier = 0, actor = null, dc = null, rollType = '', parts = null, extraMeta = {} }) {
+  let initialDC = dc;
+  if (initialDC === null && (rollType === 'attack' || rollType === 'spellattack') && typeof window !== 'undefined') {
+    try {
+      const targets = window.Loom?.targets || [];
+      const firstTargetId = targets[0]?.castId || targets[0]?.actorId || targets[0]?.id || targets[0];
+      if (firstTargetId && window.Loom?.api) {
+        let cast = null;
+        try { cast = await window.Loom.api.get(`/cast/${encodeURIComponent(firstTargetId)}`); } catch {}
+        const linked = cast?.isLinked && cast?.actorId;
+        const targetPath = linked ? `/actors/${encodeURIComponent(cast.actorId)}` : (cast ? `/cast/${encodeURIComponent(firstTargetId)}` : `/actors/${encodeURIComponent(firstTargetId)}`);
+        const targetDoc = linked ? await window.Loom.api.get(targetPath) : (cast || await window.Loom.api.get(targetPath));
+        if (targetDoc) {
+          const targetPrepared = getPreparedActor(targetDoc);
+          const targetAC = num(targetPrepared?.systemData?.armor?.value ?? targetPrepared?.systemData?.ac);
+          if (targetAC > 0) {
+            initialDC = targetAC;
+            extraMeta.targetName = targetDoc.name;
+          }
+        }
+      }
+    } catch {
+      // Non-blocking fallback
+    }
+  }
+
   const { showRollDialog } = await import('./roll-dialog.mjs');
   const dialogParts = parts || [{ label: 'Modifier', value: num(modifier) }];
-  const choice = await showRollDialog({ title: label, parts: dialogParts, dc });
+  const choice = await showRollDialog({ title: label, parts: dialogParts, dc: initialDC });
   if (!choice) return null;
 
   const totalBonus = num(modifier) + num(choice.situational);
@@ -94,18 +120,19 @@ export async function rollSkill(actor, key) {
 }
 
 /** Save: fortitude, reflex or will. */
-export async function rollSave(actor, key) {
+export async function rollSave(actor, key, { dc = null, label = null, extraMeta = {} } = {}) {
   if (!SAVE_KEYS.includes(key)) return null;
   const prepActor = getPreparedActor(actor);
   const sd = actorData(prepActor);
   const entry = sd.saves?.[key];
-  const label = localize(`pf2e.defenses.${key}`, key);
+  const saveLabel = label || localize(`pf2e.defenses.${key}`, key);
   return baseRoll({
-    label,
+    label: saveLabel,
     modifier: num(entry?.total),
     actor: prepActor,
+    dc,
     rollType: 'save',
-    extraMeta: { save: key, breakdown: entry?.breakdown },
+    extraMeta: { save: key, breakdown: entry?.breakdown, ...extraMeta },
   });
 }
 
@@ -177,6 +204,7 @@ export async function rollDamage(actor, item, { critical = false } = {}) {
         label: dmg.label,
         system: 'pf2e',
         rollType: 'damage',
+        damageType: dmg.damageType || '',
         critical: !!critical,
         itemId: item.id,
         breakdown: dmg.breakdown,
@@ -200,3 +228,66 @@ export async function rollSpellAttack(actor, { attackIndex = 0 } = {}) {
     extraMeta: { attackIndex: num(attackIndex), map },
   });
 }
+
+/**
+ * Rolls heightened damage for a spell item.
+ */
+export async function rollSpellDamage(actor, spellItem, { castRank = null, critical = false } = {}) {
+  const prepActor = getPreparedActor(actor);
+  const sd = actorData(prepActor);
+  const sys = spellItem?.system || spellItem?.data || {};
+  const heightened = heightenSpell(sys, castRank || sys.rank || 1);
+
+  const dmgParts = [];
+  if (heightened.damage) {
+    for (const d of Object.values(heightened.damage)) {
+      if (d?.formula) {
+        let f = String(d.formula).trim();
+        if (d.applyMod) {
+          const mod = num(sd.spellcasting?.mod || sd.abilities?.[sd.spellcasting?.keyAbility || 'int']?.value);
+          if (mod !== 0) f = `${f} ${mod >= 0 ? '+' : '-'} ${Math.abs(mod)}`;
+        }
+        dmgParts.push({ formula: f, type: d.type || 'untyped' });
+      }
+    }
+  }
+
+  if (dmgParts.length === 0) return null;
+
+  let fullFormula = dmgParts.map((p) => p.formula).join(' + ');
+  if (critical) fullFormula = `2 * (${fullFormula})`;
+
+  const label = `${localize('pf2e.combatTools.damage', 'Damage')}: ${spellItem.name || 'Spell'}${critical ? ' (Critical)' : ''}`;
+
+  if (window.Loom?.dispatchRoll) {
+    window.Loom.dispatchRoll({
+      formula: fullFormula,
+      actorId: actor?.id,
+      mode: 'public',
+      meta: {
+        label,
+        system: 'pf2e',
+        rollType: 'spellDamage',
+        critical: !!critical,
+        itemId: spellItem.id,
+        castRank: heightened.castRank,
+        damageTypes: dmgParts.map((p) => p.type),
+      },
+    });
+  }
+  return { formula: fullFormula, parts: dmgParts };
+}
+
+/**
+ * Target roll for saving throw against a spell DC.
+ */
+export async function rollSpellSave(actor, { dc, statistic = 'fortitude', basic = false } = {}) {
+  const statKey = String(statistic).toLowerCase();
+  const label = `${localize(`pf2e.defenses.${statKey}`, statKey)} ${localize('pf2e.rolls.save', 'Save')}`;
+  return rollSave(actor, statKey, {
+    dc: num(dc),
+    label,
+    extraMeta: { isSpellSave: true, basic: !!basic, targetDc: num(dc) },
+  });
+}
+

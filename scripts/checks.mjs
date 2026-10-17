@@ -5,6 +5,7 @@ import { proficiencyBonus, multipleAttackPenalty, weaponDamageFormula } from './
 import { getSetting } from './settings.mjs';
 import { getConditionModifiers } from './conditions.mjs';
 import { createModifier, resolveModifiers } from './modifiers.mjs';
+import { collectRuleElements } from './rule-elements.mjs';
 
 function num(v) {
   const n = Number(v);
@@ -17,6 +18,21 @@ function actorData(actor) {
 
 function itemData(item) {
   return item?.system ?? item?.data ?? item ?? {};
+}
+
+/**
+ * Modifiers coming from the rule elements of the actor's items. The actor may be a
+ * prepared row carrying `items` (array or collection); without items this is empty.
+ */
+function actorRuleModifiers(actor, sd) {
+  const raw = actor?.items;
+  const items = Array.isArray(raw) ? raw : Array.isArray(raw?.contents) ? raw.contents : [];
+  if (items.length === 0) return [];
+  const initialOptions = [];
+  if (sd?.rollOptions?.offGuard) initialOptions.push('target:off-guard', 'target:flat-footed');
+  if (sd?.rollOptions?.cover) initialOptions.push('self:cover');
+  if (sd?.rollOptions?.flanking) initialOptions.push('self:flanking');
+  return collectRuleElements(items, initialOptions, sd).modifiers;
 }
 
 export function isProficiencyWithoutLevel() {
@@ -100,7 +116,7 @@ export function buildCheck(actor, {
 
   // Collect modifiers from conditions and extras
   const conditionMods = getConditionModifiers(sd.conditions);
-  const allMods = [...conditionMods, ...extraModifiers];
+  const allMods = [...conditionMods, ...actorRuleModifiers(actor, sd), ...extraModifiers];
 
   // Multiple attack penalty if applicable
   const map = multipleAttackPenalty(attackIndex, agile);
@@ -147,11 +163,13 @@ export function buildStrike(actor, item, { attackIndex = 0, withoutLevelOverride
 
   const ranged = isWeaponRanged(idata, { thrown, isRanged });
   const attrKey = resolveAttackAttribute(sd, idata, { thrown, isRanged });
-  const isDirect = !!(idata.isDirect || sd.isDirect);
+  const isNpcDirect = !!(idata.isDirect || sd.isDirect || actor?.type === 'npc' || item?.type === 'melee');
+  const directBonus = idata.bonus?.value ?? idata.bonus ?? (isNpcDirect ? idata.attackBonus : undefined);
+  const isDirect = isNpcDirect && directBonus !== undefined && directBonus !== null;
 
   let base = 0;
-  if (isDirect && idata.attackBonus !== undefined && idata.attackBonus !== null) {
-    base = num(idata.attackBonus);
+  if (isDirect) {
+    base = num(directBonus);
   } else {
     const attrMod = num(sd.abilities?.[attrKey]?.value);
     const prof = proficiencyBonus(idata.rank || 'U', level, withoutLevel);
@@ -187,34 +205,73 @@ export function buildStrike(actor, item, { attackIndex = 0, withoutLevelOverride
 export function buildDamage(actor, item, { critical = false, thrown = false, isRanged = false } = {}) {
   const sd = actorData(actor);
   const idata = itemData(item);
-  const dmgFormula = String(idata.damage || '').trim();
+  let dmgFormula = String(idata.damage || '').trim();
+  if (!dmgFormula && idata.damageRolls) {
+    const rolls = Object.values(idata.damageRolls).map((r) => r.damage || r.formula).filter(Boolean);
+    dmgFormula = rolls.join(' + ');
+  }
   if (!dmgFormula) return null;
 
   const ranged = isWeaponRanged(idata, { thrown, isRanged });
   const isThrown = (idata?.traits || []).some((t) => String(t).startsWith('thrown')) || !!idata?.thrown;
 
   // Melee and thrown attacks add Str modifier to damage; normal ranged does not
-  const strMod = num(sd.abilities?.str?.value);
-  const addStr = !ranged || (thrown && isThrown);
+  // For NPCs with direct formulas (e.g. 2d8+5), do not double add Str
+  const isNpcDirect = actor?.type === 'npc' || item?.type === 'melee' || !!idata.isDirect;
+  const strMod = isNpcDirect ? 0 : num(sd.abilities?.str?.value);
+  const addStr = !isNpcDirect && (!ranged || (thrown && isThrown));
   const baseFormula = weaponDamageFormula(dmgFormula, strMod, !addStr);
 
-  // Condition modifiers to damage (e.g. enfeebled)
+  // Condition and item rule modifiers to damage (e.g. enfeebled, flat modifiers)
   const conditionMods = getConditionModifiers(sd.conditions);
-  const resolved = resolveModifiers(conditionMods, ranged ? ['ranged-damage'] : ['melee-damage', 'damage']);
+  const resolved = resolveModifiers(
+    [...conditionMods, ...actorRuleModifiers(actor, sd)],
+    ranged ? ['ranged-damage', 'damage'] : ['melee-damage', 'damage'],
+  );
+
+  // Extra damage dice from Rule Elements (e.g. Sneak Attack, Deadly, Flaming)
+  const rawItems = actor?.items;
+  const items = Array.isArray(rawItems) ? rawItems : Array.isArray(rawItems?.contents) ? rawItems.contents : [];
+  const rules = collectRuleElements(items, [], sd);
+  const selectors = ranged ? ['ranged-damage', 'damage'] : ['melee-damage', 'damage'];
+
+  const extraCritDice = [];
+  const extraNormalDice = [];
+
+  for (const dd of rules.damageDice || []) {
+    const matchesSelector = (dd.selectors || []).some((s) => selectors.includes(s));
+    if (!matchesSelector) continue;
+
+    const diceStr = `${dd.diceNumber}${dd.dieSize}`;
+    if (dd.critical === true) {
+      if (critical) extraCritDice.push(diceStr);
+    } else if (dd.critical === false) {
+      if (!critical) extraNormalDice.push(diceStr);
+    } else {
+      extraNormalDice.push(diceStr);
+    }
+  }
 
   let formula = baseFormula;
+  if (extraNormalDice.length > 0) {
+    formula = `${formula} + ${extraNormalDice.join(' + ')}`;
+  }
   if (resolved.total !== 0) {
     formula = `${formula} ${resolved.total >= 0 ? '+' : '-'} ${Math.abs(resolved.total)}`;
   }
 
   if (critical) {
     formula = `2 * (${formula})`;
+    if (extraCritDice.length > 0) {
+      formula = `${formula} + ${extraCritDice.join(' + ')}`;
+    }
   }
 
   return {
     formula,
     critical: !!critical,
     isRanged: ranged,
+    damageType: idata.damageType || '',
     label: `Damage: ${item?.name || 'Weapon'}${critical ? ' (Critical)' : ''}`,
     breakdown: resolved.breakdown,
   };

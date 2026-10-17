@@ -2,7 +2,7 @@
 // Ficha de Familiar (Minion vinculado a um conjurador/mestre).
 // Estatísticas derivam do nível e testes do Mestre, com slots para habilidades diárias de familiar e mestre.
 import { LoomHandlebarsMixin, LoomActorSheet, api } from '/_loom/sdk/index.js';
-import { fmtMod, setPathValue } from './utils.mjs';
+import { fmtMod, setPathValue, resolveActorPortrait } from './utils.mjs';
 import { rollCheck, rollSave, rollPerception } from './roll-engine.mjs';
 import { localize } from './i18n.mjs';
 
@@ -38,26 +38,27 @@ export class Pf2eFamiliarSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     return (n && n !== 'undefined') ? n : localize('pf2e.familiar.title', 'PF2e Familiar');
   }
 
+  get apiRoute() { return this._apiRouteOverride ?? '/actors'; }
+
   async _prepareContext() {
     const doc = this.document || {};
-    const sd = doc.systemData || {};
+    const sd = doc.systemData || doc.data || {};
 
-    const level = num(sd.level) || 1;
-    const hpVal = num(sd.hp?.value);
-    const hpMax = num(sd.hp?.max) || (level * 5);
-    const hpTemp = num(sd.hp?.temp);
+    const level = num(sd.level ?? sd.details?.level?.value) || 1;
+    const hpObj = sd.hp || sd.attributes?.hp || {};
+    const hpVal = num(hpObj.value ?? hpObj.max ?? (level * 5));
+    const hpMax = num(hpObj.max) || (level * 5);
+    const hpTemp = num(hpObj.temp);
     const hpPct = hpMax > 0 ? Math.max(0, Math.min(100, Math.round((hpVal / hpMax) * 100))) : 0;
 
     return {
       name: (doc.name && doc.name !== 'undefined') ? doc.name : '',
-      avatarUrl: (doc.avatarUrl && doc.avatarUrl !== '/icons/svg/adventurer.svg')
-        ? doc.avatarUrl
-        : (doc.imgUrl || (doc.img && doc.img !== '/icons/svg/adventurer.svg') || '/marketplace/rulesets/pf2e/assets/images/default-avatar.svg'),
+      avatarUrl: resolveActorPortrait(doc),
       level,
       master: sd.master || '',
       hp: { value: hpVal, max: hpMax, temp: hpTemp, pct: hpPct, low: hpPct < 25 },
-      ac: num(sd.ac?.value) || 15,
-      perception: fmtMod(num(sd.perception?.total)),
+      ac: num(sd.ac?.value ?? sd.attributes?.ac?.value) || 15,
+      perception: fmtMod(num(sd.perception?.total ?? sd.perception?.mod)),
       speed: sd.speed?.value || 25,
       speeds: {
         flying: num(sd.speed?.flying),
@@ -66,13 +67,13 @@ export class Pf2eFamiliarSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         climbing: num(sd.speed?.climbing),
       },
       saves: {
-        fortitude: fmtMod(num(sd.saves?.fortitude?.total)),
-        reflex: fmtMod(num(sd.saves?.reflex?.total)),
-        will: fmtMod(num(sd.saves?.will?.total)),
+        fortitude: fmtMod(num(sd.saves?.fortitude?.total ?? sd.saves?.fortitude?.value)),
+        reflex: fmtMod(num(sd.saves?.reflex?.total ?? sd.saves?.reflex?.value)),
+        will: fmtMod(num(sd.saves?.will?.total ?? sd.saves?.will?.value)),
       },
       skills: {
-        acrobatics: fmtMod(num(sd.skills?.acrobatics?.total)),
-        stealth: fmtMod(num(sd.skills?.stealth?.total)),
+        acrobatics: fmtMod(num(sd.skills?.acrobatics?.total ?? sd.skills?.acrobatics?.base)),
+        stealth: fmtMod(num(sd.skills?.stealth?.total ?? sd.skills?.stealth?.base)),
       },
       abilitiesCount: num(sd.abilitiesCount) || 2,
       abilities: Array.isArray(sd.abilities) ? sd.abilities : [],
@@ -118,7 +119,7 @@ export class Pf2eFamiliarSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const worldId = currentDoc.worldId;
 
     const baseUpdate = {};
-    const nextSystemData = JSON.parse(JSON.stringify(currentDoc.systemData || {}));
+    const nextSystemData = JSON.parse(JSON.stringify(currentDoc.systemData || currentDoc.data || {}));
 
     for (const [key, value] of pending.entries()) {
       if (key.startsWith('sd:')) {
@@ -129,7 +130,7 @@ export class Pf2eFamiliarSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     }
 
     try {
-      await api.put(`/actors/${actorId}`, {
+      await api.put(`${this.apiRoute}/${actorId}`, {
         worldId,
         ...baseUpdate,
         systemData: nextSystemData,
@@ -143,8 +144,9 @@ export class Pf2eFamiliarSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   async _reloadDocument() {
     if (!this.document?.id) return;
     try {
-      const updated = await api.get(`/actors/${this.document.id}`);
+      const updated = await api.get(`${this.apiRoute}/${this.document.id}`);
       if (updated) {
+        if (updated.data && !updated.systemData) updated.systemData = updated.data;
         this.document = updated;
         this.render?.();
       }
@@ -159,7 +161,7 @@ export class Pf2eFamiliarSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         type: 'image',
         current: this.document?.avatarUrl,
         onSelect: async (path) => {
-          await api.put(`/actors/${this.document.id}`, { avatarUrl: path });
+          await api.put(`${this.apiRoute}/${this.document.id}`, { avatarUrl: path });
           await this._reloadDocument();
         },
       });
@@ -211,6 +213,60 @@ export class Pf2eFamiliarSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         systemData: { ...sd, abilities },
       });
       await this._reloadDocument();
+      return;
+    }
+
+    if (action === 'sync-master') {
+      const sd = this.document?.systemData || {};
+      const masterName = String(sd.master || '').trim().toLowerCase();
+      try {
+        const actors = await api.get('/actors');
+        const list = Array.isArray(actors) ? actors : (actors?.contents || []);
+        const master = list.find((a) => a.id !== this.document.id && a.type === 'character' && (
+          !masterName || (a.name || '').toLowerCase() === masterName || (a.name || '').toLowerCase().includes(masterName)
+        ));
+        if (!master) {
+          window.Loom?.showToast?.(localize('pf2e.familiar.masterNotFound', 'Mestre não encontrado. Preencha o nome do Mestre na ficha.'), 'warning');
+          return;
+        }
+        const msd = master.systemData || {};
+        const mLevel = num(msd.level) || 1;
+        const hpTotal = mLevel * 5;
+        const acVal = num(msd.armor?.value) || 15;
+        const perc = num(msd.perception?.total) || (mLevel + num(msd.abilities?.wis?.value));
+        const fort = num(msd.saves?.fortitude?.total) || (mLevel + num(msd.abilities?.con?.value));
+        const ref = num(msd.saves?.reflex?.total) || (mLevel + num(msd.abilities?.dex?.value));
+        const will = num(msd.saves?.will?.total) || (mLevel + num(msd.abilities?.wis?.value));
+        const skillMod = mLevel + Math.max(num(msd.abilities?.dex?.value), num(msd.abilities?.int?.value));
+
+        await api.put(`/actors/${this.document.id}`, {
+          systemData: {
+            ...sd,
+            master: master.name,
+            level: mLevel,
+            hp: {
+              ...(sd.hp || {}),
+              max: hpTotal,
+              value: Math.min(num(sd.hp?.value) || hpTotal, hpTotal),
+            },
+            ac: { value: acVal },
+            perception: { total: perc },
+            saves: {
+              fortitude: { total: fort },
+              reflex: { total: ref },
+              will: { total: will },
+            },
+            skills: {
+              acrobatics: { total: skillMod },
+              stealth: { total: skillMod },
+            },
+          },
+        });
+        await this._reloadDocument();
+        window.Loom?.showToast?.(localize('pf2e.familiar.syncSuccess', 'Estatísticas sincronizadas com o Mestre {name}!', { name: master.name }), 'success');
+      } catch (err) {
+        console.error('Failed to sync familiar with master:', err);
+      }
       return;
     }
   }
