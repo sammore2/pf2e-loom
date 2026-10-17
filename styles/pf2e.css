@@ -156,6 +156,17 @@
   box-sizing: border-box;
 }
 
+.loom-window.pf2e-character-sheet>.loom-window-body,
+.loom-window.pf2e-ui.pf2e-character-sheet>.loom-window-body {
+  padding: 8px 10px !important;
+  overflow: hidden !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+}
+
 /* ── 4. BASE HUD LAYOUT & BUTTON RESETS ── */
 .pf2e-panel {
   display: flex;
@@ -173,10 +184,28 @@
 
 .pf2e-remaster-sheet {
   display: grid !important;
-  grid-template-columns: 165px minmax(0, 1fr);
+  grid-template-columns: 240px minmax(0, 1fr) !important;
   gap: 12px;
-  align-items: start;
+  align-items: stretch;
   overflow-x: hidden !important;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.pf2e-character-sheet .tat-rail {
+  height: 100% !important;
+  max-height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(216, 180, 106, 0.4) transparent;
+  flex: none !important;
+  width: 240px !important;
 }
 
 .pf2e-ui button {
@@ -1044,11 +1073,15 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  overflow-x: hidden;
+  gap: 4px;
+  overflow: hidden;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
 }
 
 .pf2e-ui .tat-head {
+  flex: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1059,6 +1092,71 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(216, 180, 106, 0.25);
   padding: 5px 10px;
   margin-bottom: 0;
+}
+
+/* Faixa de Atributos Fixos no Topo (Acima da Barra de Abas) */
+.pf2e-ui .tat-fixed-attrs {
+  flex: none !important;
+  margin: 0 !important;
+  padding: 3px 8px 4px !important;
+  background: rgba(255, 255, 255, 0.58) !important;
+  border: 1px solid rgba(166, 124, 59, 0.45) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 1px 4px rgba(60, 40, 15, 0.08) !important;
+}
+
+.pf2e-ui .tat-fixed-attrs .pf2e-section-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin: 0 0 2px 0 !important;
+  padding: 0 2px !important;
+}
+
+.pf2e-ui .tat-fixed-attrs .tat-label {
+  font-size: 0.72rem !important;
+  letter-spacing: 0.08em !important;
+  color: #5c1412 !important;
+  font-weight: 800 !important;
+}
+
+.pf2e-ui .tat-fixed-attrs .tat-attr-ribbon-grid {
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  gap: 4px !important;
+}
+
+.pf2e-ui .tat-fixed-attrs .tat-ribbon-cell {
+  background: #fffdf8 !important;
+  border: 1.5px solid #8c6a46 !important;
+  border-radius: 3px !important;
+  padding: 2px 2px 3px !important;
+  box-shadow: 0 1px 2px rgba(60, 40, 15, 0.08) !important;
+  position: relative !important;
+}
+
+.pf2e-ui .tat-fixed-attrs .tat-ribbon-key-btn {
+  font-family: var(--tat-engraved), serif !important;
+  font-size: 0.82rem !important;
+  font-weight: 800 !important;
+  color: #5c1412 !important;
+  margin-bottom: 1px !important;
+  cursor: pointer !important;
+  line-height: 1.1 !important;
+}
+
+.pf2e-ui .tat-fixed-attrs input.tat-attr-mod {
+  height: 24px !important;
+  max-width: 44px !important;
+  min-width: 32px !important;
+  font-size: 1.18rem !important;
+  font-weight: 800 !important;
+  color: #1f140a !important;
+  background: #ffffff !important;
+  border: 1px solid #7c6853 !important;
+  border-radius: 3px !important;
+  text-align: center !important;
+  padding: 0 !important;
 }
 
 .pf2e-ui .tat-id {
@@ -1218,7 +1316,7 @@
   padding: 0 !important;
 }
 
-/* ── 9. FAIXA DE ABAS COM ÍCONES CIRCULARES DE ALTO CONTRASTE ── */
+/* ── 9. FAIXA DE ABAS COM ÍCONES CIRCULARES COMPACTOS (FIXA SEM SCROLL) ── */
 .pf2e-ui .tat-tabs {
   display: flex !important;
   align-items: center !important;
@@ -1226,31 +1324,37 @@
   background: linear-gradient(180deg, #3d1416 0%, #25090b 100%) !important;
   border: 1.5px solid #a67c3b !important;
   border-radius: 4px !important;
-  padding: 4px 10px !important;
-  margin: 4px 0 8px !important;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4) !important;
+  padding: 3px 8px !important;
+  margin: 1px 0 3px !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4) !important;
+  flex: none !important;
 }
 
 .pf2e-ui .tat-active-tab-title {
   font-family: var(--tat-engraved), serif !important;
-  font-size: 0.95rem !important;
+  font-size: 0.8rem !important;
   font-weight: 800 !important;
   color: #ffffff !important;
   letter-spacing: 0.08em !important;
   text-transform: uppercase !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+  white-space: nowrap !important;
+  margin-right: 6px !important;
 }
 
 .pf2e-ui .tat-tab-icons {
   display: flex !important;
   align-items: center !important;
-  gap: 5px !important;
+  gap: 4px !important;
+  flex-wrap: nowrap !important;
 }
 
 .pf2e-ui .tat-tabs .pf2e-tab-btn,
 .pf2e-ui .tat-tab-icons .pf2e-tab-btn {
-  width: 30px !important;
-  height: 30px !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
   border-radius: 50% !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -1258,7 +1362,7 @@
   background: rgba(255, 255, 255, 0.12) !important;
   border: 1px solid rgba(216, 180, 106, 0.45) !important;
   color: #fff4da !important;
-  font-size: 0.92rem !important;
+  font-size: 0.74rem !important;
   padding: 0 !important;
   cursor: pointer !important;
   transition: all 120ms ease !important;
@@ -1270,7 +1374,7 @@
   background: rgba(255, 255, 255, 0.28) !important;
   color: #ffffff !important;
   border-color: #ffd778 !important;
-  transform: scale(1.12) !important;
+  transform: scale(1.08) !important;
 }
 
 .pf2e-ui .tat-tabs .pf2e-tab-btn.active,
@@ -1278,13 +1382,63 @@
   background: linear-gradient(180deg, #8a2420, #5c1412) !important;
   border: 1.5px solid #ffd778 !important;
   color: #ffffff !important;
-  box-shadow: 0 0 10px rgba(255, 215, 120, 0.7) !important;
-  transform: scale(1.12) !important;
+  box-shadow: 0 0 6px rgba(255, 215, 120, 0.6) !important;
+  transform: scale(1.08) !important;
 }
 
 .pf2e-ui .pf2e-browser-launch-btn {
-  margin-left: 6px !important;
+  margin-left: 3px !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  font-size: 0.74rem !important;
   color: #ffd778 !important;
+}
+
+/* ── CORPO ROLÁVEL DAS ABAS (ROLAGEM EXCLUSIVA NO BLOCO DA ABA) ── */
+.pf2e-ui .tat-tab-body {
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+.pf2e-ui .tat-tab-body > .tat-panel,
+.pf2e-ui .tat-panel[data-tab-content] {
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-right: 4px !important;
+  box-sizing: border-box !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 42, 38, 0.5) rgba(0, 0, 0, 0.05);
+}
+
+.pf2e-ui .tat-tab-body > .tat-panel::-webkit-scrollbar,
+.pf2e-ui .tat-panel[data-tab-content]::-webkit-scrollbar {
+  width: 5px;
+}
+
+.pf2e-ui .tat-tab-body > .tat-panel::-webkit-scrollbar-track,
+.pf2e-ui .tat-panel[data-tab-content]::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.pf2e-ui .tat-tab-body > .tat-panel::-webkit-scrollbar-thumb,
+.pf2e-ui .tat-panel[data-tab-content]::-webkit-scrollbar-thumb {
+  background: rgba(140, 42, 38, 0.5);
+  border-radius: 3px;
+}
+
+.pf2e-ui .tat-tab-body > .tat-panel::-webkit-scrollbar-thumb:hover,
+.pf2e-ui .tat-panel[data-tab-content]::-webkit-scrollbar-thumb:hover {
+  background: #8c2a26;
 }
 
 /* ── 10. BLOCOS NA ÁREA PRINCIPAL EM PERGAMINHO ILUMINADO ── */

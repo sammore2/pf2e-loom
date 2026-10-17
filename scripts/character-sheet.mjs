@@ -169,6 +169,13 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     root.querySelectorAll('[data-tab-content]').forEach((panel) => {
       panel.style.display = panel.dataset.tabContent === tab ? '' : 'none';
     });
+    const titleEl = root.querySelector('.tat-active-tab-title');
+    if (titleEl) {
+      const activeBtn = root.querySelector(`.pf2e-tab-btn[data-tab="${tab}"]`);
+      if (activeBtn?.title) {
+        titleEl.textContent = activeBtn.title;
+      }
+    }
     // Estado dos marcadores de ação (só memória) reaplicado após cada render.
     root.querySelectorAll('[data-action="action-pip"]').forEach((pip) => {
       const idx = num(pip.dataset.idx);

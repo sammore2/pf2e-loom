@@ -229,6 +229,31 @@
       </div>
     </header>
 
+    {{!-- Fixed Attribute Modifiers Ribbon (Remaster Primary Statistics) --}}
+    <section class="tat-block tat-attributes-ribbon tat-fixed-attrs">
+      <div class="pf2e-section-head">
+        <h3 class="tat-label">{{localize "pf2e.sheets.attributes"}}</h3>
+        <button type="button" class="tat-btn-xs" data-action="roll-attribute" data-key="str" title="{{localize "pf2e.sheets.rollCheck"}}">
+          <i class="fa-solid fa-dice-d20"></i> {{localize "pf2e.rollCategories.check"}}
+        </button>
+      </div>
+      <div class="tat-attr-ribbon-grid">
+        {{#each abilities}}
+        <div class="tat-ribbon-cell" data-key="{{key}}">
+          <div class="tat-ribbon-header-line">
+            <button type="button" class="tat-ribbon-key-btn" data-action="roll-attribute" data-key="{{key}}" title="{{localize labelKey}} — {{localize "pf2e.sheets.rollCheck"}}">
+              {{localize (concat "pf2e.sheets.abbr." key)}}
+            </button>
+            {{#if isKeyAttr}}<i class="fa-solid fa-key tat-key-attr-icon" title="{{localize "pf2e.sheets.keyAttribute"}}"></i>{{/if}}
+          </div>
+          <div class="tat-ribbon-val-box">
+            <input class="tat-in tat-attr-mod" type="text" name="sd:abilities.{{key}}.value" value="{{modFmt}}" title="{{localize labelKey}} {{localize "pf2e.sheets.modifier"}}" />
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+
     {{!-- Navy Tab Strip with Heraldic Circular Icons --}}
     <nav class="tat-tabs">
       <span class="tat-active-tab-title">{{currentTabLabel}}</span>
@@ -266,7 +291,10 @@
       </div>
     </nav>
 
-    {{!-- ═══ 1. OVERVIEW TAB (PERSONAGEM & ATRIBUTOS HORIZONTAIS) ═══ --}}
+    {{!-- Scrollable Tab Body Area (Rolagem apenas no bloco da aba ativa) --}}
+    <div class="tat-tab-body">
+
+    {{!-- ═══ 1. OVERVIEW TAB (PERSONAGEM & DETALHES) ═══ --}}
     <div class="tat-panel tat-overview-panel" data-tab-content="overview">
       {{!-- Character Dossier Card: Identity Details & Demographics --}}
       <section class="tat-block tat-profile-card">
@@ -388,30 +416,7 @@
         </div>
       </section>
 
-      {{!-- Horizontal Attribute Modifiers Ribbon (Remaster Primary Statistics) --}}
-      <section class="tat-block tat-attributes-ribbon">
-        <div class="pf2e-section-head">
-          <h3 class="tat-label">{{localize "pf2e.sheets.attributes"}}</h3>
-          <button type="button" class="tat-btn-xs" data-action="roll-attribute" data-key="str" title="{{localize "pf2e.sheets.rollCheck"}}">
-            <i class="fa-solid fa-dice-d20"></i> {{localize "pf2e.rollCategories.check"}}
-          </button>
-        </div>
-        <div class="tat-attr-ribbon-grid">
-          {{#each abilities}}
-          <div class="tat-ribbon-cell" data-key="{{key}}">
-            <div class="tat-ribbon-header-line">
-              <button type="button" class="tat-ribbon-key-btn" data-action="roll-attribute" data-key="{{key}}" title="{{localize labelKey}} — {{localize "pf2e.sheets.rollCheck"}}">
-                {{localize (concat "pf2e.sheets.abbr." key)}}
-              </button>
-              {{#if isKeyAttr}}<i class="fa-solid fa-key tat-key-attr-icon" title="{{localize "pf2e.sheets.keyAttribute"}}"></i>{{/if}}
-            </div>
-            <div class="tat-ribbon-val-box">
-              <input class="tat-in tat-attr-mod" type="text" name="sd:abilities.{{key}}.value" value="{{modFmt}}" title="{{localize labelKey}} {{localize "pf2e.sheets.modifier"}}" />
-            </div>
-          </div>
-          {{/each}}
-        </div>
-      </section>
+
 
       {{!-- Focus & Class DC Row --}}
       <section class="tat-block tat-focus-dc-section">
@@ -891,6 +896,7 @@
     {{!-- ═══ 9. NOTES TAB ═══ --}}
     <div class="tat-panel" data-tab-content="notes">
       <textarea class="tat-in tat-notes" name="sd:details.biography" placeholder="{{localize "pf2e.sheets.notesPlaceholder"}}">{{biography}}</textarea>
+    </div>
     </div>
   </div>
 </div>

@@ -10,28 +10,26 @@
 //
 // The list is virtual: only the rows inside the scroll window (plus a small overscan) are in
 // the DOM. The list's top and bottom padding stand in for the rows that are not rendered.
-import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager } from '/_loom/sdk/index.js';
+import { LoomHandlebarsMixin, BaseWindow, api, windowManager } from '/_loom/sdk/index.js';
 import { localize } from './i18n.mjs';
 
 // Owner name of this ruleset (ruleset.json "name"). Only the sources it ships are listed.
 const RULESET_OWNER = 'pf2e';
 
-// Parallel full-entry requests inside one page, and how many rows one detail page covers.
-const DETAIL_CONCURRENCY = 8;
-const DETAIL_PAGE_SIZE = 100;
+// Parallel full-entry requests inside one batch.
+const DETAIL_CONCURRENCY = 4;
 
 // Virtual list: extra rows rendered above and below the viewport, and the row pitch used
 // until the first layout measures the real one (row height plus list gap).
 const OVERSCAN_ROWS = 10;
 const DEFAULT_ROW_PITCH = 40;
 
-const EQUIPMENT_TYPES = new Set(['equipment', 'weapon', 'armor', 'shield', 'consumable', 'ammo', 'treasure', 'backpack', 'kit']);
-
 let _packsCache = null;
 let _packsPromise = null;
-
 // Full entry data (`entry.data`) keyed by the browser row id.
 const _entryCache = new Map();
+
+const EQUIPMENT_TYPES = new Set(['equipment', 'weapon', 'armor', 'shield', 'consumable', 'ammo', 'treasure', 'backpack', 'kit']);
 
 function categoryFor(type) {
   if (EQUIPMENT_TYPES.has(type)) return 'equipment';
@@ -83,20 +81,27 @@ async function loadCompendiumPacks() {
 }
 
 async function loadEntryData(item) {
+  if (!item) return {};
   if (_entryCache.has(item.id)) return _entryCache.get(item.id);
-  const full = await api.get(`/compendium/sources/${encodeURIComponent(item.sourceId)}/entries/${encodeURIComponent(item.entryId)}`);
-  const data = full?.data ?? {};
-  _entryCache.set(item.id, data);
-  return data;
+  try {
+    const full = await api.get(`/compendium/sources/${encodeURIComponent(item.sourceId)}/entries/${encodeURIComponent(item.entryId)}`);
+    const data = full?.data ?? {};
+    _entryCache.set(item.id, data);
+    return data;
+  } catch (err) {
+    // Cache empty object so broken or 500-error entries are never re-requested in a loop
+    _entryCache.set(item.id, {});
+    console.warn(`[PF2E Compendium] Could not load entry ${item.id}:`, err);
+    return {};
+  }
 }
 
 async function ensureEntryData(items) {
   const pending = items.filter((it) => it && !_entryCache.has(it.id));
+  if (!pending.length) return;
   for (let i = 0; i < pending.length; i += DETAIL_CONCURRENCY) {
     const batch = pending.slice(i, i + DETAIL_CONCURRENCY);
-    await Promise.all(batch.map((it) => loadEntryData(it).catch((err) => {
-      console.warn(`[PF2E Compendium] Could not load entry ${it.id}:`, err);
-    })));
+    await Promise.all(batch.map((it) => loadEntryData(it)));
   }
 }
 
@@ -220,7 +225,7 @@ function rowHtml(item, selectedId) {
     + '</div>';
 }
 
-export class Pf2eCompendiumBrowser extends LoomHandlebarsMixin(LoomActorSheet) {
+export class Pf2eCompendiumBrowser extends LoomHandlebarsMixin(BaseWindow) {
   static DEFAULT_OPTIONS = {
     position: { width: 780, height: 640 },
   };
@@ -239,14 +244,16 @@ export class Pf2eCompendiumBrowser extends LoomHandlebarsMixin(LoomActorSheet) {
   _rowPitch = DEFAULT_ROW_PITCH;
   _rendered = null;      // { start, end } of the rows currently in the list
   _detailBusy = false;   // at most one detail page request in flight
-  _failedIds = new Set(); // rows whose data request failed; not retried in this session
   _scrollRaf = null;
+  _searchTimer = null;
 
   constructor(props = {}) {
     super({
       ...props,
       id: 'pf2e-compendium-browser',
       title: localize('pf2e.browser.title', 'Compêndio PF2e — Navegador de Regras & Itens'),
+      width: 780,
+      height: 640,
       showFooter: false,
       resizable: true,
       allowOverflow: true,
@@ -260,7 +267,6 @@ export class Pf2eCompendiumBrowser extends LoomHandlebarsMixin(LoomActorSheet) {
 
   async mount() {
     await super.mount();
-    this._attachBrowserListeners();
   }
 
   _postRender() {
@@ -367,7 +373,10 @@ export class Pf2eCompendiumBrowser extends LoomHandlebarsMixin(LoomActorSheet) {
       searchInput.oninput = (e) => {
         this._searchQuery = e.target.value;
         this._scrollTop = 0;
-        this.render();
+        clearTimeout(this._searchTimer);
+        this._searchTimer = setTimeout(() => {
+          this.render();
+        }, 150);
       };
     }
     this._updateSearchHint(root);
@@ -397,6 +406,7 @@ export class Pf2eCompendiumBrowser extends LoomHandlebarsMixin(LoomActorSheet) {
     if (total === 0) {
       list.style.paddingTop = '';
       list.style.paddingBottom = '';
+      list.innerHTML = `<div class="tat-empty pf2e-browser-empty"><i class="fa-solid fa-box-open"></i> ${escapeHtml(localize('pf2e.browser.noResults', 'Nenhum resultado encontrado'))}</div>`;
       return;
     }
 
@@ -420,35 +430,29 @@ export class Pf2eCompendiumBrowser extends LoomHandlebarsMixin(LoomActorSheet) {
     this._scrollRaf = requestAnimationFrame(() => {
       this._scrollRaf = null;
       const win = computeWindow(this._scrollTop, this._viewportH, this._rowPitch, this._filtered.length);
-      if (win.start !== this._rendered?.start || win.end !== this._rendered?.end) this._renderSlice();
-      this._requestVisibleDetails();
+      if (win.start !== this._rendered?.start || win.end !== this._rendered?.end) {
+        this._renderSlice();
+        this._requestVisibleDetails();
+      }
     });
   }
 
-  // Requests full data for the uncached rows in view, one page at a time. The page starts at the
-  // first visible row, so the rows the reader is looking at load first.
+  // Requests full data for the uncached rows currently in view.
   async _requestVisibleDetails() {
     if (this._detailBusy || !this._rendered) return;
     const { start, end } = this._rendered;
-    const isMissing = (it) => !_entryCache.has(it.id) && !this._failedIds.has(it.id);
-    if (!this._filtered.slice(start, end).some(isMissing)) return;
-
-    const page = [];
-    for (let i = start; i < this._filtered.length && page.length < DETAIL_PAGE_SIZE; i++) {
-      if (isMissing(this._filtered[i])) page.push(this._filtered[i]);
-    }
+    const visible = this._filtered.slice(start, end);
+    const missing = visible.filter((it) => it && !_entryCache.has(it.id));
+    if (!missing.length) return;
 
     this._detailBusy = true;
     try {
-      await ensureEntryData(page);
+      await ensureEntryData(missing);
     } finally {
       this._detailBusy = false;
     }
-    page.forEach((it) => {
-      if (!_entryCache.has(it.id)) this._failedIds.add(it.id);
-    });
+
     this._renderSlice();
-    this._requestVisibleDetails();
   }
 
   // Name search is complete; description and trait search only see loaded rows, so say so.
@@ -565,13 +569,10 @@ export class Pf2eCompendiumBrowser extends LoomHandlebarsMixin(LoomActorSheet) {
     }
   }
 
-  static open() {
-    let inst = windowManager?.get?.('pf2e-compendium-browser');
-    if (!inst) {
-      inst = new Pf2eCompendiumBrowser();
-      windowManager?.register?.('pf2e-compendium-browser', inst);
-    }
-    inst.render(true);
-    return inst;
+  static async open() {
+    const wm = windowManager || window.Loom?.windowManager;
+    if (!wm) return null;
+    await wm.open('pf2e-compendium-browser', Pf2eCompendiumBrowser);
+    return wm.get?.('pf2e-compendium-browser');
   }
 }
