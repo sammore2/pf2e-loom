@@ -4,7 +4,7 @@
 // como chips. Forma segue o molde da ficha de item de referência do motor.
 import { LoomHandlebarsMixin, LoomItemSheet, api, effects } from '/_loom/sdk/index.js';
 import { ATTRIBUTE_KEYS, RANK_KEYS, ITEM_TYPE_ICON, ITEM_TYPE_LABEL, SKILL_ABILITIES } from './config.mjs';
-import { setPathValue } from './utils.mjs';
+import { setPathValue, readValue, readDescription, readActionCost, normalizeItemData } from './utils.mjs';
 import { localize } from './i18n.mjs';
 
 function rankOptions(selected) {
@@ -140,6 +140,71 @@ export class Pf2eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
       }
       return;
     }
+    if (action === 'effect-add') {
+      const fx = window.Loom?.effects || effects;
+      let created = null;
+      if (this.document?.id && fx && typeof fx.create === 'function') {
+        try {
+          created = await fx.create({
+            itemId: this.document.id,
+            name: this.document.name || 'Novo Efeito',
+            icon: this.document.imgUrl || 'fa-solid fa-wand-magic-sparkles',
+            durationUnit: 'rounds',
+            duration: 1,
+            changes: [],
+          });
+        } catch (err) {
+          console.warn('[pf2e] fx.create falhou, tentando fallback em data.effects:', err);
+        }
+      }
+      if (!created) {
+        const data = { ...(this.document.data || {}) };
+        data.effects = Array.isArray(data.effects) ? [...data.effects] : [];
+        const newEff = {
+          id: `eff-${Date.now()}`,
+          name: this.document.name || 'Novo Efeito',
+          icon: this.document.imgUrl || 'fa-solid fa-wand-magic-sparkles',
+          durationUnit: 'rounds',
+          duration: 1,
+          changes: [],
+        };
+        data.effects.push(newEff);
+        if (this.document?.id) {
+          await api.put(`${this.apiRoute}/${this.document.id}`, { data });
+        } else {
+          this.document.data = data;
+        }
+        created = newEff;
+      }
+      if (created?.id && typeof fx?.openConfig === 'function') {
+        void fx.openConfig(created.id);
+      }
+      await this._reloadDocument();
+      return;
+    }
+    if (action === 'delete-effect') {
+      const effectId = target?.dataset?.effectId || target?.dataset?.id || id;
+      const fx = window.Loom?.effects || effects;
+      if (effectId && fx && typeof fx.delete === 'function') {
+        try {
+          await fx.delete(effectId);
+        } catch (err) {
+          console.warn('[pf2e] fx.delete falhou, verificando data.effects:', err);
+        }
+      }
+      const data = { ...(this.document.data || {}) };
+      if (Array.isArray(data.effects)) {
+        const idx = data.effects.findIndex((e) => (e.id || e.templateId) === effectId);
+        if (idx >= 0) {
+          data.effects.splice(idx, 1);
+          if (this.document?.id) {
+            await api.put(`${this.apiRoute}/${this.document.id}`, { data });
+          }
+        }
+      }
+      await this._reloadDocument();
+      return;
+    }
     if (typeof super.onAction === 'function') super.onAction(action, id, target);
   }
 
@@ -155,6 +220,7 @@ export class Pf2eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
 
   _allTraits() {
     const v = this.document?.data?.traits;
+    if (v && typeof v === 'object' && Array.isArray(v.value)) return v.value.map(String);
     return Array.isArray(v) ? v.map((s) => String(s)) : [];
   }
 
@@ -226,7 +292,7 @@ export class Pf2eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
   async _prepareContext() {
     const context = await super._prepareContext();
     const type = this.document?.type || 'equipment';
-    const v = this.document?.data || {};
+    const v = normalizeItemData(this.document?.data || {}, type);
     const getVal = (key) => key.split('.').reduce((o, k) => (o == null ? o : o[k]), v);
 
     const cost = String(v.actions || '');

@@ -8,7 +8,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getDefaultData } from '../scripts/schema.mjs';
 import { prepareActorRow } from '../scripts/prepare-data.mjs';
-import { resolveActorPortrait, getItemType, getActorType } from '../scripts/utils.mjs';
+import { resolveActorPortrait, getItemType, getActorType, readValue, readDescription, readActionCost, normalizeItemData } from '../scripts/utils.mjs';
 import {
   bonusesToChanges,
   NATIVE_CONDITIONS,
@@ -472,6 +472,35 @@ test('Native Effects — ensureItemTemplate, applyItemEffect, and removeItemEffe
   } finally {
     delete globalThis.Loom;
   }
+});
+
+test('Item Data Normalization — prevents [object Object] in descriptions and actions', () => {
+  // Test 1: Description object { value: "<p>...</p>" }
+  const rawHtml = '<p>You utter phrases in an unknown tongue.</p>\n<p><strong>Success</strong> The target is unaffected.</p>\n<p><strong>Failure</strong> The target is @UUID[Compendium.pf2e.conditionitems.Item.e1XGnhKNSQIm5IXg]{Stupefied 2}.</p>';
+  const clean = readDescription({ value: rawHtml });
+  assert.ok(!clean.includes('[object Object]'));
+  assert.ok(!clean.includes('<p>'));
+  assert.ok(!clean.includes('@UUID'));
+  assert.ok(clean.includes('Stupefied 2'));
+  assert.ok(clean.includes('**Success**'));
+
+  // Test 2: Actions & spell time vs material cost
+  const spellRaw = {
+    time: { value: '1 to 3' },
+    cost: { value: '' },
+    level: { value: 3 },
+    traits: { rarity: 'uncommon', value: ['focus', 'mental'] },
+    description: { value: '<p>A focus spell</p>' },
+  };
+  const cost = readActionCost(spellRaw);
+  assert.equal(cost, '1 to 3');
+
+  const normalized = normalizeItemData(spellRaw, 'spell');
+  assert.equal(normalized.actions, '1 to 3');
+  assert.equal(normalized.rank, 3);
+  assert.deepEqual(normalized.traits, ['focus', 'mental']);
+  assert.equal(normalized.description, 'A focus spell');
+  assert.ok(!String(normalized.description).includes('[object Object]'));
 });
 
 

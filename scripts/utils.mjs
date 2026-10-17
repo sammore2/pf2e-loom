@@ -214,3 +214,164 @@ export function getActorType(actor) {
   return rawType && rawType !== 'actor' ? rawType : 'character';
 }
 
+/**
+ * Reads a scalar or text value from fields that may be wrapped in { value: ... }
+ * (common in Foundry PF2e data model), preventing [object Object] artifacts.
+ */
+export function readValue(field, fallback = '') {
+  if (field === null || field === undefined) return fallback;
+  if (typeof field === 'object' && !Array.isArray(field)) {
+    if ('value' in field) return readValue(field.value, fallback);
+    return fallback;
+  }
+  return field;
+}
+
+/**
+ * Strips raw HTML and Foundry @UUID / @Check tags from descriptions,
+ * leaving clean Markdown and readable text.
+ */
+export function cleanDescriptionText(text) {
+  if (!text || typeof text !== 'string') return '';
+  return text
+    .replace(/@UUID\[[^\]]+\]\{([^}]+)\}/g, (_, g) => g)
+    .replace(/@UUID\[[^\]]+\]/g, '')
+    .replace(/@Check\[[^\]]*dc:(\d+)[^\]]*type:([a-zA-Z]+)[^\]]*\]/gi, (_, dc, t) => `DC ${dc} ${t}`)
+    .replace(/@Check\[[^\]]*type:([a-zA-Z]+)[^\]]*dc:(\d+)[^\]]*\]/gi, (_, t, dc) => `DC ${dc} ${t}`)
+    .replace(/@Check\[[^\]]+\]\{([^}]+)\}/g, (_, g) => g)
+    .replace(/@Check\[[^\]]+\]/g, '')
+    .replace(/@Damage\[[^\]]+\]\{([^}]+)\}/g, (_, g) => g)
+    .replace(/@Damage\[([^\]]+)\]/g, (_, g) => g)
+    .replace(/@Template\[[^\]]+\]\{([^}]+)\}/g, (_, g) => g)
+    .replace(/@Template\[[^\]]+\]/g, '')
+    .replace(/<hr\s*\/?>/gi, '\n---\n')
+    .replace(/<p>/gi, '')
+    .replace(/<\/p>/gi, '\n\n')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<strong>(.*?)<\/strong>/gi, (_, g) => `**${g}**`)
+    .replace(/<b>(.*?)<\/b>/gi, (_, g) => `**${g}**`)
+    .replace(/<em>(.*?)<\/em>/gi, (_, g) => `*${g}*`)
+    .replace(/<i>(.*?)<\/i>/gi, (_, g) => `*${g}*`)
+    .replace(/<[^>]+>/g, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+/**
+ * Extracts a clean string description from any input (plain string, { value: ... }, or details object).
+ */
+export function readDescription(desc, fallback = '') {
+  if (desc === null || desc === undefined) return fallback;
+  if (typeof desc === 'string') return cleanDescriptionText(desc);
+  if (typeof desc === 'object') {
+    if (typeof desc.value === 'string') return cleanDescriptionText(desc.value);
+    if (typeof desc.value === 'object' && desc.value !== null) return readDescription(desc.value, fallback);
+  }
+  return cleanDescriptionText(String(desc || fallback));
+}
+
+/**
+ * Formats price objects or strings into readable notation (e.g. "15 gp").
+ */
+export function formatPrice(price) {
+  const coins = readValue(price);
+  if (typeof coins === 'string') return coins;
+  if (!coins || typeof coins !== 'object') return '';
+  return Object.entries(coins)
+    .filter(([, amount]) => amount)
+    .map(([coin, amount]) => `${amount} ${coin}`)
+    .join(', ');
+}
+
+/**
+ * Extracts action cost / glyph string from an item, checking actions, time, and cost.
+ * Distinguishes action cost from currency/material cost ({ value: '' }).
+ */
+export function readActionCost(data) {
+  if (!data) return '';
+  if (typeof data === 'string' || typeof data === 'number') return String(data);
+  // Direct actions field
+  const direct = readValue(data.actions);
+  if (direct !== undefined && direct !== null && direct !== '') return String(direct);
+  // Spell time field (e.g. { value: "2" }, "1 to 3", "reaction", etc.)
+  const time = readValue(data.time);
+  if (time !== undefined && time !== null && time !== '') return String(time);
+  // Cost field (if it represents action cost like "1", "reaction", etc.)
+  const cost = readValue(data.cost);
+  if (cost && typeof cost === 'string' && /^(1|2|3|1A|2A|3A|reaction|free|R|F)$/i.test(cost.trim())) {
+    return cost;
+  }
+  return '';
+}
+
+/**
+ * Normalizes item data from compendiums or raw JSON, flattening Foundry/PF2e
+ * nested structures like `{ value: ... }` into clean, flat scalars expected by Loom sheets.
+ */
+export function normalizeItemData(raw, type = 'equipment') {
+  if (!raw || typeof raw !== 'object') return {};
+  const data = { ...raw };
+
+  // 1. Description: unwrap { value: "..." }
+  if (data.description && typeof data.description === 'object') {
+    data.description = readDescription(data.description);
+  } else if (data.details?.description && !data.description) {
+    data.description = readDescription(data.details.description);
+  }
+
+  // 2. Action economy: unwrap actions / time / cost
+  const actionCost = readActionCost(data);
+  if (actionCost) {
+    data.actions = actionCost;
+  } else if (data.actions && typeof data.actions === 'object') {
+    data.actions = String(readValue(data.actions) || '');
+  }
+
+  // 3. Level & Rank: unwrap { value: N }
+  if (data.level !== undefined) {
+    data.level = typeof data.level === 'object' ? (readValue(data.level) ?? 1) : data.level;
+  }
+  if (type === 'spell' || data.rank !== undefined) {
+    const rawRank = data.rank !== undefined ? readValue(data.rank) : readValue(data.level);
+    const numRank = Number(rawRank);
+    data.rank = Number.isFinite(numRank) ? numRank : 1;
+  }
+
+  // 4. Traits: unwrap { value: [...] } or array
+  if (data.traits && typeof data.traits === 'object' && !Array.isArray(data.traits)) {
+    data.traits = Array.isArray(data.traits.value) ? [...data.traits.value] : [];
+  } else if (Array.isArray(data.traits)) {
+    data.traits = [...data.traits];
+  }
+
+  // 5. HP & AC & Hardness
+  if (data.hp && typeof data.hp === 'object') {
+    data.hp = readValue(data.hp.value) ?? readValue(data.hp.max) ?? 0;
+  }
+  if (data.hardness && typeof data.hardness === 'object') {
+    data.hardness = readValue(data.hardness) ?? 0;
+  }
+  if (data.acBonus && typeof data.acBonus === 'object') {
+    data.acBonus = readValue(data.acBonus) ?? 0;
+  }
+
+  // 6. Bulk & Quantity & Price
+  if (data.bulk && typeof data.bulk === 'object') {
+    data.bulk = String(readValue(data.bulk) || '');
+  }
+  if (data.quantity && typeof data.quantity === 'object') {
+    data.quantity = Number(readValue(data.quantity)) || 1;
+  }
+  if (data.price && typeof data.price === 'object') {
+    data.price = formatPrice(data.price);
+  }
+
+  // 7. Spell save
+  if (data.defense?.save?.statistic) {
+    const s = String(data.defense.save.statistic || '');
+    data.save = s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+  }
+
+  return data;
+}
+

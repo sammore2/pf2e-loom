@@ -5,7 +5,7 @@
 // personagem (debounce, drop, onAction); sem abas.
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager } from '/_loom/sdk/index.js';
 import { ATTRIBUTE_KEYS, CONDITIONS, RANK_KEYS, SAVE_KEYS, SKILL_ABILITIES } from './config.mjs';
-import { fmtMod, setPathValue, resolveActorPortrait, getItemType } from './utils.mjs';
+import { fmtMod, setPathValue, resolveActorPortrait, getItemType, readValue, readDescription, readActionCost, normalizeItemData } from './utils.mjs';
 import { getDefaultData } from './schema.mjs';
 import { prepareActorRow } from './prepare-data.mjs';
 import { proficiencyBonus, multipleAttackPenalty } from './rules.mjs';
@@ -115,12 +115,14 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       if (!source && itemId) source = await api.get(`/items/${itemId}`);
       if (!source) return;
       const itemType = source.type || 'equipment';
+      const rawData = source.system || source.data || getDefaultData(itemType);
+      const normalizedData = normalizeItemData(rawData, itemType);
       await api.post('/items', {
         worldId: window.Loom?.world?.id || this.document.worldId,
         name: source.name,
         type: itemType,
         imgUrl: source.imgUrl || source.img || '',
-        data: source.system || source.data || getDefaultData(itemType),
+        data: normalizedData,
         actorId: this.document.id,
       });
       await this._reloadDocument();
@@ -388,8 +390,9 @@ export class Pf2eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const item = itemId ? this._findItem(itemId) : null;
       if (!item) return;
       const sys = item.system || item.data || {};
-      const desc = sys.description || '';
-      const glyph = sys.actions === 'reaction' ? '↺' : (sys.actions === 'free' ? '◇' : (sys.actions || '◆'));
+      const desc = readDescription(sys.description);
+      const actionCost = readActionCost(sys);
+      const glyph = actionCost === 'reaction' ? '↺' : (actionCost === 'free' ? '◇' : (actionCost === '2' ? '◆◆' : (actionCost === '3' ? '◆◆◆' : (actionCost || '◆'))));
       const traits = Array.isArray(sys.traits) ? sys.traits : (sys.traits ? [sys.traits] : []);
       const iType = getItemType(item);
       const typeLabel = iType === 'spell'

@@ -6,7 +6,7 @@
 import { xpProgress } from './rules.mjs';
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager, LoomDialog } from '/_loom/sdk/index.js';
 import { ATTRIBUTE_KEYS, SKILL_ABILITIES, SAVE_KEYS, CONDITIONS, RANK_KEYS, ITEM_TYPE_ICON } from './config.mjs';
-import { fmtMod, setPathValue, resolveActorPortrait, getItemType, getActorType } from './utils.mjs';
+import { fmtMod, setPathValue, resolveActorPortrait, getItemType, getActorType, readValue, readDescription, readActionCost, normalizeItemData } from './utils.mjs';
 import { toggleNativeCondition, syncEquippedEffect, removeItemEffects } from './effects.mjs';
 import { getDefaultData } from './schema.mjs';
 import { prepareActorRow } from './prepare-data.mjs';
@@ -56,6 +56,7 @@ import { calculateEarnIncome, calculateCraftingProgress, DC_BY_LEVEL } from './d
 export { sendChatCard };
 
 function num(v) {
+  if (v && typeof v === 'object') v = v.value;
   const n = Number(v);
   return Number.isFinite(n) ? n : 0;
 }
@@ -87,10 +88,16 @@ function rankPips(rank) {
 }
 
 function formatActionGlyph(cost) {
+  if (cost && typeof cost === 'object') {
+    cost = readActionCost(cost);
+  }
   const str = String(cost || '').trim();
   if (str === '1' || str === '1A') return '◆';
   if (str === '2' || str === '2A') return '◆◆';
   if (str === '3' || str === '3A') return '◆◆◆';
+  if (/^1\s*to\s*3$/i.test(str)) return '◆-◆◆◆';
+  if (/^1\s*or\s*2$/i.test(str)) return '◆/◆◆';
+  if (/^2\s*or\s*3$/i.test(str)) return '◆◆/◆◆◆';
   if (str.toLowerCase() === 'reaction' || str.toUpperCase() === 'R') return '↺';
   if (str.toLowerCase() === 'free' || str.toUpperCase() === 'F') return '◇';
   return str || '◆';
@@ -362,7 +369,8 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const itemType = source.type || 'equipment';
       const baseData = getDefaultData(itemType) || {};
       const rawData = source.system || source.data || {};
-      const mergedData = { ...baseData, ...rawData };
+      const normalizedRaw = normalizeItemData(rawData, itemType);
+      const mergedData = { ...baseData, ...normalizedRaw };
       if (rawData.rules) mergedData.rules = rawData.rules;
       if (rawData.duration) mergedData.duration = rawData.duration;
       await api.post('/items', {
@@ -473,7 +481,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       id: item.id,
       name: item.name,
       icon: ITEM_TYPE_ICON[itemType] || 'fa-solid fa-hammer',
-      actions: formatActionGlyph(idata.actions || idata.cost || '1'),
+      actions: formatActionGlyph(readActionCost(idata) || '1'),
       atk: [fmtMod(strike0.total), fmtMod(strike1.total), fmtMod(strike2.total)],
       mapLabels: [`◆ ${fmtMod(strike0.total)}`, `◆ ${fmtMod(strike1.total)}`, `◆ ${fmtMod(strike2.total)}`],
       damage: String(idata.damage || ''),
@@ -594,9 +602,9 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       return {
         id: i.id,
         name: i.name,
-        actions: formatActionGlyph(isys.actions || isys.cost || '1'),
+        actions: formatActionGlyph(readActionCost(isys) || '1'),
         traits: Array.isArray(isys.traits) ? isys.traits : (isys.traits?.value || []),
-        desc: isys.description || '',
+        desc: readDescription(isys.description),
         actionCategory: isys.actionCategory || 'encounter',
         checkType,
         skill,
@@ -704,12 +712,12 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       if (i.type !== 'spell') return false;
       const ssys = i.system || i.data || {};
       const traits = Array.isArray(ssys.traits) ? ssys.traits : (ssys.traits?.value || []);
-      return !traits.includes('cantrip') && num(ssys.rank) > 0;
+      return !traits.includes('cantrip') && num(ssys.rank ?? ssys.level) > 0;
     });
 
     const spellsByRank = [];
     for (let r = 0; r <= 10; r++) {
-      const list = items.filter((i) => i.type === 'spell' && num((i.system || i.data || {}).rank) === r)
+      const list = items.filter((i) => i.type === 'spell' && num((i.system || i.data || {}).rank ?? (i.system || i.data || {}).level) === r)
         .map((i) => {
           const ssys = i.system || i.data || {};
           const heightened = heightenSpell(ssys, r);
@@ -723,7 +731,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
           return {
             id: i.id,
             name: i.name,
-            actions: formatActionGlyph(ssys.actions || ssys.cost || '2'),
+            actions: formatActionGlyph(readActionCost(ssys) || '2'),
             hasDamage: dmgList.length > 0,
             damageFormula,
             hasSave: !!ssys.defense?.save,
@@ -734,8 +742,8 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const storedSlots = sd.preparedSlots?.[r] || [];
       const preparedSlots = [];
       const availableForRank = nonCantripSpells
-        .filter((i) => num((i.system || i.data || {}).rank) <= r)
-        .map((i) => ({ id: i.id, name: i.name, baseRank: num((i.system || i.data || {}).rank) }));
+        .filter((i) => num((i.system || i.data || {}).rank ?? (i.system || i.data || {}).level) <= r)
+        .map((i) => ({ id: i.id, name: i.name, baseRank: num((i.system || i.data || {}).rank ?? (i.system || i.data || {}).level) }));
 
       if (r > 0 && maxSlots > 0) {
         for (let idx = 0; idx < maxSlots; idx++) {
@@ -782,11 +790,11 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         return {
           id: i.id,
           name: i.name,
-          actions: formatActionGlyph(isys.actions || isys.cost || ''),
+          actions: formatActionGlyph(readActionCost(isys) || ''),
           traits,
           level: isys.level !== undefined ? num(isys.level) : null,
           category: isys.category || g.key,
-          desc: isys.description || '',
+          desc: readDescription(isys.description),
           hasImg: Boolean(i.imgUrl),
           imgUrl: i.imgUrl,
         };
@@ -1088,7 +1096,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
           id: i.id,
           name: i.name,
           duration: durationStr,
-          description: idata.description || '',
+          description: readDescription(idata.description),
           traits: Array.isArray(idata.traits) ? idata.traits : (idata.traits?.value || []),
         };
       }),
@@ -1282,8 +1290,8 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       } : (itemId ? this._findItem(itemId) : null);
       if (!item) return;
       const sys = item.system || item.data || {};
-      const desc = sys.description || '';
-      const glyph = formatActionGlyph(sys.actions || sys.cost || '1');
+      const desc = readDescription(sys.description);
+      const glyph = formatActionGlyph(readActionCost(sys) || '1');
       const traits = Array.isArray(sys.traits) ? sys.traits : (sys.traits ? [sys.traits] : []);
       const iType = getItemType(item);
       const typeLabel = iType === 'spell'
@@ -1319,7 +1327,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
           name: found.name || found.id,
           glyph: found.glyph || '◆',
           traits: found.type ? [found.type] : [],
-          desc: found.desc || '',
+          desc: readDescription(found.desc),
           type: localize('pf2e.itemTypes.action', 'Action'),
         });
       }
@@ -1334,7 +1342,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const skillKey = isys.skill || 'athletics';
       const formula = isys.formula;
       const dc = isys.dc ? num(isys.dc) : null;
-      const glyph = formatActionGlyph(isys.actions || isys.cost || '1');
+      const glyph = formatActionGlyph(readActionCost(isys) || '1');
       const traits = Array.isArray(isys.traits) ? isys.traits : (isys.traits?.value || []);
 
       if (checkType === 'skill' && skillKey) {
@@ -1376,7 +1384,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
             name: item.name,
             glyph,
             type: localize('pf2e.rolls.check', 'Check'),
-            desc: `**${formula}** = **${rollObj.total}**\n\n${isys.description || ''}`,
+            desc: `**${formula}** = **${rollObj.total}**\n\n${readDescription(isys.description)}`,
             traits,
           });
         }
@@ -1385,8 +1393,9 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         if (isys.trigger) cardText += `**${localize('pf2e.actions.trigger', 'Trigger')}:** ${isys.trigger}\n`;
         if (isys.requirements) cardText += `**${localize('pf2e.actions.requirements', 'Requirements')}:** ${isys.requirements}\n`;
         if (isys.dc) cardText += `**DC:** ${isys.dc}\n`;
-        if (cardText && isys.description) cardText += '\n';
-        cardText += isys.description || '';
+        const actionDesc = readDescription(isys.description);
+        if (cardText && actionDesc) cardText += '\n';
+        cardText += actionDesc;
         void sendChatCard(this.document, {
           name: item.name,
           glyph,
@@ -2208,10 +2217,10 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
       void sendChatCard(this.document, {
         name: item.name,
-        glyph: formatActionGlyph(sdata.actions || sdata.cost || '2'),
+        glyph: formatActionGlyph(readActionCost(sdata) || '2'),
         traits,
         type: `${localize('pf2e.itemTypes.spell', 'Spell')} (${localize('pf2e.sheets.rank', 'Rank')} ${castRank})`,
-        desc: `${resourceNote}${spellDetails}\n\n${sdata.description || ''}`,
+        desc: `${resourceNote}${spellDetails}\n\n${readDescription(sdata.description)}`,
       });
 
       if (Array.isArray(sdata.effects) && sdata.effects.length > 0) {

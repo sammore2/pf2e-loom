@@ -260,16 +260,23 @@
           </div>
           <div class="pf2e-effect-actions">
             {{#if id}}
-            <button type="button" class="tat-icon pf2e-effect-config-btn" data-action="open-effect-config" data-effect-id="{{id}}" data-id="{{id}}" title="Open Loom Advanced Effect Config">
+            <button type="button" class="tat-icon pf2e-effect-config-btn" data-action="open-effect-config" data-effect-id="{{id}}" data-id="{{id}}" title="Configuração Avançada do Efeito">
               <i class="fa-solid fa-sliders"></i>
+            </button>
+            <button type="button" class="tat-icon pf2e-effect-del-btn" data-action="delete-effect" data-effect-id="{{id}}" data-id="{{id}}" title="Remover Efeito">
+              <i class="fa-solid fa-trash"></i>
             </button>
             {{/if}}
           </div>
         </div>
         {{else}}
-        <div class="tat-empty"><i class="fa-solid fa-wand-magic-sparkles"></i> No active effects attached to this item.</div>
+        <div class="tat-empty"><i class="fa-solid fa-wand-magic-sparkles"></i> Nenhum efeito ativo ou modelo configurado neste item.</div>
         {{/each}}
       </div>
+
+      <button type="button" class="tat-add pf2e-add-effect-btn" data-action="effect-add" style="margin-top: 8px;">
+        <i class="fa-solid fa-plus"></i> Adicionar Efeito / Buff
+      </button>
     </div>
   </div>
 </div>
