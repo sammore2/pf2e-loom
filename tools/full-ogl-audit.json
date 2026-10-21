@@ -1,0 +1,438 @@
+{
+  "equipReport": {
+    "remasteredCount": 75,
+    "legacyOldStillPresentCount": 0,
+    "legacyOldStillPresent": [],
+    "bothPresentCount": 1,
+    "bothPresent": [
+      {
+        "oldName": "Liar's Demise",
+        "newName": "Fraudslayer Oil",
+        "rawNew": "<td>@UUID[Compendium.pf2e.equipment-srd.Item.vAEQsYQbOYmqfIc0]{Fraudslayer Oil}</td>",
+        "oldId": "ChIhgRwtnhTukICY",
+        "newId": "vAEQsYQbOYmqfIc0"
+      }
+    ],
+    "neitherCount": 12,
+    "neitherSample": [
+      {
+        "oldName": "Bag of Holding",
+        "newName": "Spacious Pouch",
+        "rawNew": "<td>@UUID[Compendium.pf2e.equipment-srd.Item.jaEEvuQ32GjAa8jy]{Spacious Pouch}</td>"
+      },
+      {
+        "oldName": "Choker-Arm Mutagen",
+        "newName": "Bendy-Arm Mutagen",
+        "rawNew": "<td>@UUID[Compendium.pf2e.equipment-srd.Item.9F3d43xMDCJNIkDo]{Bendy-Arm Mutagen}</td>"
+      },
+      {
+        "oldName": "Death Knell Powder",
+        "newName": "Death Knell Powder",
+        "rawNew": "<td>@UUID[Compendium.pf2e.equipment-srd.Item.8qUja4YdvewN4es0]{Death Knell Powder}</td>"
+      },
+      {
+        "oldName": "Disrupting Rune",
+        "newName": "Vitalizing Rune",
+        "rawNew": "<td>@UUID[Compendium.pf2e.equipment-srd.Item.LwQb7ryTC8FlOXgX]{Vitalizing Rune}</td>"
+      },
+      {
+        "oldName": "Dragon's Breath potion (various)",
+        "newName": "Energy Breath Potion (various)",
+        "rawNew": "<td>Energy Breath Potion (various)</td>"
+      },
+      {
+        "oldName": "Greater Disrupting Rune",
+        "newName": "Greater Vitalizing Rune",
+        "rawNew": "<td>@UUID[Compendium.pf2e.equipment-srd.Item.oVrVzML63VFvVfKk]{Greater Vitalizing Rune}</td>"
+      },
+      {
+        "oldName": "Tanglefoot Bag",
+        "newName": "Glue Bomb",
+        "rawNew": "<td>@UUID[Compendium.pf2e.equipment-srd.Item.T6Appwwl6nUl56Xj]{Glue Bomb}</td>"
+      },
+      {
+        "oldName": "Thunderstone",
+        "newName": "Blasting Stone",
+        "rawNew": "<td>@UUID[Compendium.pf2e.equipment-srd.Item.Xnqglykl3Cif8rN9]{Blasting Stone}</td>"
+      },
+      {
+        "oldName": "Universal Solvent",
+        "newName": "Absolute Solvent",
+        "rawNew": "<td>@UUID[Compendium.pf2e.equipment-srd.Item.QSVIv5obLhKkmy67]{Absolute Solvent}</td>"
+      },
+      {
+        "oldName": "Wand of Manifold Missiles",
+        "newName": "Wand of Shardstorm",
+        "rawNew": "<td>@UUID[Compendium.pf2e.equipment-srd.Item.KPWN5tGGkvZR7K3K]{Wand of Shardstorm}</td>"
+      }
+    ]
+  },
+  "spellsReport": {
+    "remasteredCount": 138,
+    "legacyOldStillPresentCount": 1,
+    "legacyOldStillPresent": [
+      {
+        "oldName": "Divine Vessel",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "hiVL8qsnTJtpouw0"
+      }
+    ],
+    "bothPresentCount": 1,
+    "bothPresent": [
+      {
+        "oldName": "Faerie Fire",
+        "status": "Merged",
+        "newName": "Revealing Light",
+        "rawNew": "<td>@UUID[Compendium.pf2e.spells-srd.Item.0qaqksrGGDj74HXE]{Revealing Light}</td>",
+        "oldId": "HRb2doyaLtaoCfi3",
+        "newId": "0qaqksrGGDj74HXE"
+      }
+    ],
+    "neitherCount": 6,
+    "neitherSample": [
+      {
+        "oldName": "Litany against Sloth",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>"
+      },
+      {
+        "oldName": "Litany against Wrath",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>"
+      },
+      {
+        "oldName": "Litany of Depravity",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>"
+      },
+      {
+        "oldName": "Litany of Righteousness",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>"
+      },
+      {
+        "oldName": "Litany of Self-Interest",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>"
+      },
+      {
+        "oldName": "Undetectable Alignment",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>"
+      }
+    ]
+  },
+  "featsReport": {
+    "remasteredCount": 151,
+    "legacyOldStillPresentCount": 14,
+    "legacyOldStillPresent": [
+      {
+        "oldName": "Advanced School Spell",
+        "mainTrait": "Wizard",
+        "status": "Altered mechanics",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "5hUj7glY8YnO5sBI"
+      },
+      {
+        "oldName": "Beastbrood",
+        "mainTrait": "Tiefling",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "yHHXrITmD70VteIn"
+      },
+      {
+        "oldName": "Cauldron",
+        "mainTrait": "Witch",
+        "status": "Altered mechanics",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "zUtdBd3IbM7UX0AD"
+      },
+      {
+        "oldName": "Conflux Wellspring",
+        "mainTrait": "Magus",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "o1Vo4PvU09UY8sj7"
+      },
+      {
+        "oldName": "Crossbow Ace",
+        "mainTrait": "Ranger",
+        "status": "Altered mechanics",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "CpjN7v1QN8TQFcvI"
+      },
+      {
+        "oldName": "Emberkin",
+        "mainTrait": "Aasimar",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "l6Atklyi9p93IFRj"
+      },
+      {
+        "oldName": "Hold Mark",
+        "mainTrait": "Orc",
+        "status": "Altered mechanics",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "aQNsD2t0Tb4vToA4"
+      },
+      {
+        "oldName": "Idyllkin",
+        "mainTrait": "Aasimar",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "0bHLavDPj7KOAGEu"
+      },
+      {
+        "oldName": "Pale Horse",
+        "mainTrait": "Champion",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "qPlv8HwtoO2fAjkj"
+      },
+      {
+        "oldName": "Plumekith",
+        "mainTrait": "Aasimar",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "X7s1EtZBb6m4w9u1"
+      },
+      {
+        "oldName": "Riftmarked",
+        "mainTrait": "Aasimar",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "khsosF7v8FexrL2h"
+      },
+      {
+        "oldName": "Shackleborn",
+        "mainTrait": "Tiefling",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "p5MNrGSTmMATRG8C"
+      },
+      {
+        "oldName": "Spellbook Prodigy",
+        "mainTrait": "Wizard",
+        "status": "Altered mechanics",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "FCzfh8QHMo7QJpAM"
+      },
+      {
+        "oldName": "Unconventional Expertise",
+        "mainTrait": "Human",
+        "status": "Removed",
+        "newName": "—",
+        "rawNew": "<td>—</td>",
+        "oldId": "aqTlEPtd5gzs1Lxg"
+      }
+    ],
+    "bothPresentCount": 9,
+    "neitherCount": 36
+  },
+  "mechanicsAudit": {
+    "spells.sqlite": {
+      "totalEntries": 1796,
+      "schoolMatches": 60,
+      "energyMatches": 0,
+      "flatFootedMatches": 0,
+      "samples": [
+        {
+          "id": "1b55SgYTV65JvmQd",
+          "name": "Blessing of Defiance",
+          "type": "spell"
+        },
+        {
+          "id": "2EIUqc8TCTQimggQ",
+          "name": "Summon Draconic Legion",
+          "type": "spell"
+        },
+        {
+          "id": "2ZPqcM9wNoVnpwkK",
+          "name": "Magical Fetters",
+          "type": "spell"
+        },
+        {
+          "id": "3KiM09e8DN9AdTPA",
+          "name": "Hag's Fruit",
+          "type": "spell"
+        },
+        {
+          "id": "3MzuRDc7ccylpW2e",
+          "name": "Hasted Assault",
+          "type": "spell"
+        }
+      ]
+    },
+    "equipment.sqlite": {
+      "totalEntries": 5646,
+      "schoolMatches": 122,
+      "energyMatches": 0,
+      "flatFootedMatches": 0,
+      "samples": [
+        {
+          "id": "0OzL3DdtTnZE91MU",
+          "name": "Smoky Hag Eye",
+          "type": "equipment"
+        },
+        {
+          "id": "1bippAJ938UHQQQV",
+          "name": "Branch Attendant's Mask",
+          "type": "equipment"
+        },
+        {
+          "id": "2EzUZq9pEVP4oQ0k",
+          "name": "Guiding Cajon Drum",
+          "type": "equipment"
+        },
+        {
+          "id": "2QZbG6FUr2AWK6km",
+          "name": "Immovable Arm",
+          "type": "equipment"
+        },
+        {
+          "id": "2WOpgJyaFE2gNW7H",
+          "name": "Spiral Athame",
+          "type": "weapon"
+        }
+      ]
+    },
+    "actions.sqlite": {
+      "totalEntries": 556,
+      "schoolMatches": 2,
+      "energyMatches": 0,
+      "flatFootedMatches": 0,
+      "samples": [
+        {
+          "id": "CCMemaB1RoVa0aOu",
+          "name": "Bestial Clarity",
+          "type": "action"
+        },
+        {
+          "id": "mVscmsZWWcVACdU5",
+          "name": "Soaring Flight",
+          "type": "action"
+        }
+      ]
+    },
+    "conditions.sqlite": {
+      "totalEntries": 43,
+      "schoolMatches": 0,
+      "energyMatches": 0,
+      "flatFootedMatches": 0,
+      "samples": []
+    },
+    "feats.sqlite": {
+      "totalEntries": 5983,
+      "schoolMatches": 45,
+      "energyMatches": 1,
+      "flatFootedMatches": 0,
+      "samples": [
+        {
+          "id": "1HsH8hE79MDsi8kK",
+          "name": "Orc Warmask",
+          "type": "feat"
+        },
+        {
+          "id": "1ul2dasQBdlaMEC5",
+          "name": "Heart of the Kaiju",
+          "type": "feat"
+        },
+        {
+          "id": "5FOqVC9Q0eEKEf3w",
+          "name": "Magic Warrior Dedication",
+          "type": "feat"
+        },
+        {
+          "id": "63L2iSAxkHyq6qEt",
+          "name": "Hallowed Necromancer Dedication",
+          "type": "feat"
+        },
+        {
+          "id": "6VWLyjurMGi33XAT",
+          "name": "Reading the Signs",
+          "type": "feat"
+        }
+      ]
+    },
+    "class-features.sqlite": {
+      "totalEntries": 841,
+      "schoolMatches": 5,
+      "energyMatches": 1,
+      "flatFootedMatches": 0,
+      "samples": [
+        {
+          "id": "IwkAP2FBiU63aUgb",
+          "name": "Anger Phantom Eidolon",
+          "type": "feat"
+        },
+        {
+          "id": "J2Oi9MxW2e2gjrKC",
+          "name": "Fey Eidolon",
+          "type": "feat"
+        },
+        {
+          "id": "XEaO0VrYNaQepXow",
+          "name": "Devotion Phantom Eidolon",
+          "type": "feat"
+        },
+        {
+          "id": "hippAZGFRtFd26dd",
+          "name": "Angel Eidolon",
+          "type": "feat"
+        },
+        {
+          "id": "rwPx9D4PjZhinmmH",
+          "name": "Construct Eidolon",
+          "type": "feat"
+        }
+      ]
+    }
+  },
+  "bestiaryAudit": {
+    "pathfinder-bestiary.sqlite": {
+      "license": "OGL (2019)",
+      "count": 167
+    },
+    "pathfinder-bestiary-2.sqlite": {
+      "license": "OGL (2020)",
+      "count": 161
+    },
+    "pathfinder-bestiary-3.sqlite": {
+      "license": "OGL (2021)",
+      "count": 168
+    },
+    "pathfinder-monster-core.sqlite": {
+      "license": "ORC (2023)",
+      "count": 492
+    },
+    "pathfinder-monster-core-2.sqlite": {
+      "license": "ORC (2024)",
+      "count": 446
+    },
+    "pathfinder-npc-core.sqlite": {
+      "license": "ORC (2024)",
+      "count": 271
+    }
+  }
+}

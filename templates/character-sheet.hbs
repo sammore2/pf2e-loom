@@ -6,7 +6,7 @@
 
     {{!-- 0. Heraldic Ruleset Cartouche --}}
     <div class="tat-rail-logo-banner">
-      <span class="tat-rail-logo-txt">PF2e</span>
+      <img class="tat-rail-logo-img" src="/marketplace/rulesets/pf2e/assets/images/pf2e-logo.png?v=2" alt="Pathfinder 2e" />
     </div>
 
     {{!-- 1. Hit Points, Dying & Wounded Tracks, Rest Button --}}
@@ -238,6 +238,15 @@
           {{#if identity.background}}
           <button type="button" class="tat-id-badge" data-action="item-open" data-id="{{identity.background.id}}" title="{{localize "pf2e.itemTypes.background"}}">{{identity.background.name}}</button>
           {{/if}}
+          <button type="button" class="tat-id-badge tat-sanct-badge{{#if identity.isHoly}} is-holy{{else if identity.isUnholy}} is-unholy{{else}} is-none{{/if}}" data-action="toggle-sanctification" title="{{localize "pf2e.sheets.sanctification"}}: {{#if identity.isHoly}}{{localize "pf2e.sheets.holy"}}{{else if identity.isUnholy}}{{localize "pf2e.sheets.unholy"}}{{else}}{{localize "pf2e.sheets.neither"}}{{/if}} ({{localize "pf2e.sheets.clickToToggle"}})">
+            {{#if identity.isHoly}}
+            <i class="fa-solid fa-sun"></i> {{localize "pf2e.sheets.holy"}}
+            {{else if identity.isUnholy}}
+            <i class="fa-solid fa-moon"></i> {{localize "pf2e.sheets.unholy"}}
+            {{else}}
+            <i class="fa-regular fa-circle"></i> {{localize "pf2e.sheets.sanctification"}}
+            {{/if}}
+          </button>
         </div>
         <div class="tat-hero-header" title="{{localize "pf2e.sheets.hero"}}">
           <span class="tat-hero-lbl">{{localize "pf2e.sheets.hero"}}</span>
@@ -1019,6 +1028,11 @@
           <span class="tat-cost pf2e-glyph-cost">{{actions}}</span>
           <button type="button" class="tat-link" data-action="item-chat" data-id="{{id}}" title="{{localize "pf2e.sheets.sendToChat"}}">{{name}}</button>
           {{#if hasDamage}}
+          {{#unless hasSave}}
+          <button type="button" class="tat-btn-xs tat-roll" data-action="roll-spell-attack" data-id="{{id}}" data-rank="{{../rank}}" title="{{localize "pf2e.sheets.rollSpellAttack"}}">
+            <i class="fa-solid fa-bullseye"></i>
+          </button>
+          {{/unless}}
           <button type="button" class="tat-btn-xs tat-roll" data-action="roll-spell-damage" data-id="{{id}}" data-rank="{{../rank}}" title="{{damageFormula}}">
             <i class="fa-solid fa-burst"></i> {{damageFormula}}
           </button>
@@ -1152,6 +1166,14 @@
 
     {{!-- ═══ 8. INVENTORY TAB (TABELA DE INVENTÁRIO AUTÊNTICA PF2E) ═══ --}}
     <div class="tat-panel pf2e-inventory-panel" data-tab-content="inventory">
+      <div class="pf2e-bulk-bar{{#if bulk.isOverMax}} is-over-max{{else if bulk.isEncumbered}} is-encumbered{{/if}}">
+        <span class="pf2e-bulk-label"><i class="fa-solid fa-weight-hanging"></i> {{localize "pf2e.sheets.bulk"}}: <strong>{{bulk.totalBulk}}</strong> / {{bulk.encumberedLimit}} (Max: {{bulk.maxLimit}})</span>
+        {{#if bulk.isOverMax}}
+        <span class="tat-tag tat-tag-danger">Sobrecarregado (Max)</span>
+        {{else if bulk.isEncumbered}}
+        <span class="tat-tag tat-tag-warning">Sobrecarregado</span>
+        {{/if}}
+      </div>
       {{#each inventory}}
       <section class="tat-block pf2e-inv-section">
         <div class="pf2e-inv-section-head">
@@ -1184,6 +1206,9 @@
                   <button type="button" class="pf2e-inv-item-name" data-action="item-open" data-id="{{id}}" title="{{localize "pf2e.sheets.edit"}}">
                     {{name}}
                   </button>
+                  {{#if hasUses}}
+                  <span class="tat-tag tat-tag-uses" title="{{localize "pf2e.sheets.charges"}}">{{usesText}}</span>
+                  {{/if}}
                 </div>
               </td>
               <td class="col-level">{{#if level}}{{level}}{{else}}—{{/if}}</td>
@@ -1198,6 +1223,11 @@
               <td class="col-price">{{#if price}}{{price}}{{else}}—{{/if}}</td>
               <td class="col-actions">
                 <div class="pf2e-inv-row-tools">
+                  {{#if isConsumable}}
+                  <button type="button" class="tat-icon pf2e-consume-btn" data-action="item-consume" data-id="{{id}}" title="{{localize "pf2e.sheets.consume"}}">
+                    <i class="fa-solid fa-wine-bottle"></i>
+                  </button>
+                  {{/if}}
                   <button type="button" class="tat-icon pf2e-equip-toggle{{#if equipped}} is-equipped{{/if}}" data-action="item-toggle-equip" data-id="{{id}}" title="{{#if equipped}}{{localize "pf2e.sheets.equipped"}}{{else}}{{localize "pf2e.sheets.unequipped"}}{{/if}}">
                     <i class="fa-solid {{#if equipped}}fa-shield-halved{{else}}fa-shield{{/if}}"></i>
                   </button>

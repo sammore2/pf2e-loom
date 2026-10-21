@@ -288,12 +288,12 @@
       "bulk": "L",
       "quantity": 1,
       "price": "3 gp",
-      "description": "Restaura pontos de vida instantaneamente ao ser ingerida.",
+      "description": "Restaura 1d8 pontos de vida instantaneamente ao ser ingerida.",
       "effects": [
         {
           "name": "Poção de Cura",
           "icon": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg",
-          "description": "Restaura pontos de vida instantaneamente ao ser ingerida.",
+          "description": "Restaura 1d8 pontos de vida instantaneamente ao ser ingerida.",
           "durationUnit": "permanent",
           "duration": -1,
           "conditionId": "potion-healing",
@@ -309,7 +309,11 @@
           }
         }
       ],
-      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg"
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg",
+      "damage": {
+        "formula": "1d8",
+        "kind": "healing"
+      }
     },
     "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg"
   },
@@ -349,7 +353,11 @@
           }
         }
       ],
-      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg"
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg",
+      "damage": {
+        "formula": "1d6",
+        "kind": "healing"
+      }
     },
     "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/consumable.svg"
   },
@@ -491,8 +499,8 @@
     "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/equipment.svg"
   },
   {
-    "id": "eq-botas-de-velocidade-boots-of-speed",
-    "name": "Botas de Velocidade (Boots of Speed)",
+    "id": "eq-botas-propulsoras-propulsive-boots",
+    "name": "Botas Propulsoras (Propulsive Boots)",
     "type": "equipment",
     "data": {
       "bulk": "L",
@@ -501,7 +509,7 @@
       "description": "+10 pés de bônus de status na Velocidade.",
       "effects": [
         {
-          "name": "Botas de Velocidade",
+          "name": "Botas Propulsoras",
           "icon": "/marketplace/rulesets/pf2e/assets/icons/svg/items/equipment.svg",
           "description": "+10 pés de bônus de status na Velocidade.",
           "durationUnit": "permanent",

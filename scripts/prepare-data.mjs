@@ -22,6 +22,7 @@ import { resolveModifiers } from './modifiers.mjs';
 import { itemsArray, getWornArmor, resolveArmorStats } from './equipment.mjs';
 import { applyClassGrants } from './progression.mjs';
 import { collectRuleElements } from './rule-elements.mjs';
+import { calculateActorBulk } from './actions.mjs';
 
 function num(v) {
   const n = Number(v);
@@ -74,6 +75,7 @@ export function prepareActor(inputSd, rawItems = [], opts = {}) {
   if (sd.rollOptions?.offGuard) initialOptions.push('target:off-guard', 'target:flat-footed');
   if (sd.rollOptions?.cover) initialOptions.push('self:cover');
   if (sd.rollOptions?.flanking) initialOptions.push('self:flanking');
+  if (sd.details?.sanctification) initialOptions.push(`self:${sd.details.sanctification}`);
   const ruleElements = collectRuleElements(items, initialOptions, sd);
   const allMods = [...conditionMods, ...ruleElements.modifiers];
 
@@ -255,6 +257,10 @@ export function prepareActor(inputSd, rawItems = [], opts = {}) {
   if (initTotal === null || initTotal === undefined) initTotal = num(sd.perception?.total);
   const initRes = resolveModifiers(allMods, ['initiative'], ruleElements.rollOptions);
   sd.derived.initiative = initTotal + num(sd.initiative?.extra) + initRes.total;
+
+  // 11. Bulk and Encumbrance (PF2e Remaster)
+  const strMod = abilityMod(sd, 'str');
+  sd.derived.bulk = calculateActorBulk(items, strMod);
 
   return sd;
 }

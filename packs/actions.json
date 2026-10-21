@@ -233,5 +233,19 @@
       "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
     },
     "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+  },
+  {
+    "id": "act-reposition",
+    "name": "Reposicionar (Reposition)",
+    "type": "action",
+    "data": {
+      "actions": "1",
+      "traits": [
+        "ataque"
+      ],
+      "description": "Você tenta mover uma criatura ou objeto para uma nova posição. Faça um teste de Atletismo contra a CD de Fortitude do alvo. No sucesso, você move o alvo até 1,5 metro (1 quadrado), permanecendo dentro do seu alcance. No sucesso crítico, você o move até 3 metros (2 quadrados).",
+      "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
+    },
+    "imgUrl": "/marketplace/rulesets/pf2e/assets/icons/svg/items/feature.svg"
   }
 ]

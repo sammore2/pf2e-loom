@@ -52,7 +52,7 @@ function defaultActor() {
     spellSlots: defaultSpellSlots(),
     conditions: {},
     derived: { dyingMax: 4, initiative: 0 },
-    details: { biography: '' },
+    details: { biography: '', sanctification: null },
   };
 }
 

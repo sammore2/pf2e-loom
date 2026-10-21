@@ -4,6 +4,7 @@ import { buildStrike, buildDamage } from './checks.mjs';
 import { prepareActorRow } from './prepare-data.mjs';
 import { localize } from './i18n.mjs';
 import { heightenSpell } from './spellcasting.mjs';
+import { currentTargetIds, loadHolder } from './utils.mjs';
 
 function num(v) {
   const n = Number(v);
@@ -14,6 +15,12 @@ function actorData(actor) {
   return actor?.systemData ?? actor?.data ?? {};
 }
 
+// Marks a damage roll so the GM client can apply its total to the targets once the dice are known.
+function autoApplyMeta(targetIds) {
+  if (!targetIds.length) return {};
+  return { targetIds, autoApply: true, rollKey: `${Date.now()}-${Math.random().toString(36).slice(2)}`, ts: Date.now() };
+}
+
 function getPreparedActor(actor) {
   if (!actor) return null;
   const cloneDoc = JSON.parse(JSON.stringify(actor));
@@ -22,27 +29,22 @@ function getPreparedActor(actor) {
 
 async function baseRoll({ label, modifier = 0, actor = null, dc = null, rollType = '', parts = null, extraMeta = {} }) {
   let initialDC = dc;
-  if (initialDC === null && (rollType === 'attack' || rollType === 'spellattack') && typeof window !== 'undefined') {
-    try {
-      const targets = window.Loom?.targets || [];
-      const firstTargetId = targets[0]?.castId || targets[0]?.actorId || targets[0]?.id || targets[0];
-      if (firstTargetId && window.Loom?.api) {
-        let cast = null;
-        try { cast = await window.Loom.api.get(`/cast/${encodeURIComponent(firstTargetId)}`); } catch {}
-        const linked = cast?.isLinked && cast?.actorId;
-        const targetPath = linked ? `/actors/${encodeURIComponent(cast.actorId)}` : (cast ? `/cast/${encodeURIComponent(firstTargetId)}` : `/actors/${encodeURIComponent(firstTargetId)}`);
-        const targetDoc = linked ? await window.Loom.api.get(targetPath) : (cast || await window.Loom.api.get(targetPath));
-        if (targetDoc) {
-          const targetPrepared = getPreparedActor(targetDoc);
-          const targetAC = num(targetPrepared?.systemData?.armor?.value ?? targetPrepared?.systemData?.ac);
-          if (targetAC > 0) {
-            initialDC = targetAC;
-            extraMeta.targetName = targetDoc.name;
-          }
+  if (rollType === 'attack' || rollType === 'spellAttack') {
+    // Kept on the card so the damage roll reaches the same tokens; with no target nothing is set and the roll goes out as usual.
+    const targetIds = currentTargetIds();
+    if (targetIds.length) extraMeta.targetIds = targetIds;
+    if (initialDC === null && targetIds.length) {
+      try {
+        const target = await loadHolder(targetIds[0]);
+        const sd = getPreparedActor(target?.holder)?.systemData;
+        const targetAC = num(sd?.armor?.value ?? sd?.ac);
+        if (targetAC > 0) {
+          initialDC = targetAC;
+          extraMeta.targetName = target.holder.name;
         }
+      } catch {
+        // Non-blocking fallback
       }
-    } catch {
-      // Non-blocking fallback
     }
   }
 
@@ -177,6 +179,8 @@ export async function rollAttack(actor, item, attackIndex = 0) {
     rollType: 'attack',
     parts,
     extraMeta: {
+      rollType: 'attack',
+      attackerId: actor.id,
       attackIndex: num(attackIndex),
       map: strike.map,
       itemId: item.id,
@@ -187,7 +191,7 @@ export async function rollAttack(actor, item, attackIndex = 0) {
 }
 
 /** Weapon damage: uses the single buildDamage pipeline. */
-export async function rollDamage(actor, item, { critical = false } = {}) {
+export async function rollDamage(actor, item, { critical = false, targetIds = currentTargetIds() } = {}) {
   if (!actor || !item) return null;
   const prepActor = getPreparedActor(actor);
   const dmg = buildDamage(prepActor, item, { critical });
@@ -208,6 +212,7 @@ export async function rollDamage(actor, item, { critical = false } = {}) {
         critical: !!critical,
         itemId: item.id,
         breakdown: dmg.breakdown,
+        ...autoApplyMeta(targetIds),
       },
     });
   }
@@ -215,24 +220,24 @@ export async function rollDamage(actor, item, { critical = false } = {}) {
 }
 
 /** Spell attack from the actor's casting total, with MAP support. */
-export async function rollSpellAttack(actor, { attackIndex = 0 } = {}) {
+export async function rollSpellAttack(actor, { attackIndex = 0, item = null, castRank = null } = {}) {
   const prepActor = getPreparedActor(actor);
   const sd = actorData(prepActor);
   const map = multipleAttackPenalty(attackIndex, false);
   const total = num(sd.spellcasting?.attack) + map;
   return baseRoll({
-    label: 'Spell Attack',
+    label: item?.name || 'Spell Attack',
     modifier: total,
     actor: prepActor,
     rollType: 'spellAttack',
-    extraMeta: { attackIndex: num(attackIndex), map },
+    extraMeta: { rollType: 'spellAttack', attackerId: actor?.id, itemId: item?.id, castRank, attackIndex: num(attackIndex), map },
   });
 }
 
 /**
  * Rolls heightened damage for a spell item.
  */
-export async function rollSpellDamage(actor, spellItem, { castRank = null, critical = false } = {}) {
+export async function rollSpellDamage(actor, spellItem, { castRank = null, critical = false, targetIds = currentTargetIds(), castKey = null } = {}) {
   const prepActor = getPreparedActor(actor);
   const sd = actorData(prepActor);
   const sys = spellItem?.system || spellItem?.data || {};
@@ -272,6 +277,10 @@ export async function rollSpellDamage(actor, spellItem, { castRank = null, criti
         itemId: spellItem.id,
         castRank: heightened.castRank,
         damageTypes: dmgParts.map((p) => p.type),
+        // shortcut: multi-type spell damage is applied as its first type; split per type when the roll card keeps per-type totals
+        damageType: dmgParts[0].type,
+        // A save spell hurts each target by its own save result (see trackSpellSaves), so it is never applied in full here.
+        ...(heightened.defense?.save ? { castKey, ts: Date.now() } : autoApplyMeta(targetIds)),
       },
     });
   }
@@ -281,13 +290,13 @@ export async function rollSpellDamage(actor, spellItem, { castRank = null, criti
 /**
  * Target roll for saving throw against a spell DC.
  */
-export async function rollSpellSave(actor, { dc, statistic = 'fortitude', basic = false } = {}) {
+export async function rollSpellSave(actor, { dc, statistic = 'fortitude', basic = false, extra = {} } = {}) {
   const statKey = String(statistic).toLowerCase();
   const label = `${localize(`pf2e.defenses.${statKey}`, statKey)} ${localize('pf2e.rolls.save', 'Save')}`;
   return rollSave(actor, statKey, {
     dc: num(dc),
     label,
-    extraMeta: { isSpellSave: true, basic: !!basic, targetDc: num(dc) },
+    extraMeta: { isSpellSave: true, basic: !!basic, targetDc: num(dc), ...extra },
   });
 }
 

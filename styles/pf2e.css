@@ -475,10 +475,28 @@
 
 /* 7.0 Cartucho Superior da Marca */
 .pf2e-ui .tat-rail-logo-banner {
-  padding: 6px 8px 4px;
+  padding: 6px 8px 6px;
   text-align: center;
   background: linear-gradient(180deg, #661517 0%, #4a0c0e 100%);
   border-bottom: 1.5px solid rgba(216, 180, 106, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.pf2e-ui .tat-rail-logo-img {
+  width: 95% !important;
+  max-width: 220px !important;
+  height: auto !important;
+  max-height: 58px !important;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.85));
+  pointer-events: none;
+  user-select: none;
+  margin: 0 auto;
 }
 
 .pf2e-ui .tat-rail-logo-txt {
@@ -1385,6 +1403,48 @@
   background: rgba(216, 180, 106, 0.28) !important;
   border-color: #ffd875 !important;
   color: #fffdf5 !important;
+}
+
+.pf2e-ui .tat-sanct-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  user-select: none !important;
+}
+
+.pf2e-ui .tat-sanct-badge.is-holy {
+  background: linear-gradient(135deg, rgba(160, 115, 10, 0.6), rgba(218, 165, 32, 0.45)) !important;
+  border-color: #ffd700 !important;
+  color: #fff8dc !important;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.35) !important;
+}
+
+.pf2e-ui .tat-sanct-badge.is-holy:hover {
+  background: linear-gradient(135deg, rgba(200, 150, 15, 0.8), rgba(255, 215, 0, 0.6)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.6) !important;
+}
+
+.pf2e-ui .tat-sanct-badge.is-unholy {
+  background: linear-gradient(135deg, rgba(75, 10, 50, 0.65), rgba(120, 20, 80, 0.5)) !important;
+  border-color: #ba55d3 !important;
+  color: #f8c8dc !important;
+  box-shadow: 0 0 6px rgba(186, 85, 211, 0.35) !important;
+}
+
+.pf2e-ui .tat-sanct-badge.is-unholy:hover {
+  background: linear-gradient(135deg, rgba(110, 15, 75, 0.85), rgba(150, 30, 100, 0.7)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 10px rgba(186, 85, 211, 0.6) !important;
+}
+
+.pf2e-ui .tat-sanct-badge.is-none {
+  opacity: 0.6 !important;
+  border-style: dashed !important;
+}
+
+.pf2e-ui .tat-sanct-badge.is-none:hover {
+  opacity: 1 !important;
 }
 
 .pf2e-ui .tat-identity-pill-group {
@@ -6835,3 +6895,16 @@
   background: linear-gradient(180deg, #8a242a 0%, #5c1418 100%) !important;
   border-color: #ffd778 !important;
 }
+.pf2e-ui .pf2e-bulk-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  margin-bottom: 8px;
+  background: rgba(20, 20, 25, 0.6);
+  border: 1px solid rgba(216, 180, 106, 0.25);
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+.pf2e-ui .pf2e-bulk-bar.is-encumbered { border-color: #f59e0b; color: #f59e0b; }
+.pf2e-ui .pf2e-bulk-bar.is-over-max { border-color: #ef4444; color: #ef4444; }

@@ -58,21 +58,6 @@ sheets.catalog('item', '*', Pf2eItemSheet);
 
 registerChatWrapper();
 if (typeof window !== 'undefined') {
-  // Garantir que nenhum título de página/aba traga referências a outros VTTs, mantendo LoomVTT nativo
-  if (typeof document !== 'undefined') {
-    const sanitizeTitle = () => {
-      if (document.title && /foundry/i.test(document.title)) {
-        document.title = document.title.replace(/foundry\s*(virtual\s*tabletop|vtt)?/gi, 'LoomVTT').trim();
-      }
-    };
-    sanitizeTitle();
-    const titleEl = document.querySelector('title');
-    if (titleEl) {
-      const observer = new MutationObserver(sanitizeTitle);
-      observer.observe(titleEl, { childList: true, characterData: true, subtree: true });
-    }
-  }
-
   if (window.Loom?.LoomHooks?.on) {
     window.Loom.LoomHooks.on('ready', () => registerChatWrapper());
 

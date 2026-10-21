@@ -43,58 +43,6 @@ export function setPathValue(obj, path, value) {
   target[parts[parts.length - 1]] = value;
 }
 
-// Advantage/disadvantage on d20 rolls (`pf2eRoll`'s `advantage` param) was
-// wired into the roll engine from the start but nothing ever actually
-// triggered it — every ability/skill/save/attack roll call site passed 0
-// (normal), with no UI path to change that. Real the reference implementation's convention
-// is Shift-click = advantage, Ctrl-click = disadvantage; `onAction(action,
-// id, target)` only gets the clicked element, not the click event, so
-// there's no per-click modifier-key info to read — tracked globally instead
-// via keydown/keyup, same approach a real hand would use to hold a key
-// before clicking. Registered once at module load (this file is imported
-// by every sheet).
-let _shiftDown = false;
-let _ctrlDown = false;
-// Handout 30: Alt segurado ao clicar "Damage" = rola como crítico (dados em
-// dobro). Mesmo mecanismo de tecla global do Shift/Ctrl acima — não tem
-// como o sistema saber sozinho que o ataque foi 20 natural (attack e damage
-// são rolls separados), então o jogador sinaliza na hora.
-let _altDown = false;
-if (typeof window !== 'undefined') {
-  window.addEventListener('keydown', (e) => { if (e.key === 'Shift') _shiftDown = true; if (e.key === 'Control') _ctrlDown = true; if (e.key === 'Alt') _altDown = true; });
-  window.addEventListener('keyup', (e) => { if (e.key === 'Shift') _shiftDown = false; if (e.key === 'Control') _ctrlDown = false; if (e.key === 'Alt') _altDown = false; });
-  window.addEventListener('blur', () => { _shiftDown = false; _ctrlDown = false; _altDown = false; });
-}
-
-/** 1 = advantage (Shift held), -1 = disadvantage (Ctrl held), 0 = normal. Shift wins if both are held. */
-export function currentAdvantageMode() {
-  if (_shiftDown) return 1;
-  if (_ctrlDown) return -1;
-  return 0;
-}
-
-/** true = Alt está pressionado agora — sinaliza "role este dano como crítico" (Handout 30). */
-export function isCriticalHeld() {
-  return _altDown;
-}
-
-// ── Compendium search helper (shared by character-wizard and level-up-wizard) ──
-// Extracted so subclass search is not duplicated between the two wizards.
-// `includeData` is true for subclass/spell (filtered by classIdentifier/classes).
-export async function searchCompendiumEntries(entryType, query, includeData = false) {
-  const { api } = await import('/_loom/sdk/index.js');
-  const params = new URLSearchParams({ entryType });
-  if (query) params.set('search', query);
-  if (includeData) params.set('includeData', 'true');
-  try {
-    const res = await api.get(`/compendium/browse/entries?${params}`);
-    return res?.entries ?? [];
-  } catch (err) {
-    console.warn('[pf2e] compendium search failed:', err);
-    return [];
-  }
-}
-
 // ── Shared form saver for group/vehicle/encounter sheets (A1) ──
 function setPathValueArrayAware(obj, path, value) {
   const parts = path.split('.');
@@ -375,3 +323,78 @@ export function normalizeItemData(raw, type = 'equipment') {
   return data;
 }
 
+
+export function num(v) {
+  if (v && typeof v === 'object') v = v.value;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+export function itemsArray(items) {
+  if (Array.isArray(items)) return items;
+  if (Array.isArray(items?.contents)) return items.contents;
+  return [];
+}
+
+export async function promptLoomInput({ title, label, defaultValue = '' }) {
+  let LoomDialogClass = typeof LoomDialog !== 'undefined' ? LoomDialog : null;
+  if (!LoomDialogClass && typeof window !== 'undefined') {
+    try {
+      const sdk = await import('/_loom/sdk/index.js');
+      LoomDialogClass = sdk.LoomDialog;
+    } catch {}
+  }
+  if (LoomDialogClass && LoomDialogClass.wait) {
+    const container = document.createElement('div');
+    container.className = 'pf2e-prompt-dialog-body';
+    container.style.cssText = 'padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;';
+    container.innerHTML = `
+      <label style="font-family: var(--tat-sans, sans-serif); font-size: 0.88rem; font-weight: 700; color: #ffd778; letter-spacing: 0.04em; text-transform: uppercase;">${label}</label>
+      <input type="text" class="tat-in pf2e-prompt-input" value="${defaultValue}" style="width: 100%; box-sizing: border-box; padding: 8px 12px; background: #231b1b; border: 1.5px solid #d8b46a; border-radius: 4px; color: #ffffff; font-size: 0.95rem; font-weight: 600;" />
+    `;
+    const inputEl = container.querySelector('.pf2e-prompt-input');
+    setTimeout(() => {
+      inputEl?.focus();
+      inputEl?.select();
+    }, 50);
+
+    const { localize } = await import('./i18n.mjs');
+    return LoomDialogClass.wait({
+      window: { title },
+      content: container,
+      width: 400,
+      buttons: [
+        {
+          action: 'cancel',
+          label: localize('pf2e.sheets.cancel', 'Cancelar'),
+          variant: 'ghost',
+          callback: () => null,
+        },
+        {
+          action: 'save',
+          label: localize('pf2e.sheets.save', 'Salvar'),
+          variant: 'primary',
+          callback: () => inputEl?.value ?? null,
+        },
+      ],
+    });
+  }
+  return typeof prompt === 'function' ? prompt(label, defaultValue) : defaultValue;
+}
+
+// Cast ids the current user is targeting. castId first: unlinked NPCs keep their HP on the cast, not on the actor.
+export function currentTargetIds() {
+  const list = Array.from(globalThis.window?.Loom?.user?.targets ?? globalThis.window?.Loom?.targets ?? []);
+  return [...new Set(list.map((t) => t?.castId || t?.id || t).filter(Boolean))];
+}
+
+/** Loads the document that holds a token's HP (the actor for linked casts, the cast otherwise) and its API path. */
+export async function loadHolder(tid) {
+  const { api } = globalThis.window.Loom;
+  const enc = encodeURIComponent(tid);
+  const cast = await api.get(`/cast/${enc}`).catch(() => null);
+  const linked = cast?.isLinked && cast.actorId;
+  const path = linked ? `/actors/${encodeURIComponent(cast.actorId)}` : (cast ? `/cast/${enc}` : `/actors/${enc}`);
+  const holder = linked || !cast ? await api.get(path) : cast;
+  return holder ? { holder, path } : null;
+}

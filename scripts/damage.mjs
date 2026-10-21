@@ -16,6 +16,11 @@ function num(v) {
  * @param {{ immunities?: string[], weaknesses?: Record<string, number>, resistances?: Record<string, number> }} [mitigation]
  * @returns {{ effectiveDamage: number, absorbed: number, weaknessAdded: number, immune: boolean }}
  */
+/** Basic saving throw: damage multiplier by degree of success (crit success 0, success half, failure full, crit failure double). */
+export function basicSaveMultiplier(degree) {
+  return { critSuccess: 0, success: 0.5, failure: 1, critFailure: 2 }[degree] ?? 1;
+}
+
 export function calculateDamageMitigation(damage, damageType = 'untyped', mitigation = {}) {
   const dmg = Math.max(0, num(damage));
   const type = String(damageType || '').toLowerCase();
@@ -390,4 +395,76 @@ export function rollRecoveryFlatCheck(dyingValue) {
   if (natural === 20) idx = Math.min(3, idx + 1);
   else if (natural === 1) idx = Math.max(0, idx - 1);
   return { natural, dc, degree: order[idx] };
+}
+
+
+/**
+ * Decrements charges, uses, or quantity for a consumable item.
+ *
+ * @param {Record<string, any>} itemData
+ * @returns {{ success: boolean, reason?: 'empty', data: Record<string, any>, remainingQty: number, remainingUses: number }}
+ */
+export function consumeItemData(itemData = {}) {
+  const data = JSON.parse(JSON.stringify(itemData || {}));
+  const usesObj = data.uses || data.charges || null;
+  let qty = Math.max(0, num(data.quantity ?? 1));
+
+  if (usesObj && usesObj.value !== undefined) {
+    const curVal = Math.max(0, num(usesObj.value));
+    if (curVal <= 0) return { success: false, reason: 'empty', data, remainingQty: qty, remainingUses: 0 };
+    usesObj.value = curVal - 1;
+    if (usesObj.value === 0) {
+      if (qty > 1) {
+        data.quantity = qty - 1;
+        usesObj.value = Math.max(1, num(usesObj.max ?? 1));
+      } else {
+        data.quantity = 0;
+      }
+    }
+    return {
+      success: true,
+      data,
+      remainingQty: data.quantity,
+      remainingUses: usesObj.value,
+    };
+  }
+
+  if (qty <= 0) return { success: false, reason: 'empty', data, remainingQty: 0, remainingUses: 0 };
+  data.quantity = qty - 1;
+  return {
+    success: true,
+    data,
+    remainingQty: data.quantity,
+    remainingUses: data.quantity,
+  };
+}
+
+/**
+ * Extracts a dice/healing formula from a consumable item.
+ *
+ * @param {Record<string, any>} item
+ * @returns {string|null}
+ */
+export function extractConsumableHealing(item = {}) {
+  const d = item.data || item.system || {};
+  if (d.damage && (d.damage.kind === 'healing' || d.damage.type === 'healing') && d.damage.formula) {
+    return String(d.damage.formula).trim();
+  }
+  if (d.healing) {
+    if (typeof d.healing === 'string' && d.healing.trim()) return d.healing.trim();
+    if (d.healing.formula) return String(d.healing.formula).trim();
+  }
+  if (d.damageFormula && String(d.damageType || '').toLowerCase() === 'healing') {
+    return String(d.damageFormula).trim();
+  }
+  const desc = String(d.description || '');
+  const macroMatch = desc.match(/@Damage\[\(?([0-9dD+\-\s]+)\)?\[healing\]\]/i);
+  if (macroMatch?.[1]) return macroMatch[1].trim();
+  const textMatch = desc.match(/(?:cura|restaura|heals?|recovers?)\s+([0-9dD+\-\s]+)\s*(?:pv|hp|pontos de vida|hit points)/i);
+  if (textMatch?.[1]) return textMatch[1].trim();
+  const nameLower = String(item.name || '').toLowerCase();
+  if (nameLower.includes('cura') || nameLower.includes('healing potion') || nameLower.includes('elixir of life')) {
+    return '1d8';
+  }
+  return null;
 }

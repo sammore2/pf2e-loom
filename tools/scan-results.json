@@ -1,0 +1,4450 @@
+{
+  "mappings": {
+    "equipment": [
+      {
+        "oldName": "Aeon Stone (Dull Grey)",
+        "newName": "Aeon Stone (Consumed)",
+        "targetId": "CVTbxCY85nLoHYuw"
+      },
+      {
+        "oldName": "Aeon Stone (Clear Spindle)",
+        "newName": "Aeon Stone (Nourishing)",
+        "targetId": "M2CPAgSAoEL4oawq"
+      },
+      {
+        "oldName": "Aeon Stone (Tourmaline Sphere)",
+        "newName": "Aeon Stone (Delaying)",
+        "targetId": "kSaUlWgYMywIRV3C"
+      },
+      {
+        "oldName": "Aeon Stone (Orange Prism)",
+        "newName": "Aeon Stone (Amplifying)",
+        "targetId": "MO8J2IcBhiTnm9D8"
+      },
+      {
+        "oldName": "Bag of Holding",
+        "newName": "Spacious Pouch",
+        "targetId": "jaEEvuQ32GjAa8jy"
+      },
+      {
+        "oldName": "Barkskin Potion",
+        "newName": "Oak Potion",
+        "targetId": "zC7LipQPHRYw2RXx"
+      },
+      {
+        "oldName": "Boots of Speed",
+        "newName": "Propulsive Boots",
+        "targetId": "Ck5k13uTNqibLFJk"
+      },
+      {
+        "oldName": "Bracers of Armor",
+        "newName": "Bands of Force",
+        "targetId": "02q8s6sSicMkhs1l"
+      },
+      {
+        "oldName": "Bralani Breath",
+        "newName": "Deadlock Mint",
+        "targetId": "KuTwNrDpuYVAPu7c"
+      },
+      {
+        "oldName": "Breastplate of Command",
+        "newName": "Warleader's Bulwark",
+        "targetId": "RUEAV5LMUGFHcXcW"
+      },
+      {
+        "oldName": "Broom of Flying",
+        "newName": "Flying Broomstick",
+        "targetId": "1erd18HS57aCyC6r"
+      },
+      {
+        "oldName": "Cape of the Mounteback",
+        "newName": "Charlatan's Cape",
+        "targetId": "uiJAR3jQbQHhiP3Q"
+      },
+      {
+        "oldName": "Celestial Armor",
+        "newName": "Holy Chain",
+        "targetId": "2uHcTZ40oZ62R9gy"
+      },
+      {
+        "oldName": "Choker-Arm Mutagen",
+        "newName": "Bendy-Arm Mutagen",
+        "targetId": "9F3d43xMDCJNIkDo"
+      },
+      {
+        "oldName": "Class Kits",
+        "newName": "Adventurer's Pack",
+        "targetId": "2req0jGaxz8hScdB"
+      },
+      {
+        "oldName": "Dagger of Venom",
+        "newName": "Serpent Dagger",
+        "targetId": "ZvIEJCY60fHqzl6r"
+      },
+      {
+        "oldName": "Dancing Rune",
+        "newName": "Animated",
+        "targetId": "DCPsilr8wbPXxTUv"
+      },
+      {
+        "oldName": "Death Knell Powder",
+        "newName": "Death Knell Powder",
+        "targetId": "8qUja4YdvewN4es0"
+      },
+      {
+        "oldName": "Demon Armor",
+        "newName": "Unholy Plate",
+        "targetId": "hYBZK1kaGPeR85CH"
+      },
+      {
+        "oldName": "Disrupting Oil",
+        "newName": "Burial Oil",
+        "targetId": "M1rX9EahXV9pa0Ui"
+      },
+      {
+        "oldName": "Disrupting Rune",
+        "newName": "Vitalizing Rune",
+        "targetId": "LwQb7ryTC8FlOXgX"
+      },
+      {
+        "oldName": "Dragon's Breath potion (various)",
+        "newName": "Energy Breath Potion (various)",
+        "targetId": null
+      },
+      {
+        "oldName": "Draconic Toxin Bottle",
+        "newName": "Energy Toxin Bottle",
+        "targetId": "fVKiVp6yG85ADrR6"
+      },
+      {
+        "oldName": "Druid's Vestments",
+        "newName": "Living Mantle",
+        "targetId": "hvlEFx25ogf1K1C2"
+      },
+      {
+        "oldName": "Everburning Torch",
+        "newName": "Everlight Crystal",
+        "targetId": "mRz8Jmk4Q06SsZpC"
+      },
+      {
+        "oldName": "Eyes of the Eagle",
+        "newName": "Eyes of the Cat",
+        "targetId": "dLTN4FU3qBoDZ5CJ"
+      },
+      {
+        "oldName": "Faerie Dragon Liqueur",
+        "newName": "Fey Dragonet Liqueur",
+        "targetId": "CtePdUJWKgjwpatZ"
+      },
+      {
+        "oldName": "Feather Token (Chest, Ladder, Swan Boat)",
+        "newName": "Boat",
+        "targetId": "WzsKbMMewXbf1nws"
+      },
+      {
+        "oldName": "Flame Tongue",
+        "newName": "Searing Blade",
+        "targetId": "G3a60Ug3YNCMyMVR"
+      },
+      {
+        "oldName": "Gloves of Storing",
+        "newName": "Retrieval Belt",
+        "targetId": "ngz7dYysC1NkBBRK"
+      },
+      {
+        "oldName": "Goggles of Night",
+        "newName": "Obsidian Goggles",
+        "targetId": "K7VHhUamFz3kTnm5"
+      },
+      {
+        "oldName": "Greater Disrupting Rune",
+        "newName": "Greater Vitalizing Rune",
+        "targetId": "oVrVzML63VFvVfKk"
+      },
+      {
+        "oldName": "Hat of Disagreeable Disguise",
+        "newName": "Handkerchief of Disagreeable Disguise",
+        "targetId": "aGkmq9k4QIEpLFs7"
+      },
+      {
+        "oldName": "Hat of Disguise",
+        "newName": "Masquerade Scarf",
+        "targetId": "fvpLYx1Lo42cdleQ"
+      },
+      {
+        "oldName": "Hat of the Magi",
+        "newName": "Mage's Hat",
+        "targetId": "SswqJqeAWGtX3tTF"
+      },
+      {
+        "oldName": "Helm of Underwater Action",
+        "newName": "Submersible Helmet",
+        "targetId": "bdbBRucjvg0eYazY"
+      },
+      {
+        "oldName": "Holy Avenger",
+        "newName": "Chalice of Justice",
+        "targetId": "OIs6WPuCRh2UJTOe"
+      },
+      {
+        "oldName": "Horn of Fog",
+        "newName": "Cloud Pouch",
+        "targetId": "hcGvN03ieNWlSQYa"
+      },
+      {
+        "oldName": "Horseshoes of Speed",
+        "newName": "Alacritous Horseshoes",
+        "targetId": "peoheZMxdPHUNo93"
+      },
+      {
+        "oldName": "Hunger Oil",
+        "newName": "Gnawbone Toxin",
+        "targetId": "8GEsRsQAdDljRT1s"
+      },
+      {
+        "oldName": "Hunting Spider Venom",
+        "newName": "Spider Venom",
+        "targetId": "5RGNjhDxZ0yMhTds"
+      },
+      {
+        "oldName": "Javelin of Lightning",
+        "newName": "Trident of Lightning",
+        "targetId": "wDhqRxuXPQfyD0eX"
+      },
+      {
+        "oldName": "Liar's Demise",
+        "newName": "Fraudslayer Oil",
+        "targetId": "vAEQsYQbOYmqfIc0"
+      },
+      {
+        "oldName": "Lich Dust",
+        "newName": "Enervating Powder",
+        "targetId": "ca2lzxfJxvuLDrKu"
+      },
+      {
+        "oldName": "Malyass Root Paste",
+        "newName": "Tangle Root Toxin",
+        "targetId": "76T49dJYfxIrPvQe"
+      },
+      {
+        "oldName": "Marvelous Pigments",
+        "newName": "Miraculous Paintbrush",
+        "targetId": "FW1Ml15eeMItIxS2"
+      },
+      {
+        "oldName": "Mask of the Banshee",
+        "newName": "Guise of the Smirking Devil",
+        "targetId": "tr2eOlJMmBKBZtI9"
+      },
+      {
+        "oldName": "Mithral Tree",
+        "newName": "Dawnsilver Tree",
+        "targetId": "qRqGIxcadjjxcij3"
+      },
+      {
+        "oldName": "Oil of Object Animation",
+        "newName": "Oil of Dynamism",
+        "targetId": "C0kSU5KWMzLngvTa"
+      },
+      {
+        "oldName": "Owlbear Egg",
+        "newName": "Owl Screech Egg",
+        "targetId": "mAgIN0A0ywnhtefw"
+      },
+      {
+        "oldName": "Portable Hole",
+        "newName": "Planar Tunnel",
+        "targetId": "ulgsKBzOXJbjqnmW"
+      },
+      {
+        "oldName": "Potion of Expeditious Retreat",
+        "newName": "Potion of Emergency Escape",
+        "targetId": "jTfacZ4SRuQd7Avh"
+      },
+      {
+        "oldName": "Purple Worm Venom",
+        "newName": "Cave Worm Venom",
+        "targetId": "iRDCa4OVSTGUD3vi"
+      },
+      {
+        "oldName": "Remorhaz Armor",
+        "newName": "Smoldering Armor",
+        "targetId": "oE6tZBBbP59DOWFM"
+      },
+      {
+        "oldName": "Rhino Hide",
+        "newName": "Onslaught Hide",
+        "targetId": "C4XKMcHZoGzrAZBl"
+      },
+      {
+        "oldName": "Ring of Energy Resistance",
+        "newName": "Charm of Resistance",
+        "targetId": "EkZVXMdtqTTgahiJ"
+      },
+      {
+        "oldName": "Rungu",
+        "newName": "Cruuk",
+        "targetId": "v8C4hkqMNeUk60Db"
+      },
+      {
+        "oldName": "Salamander Elixir",
+        "newName": "Cooling Elixir (Lesser)",
+        "targetId": "Ekk7o1gPu8RotixD"
+      },
+      {
+        "oldName": "Salve of Slipperiness",
+        "newName": "Tricky Liniment",
+        "targetId": "MobYbxEL4KgxVi63"
+      },
+      {
+        "oldName": "Shadow Essence",
+        "newName": "Nethershade",
+        "targetId": "Wjkw0lEUOhypYvzo"
+      },
+      {
+        "oldName": "Sight-Theft Grit",
+        "newName": "Sightless Tincture",
+        "targetId": "1TWHN8RbimPVXM0U"
+      },
+      {
+        "oldName": "Silversheen",
+        "newName": "Silver Salve",
+        "targetId": "8fbsKEEbZ0CfBMIr"
+      },
+      {
+        "oldName": "Sinew-Shock Serum",
+        "newName": "Surging Serum (Lesser)",
+        "targetId": "1TWHN8RbimPVXM0U"
+      },
+      {
+        "oldName": "Smokestick",
+        "newName": "Smoke Ball (Lesser)",
+        "targetId": "MoBlVd36uD9xVvZC"
+      },
+      {
+        "oldName": "Sovereign Glue",
+        "newName": "Everlasting Adhesive",
+        "targetId": "7IrQPyMm76nLVoXx"
+      },
+      {
+        "oldName": "Speed Rune",
+        "newName": "Quickstrike",
+        "targetId": "KnZL0xPWDzQx9vWQ"
+      },
+      {
+        "oldName": "Spellbreaking (various)",
+        "newName": "Spellwatch",
+        "targetId": "qfyvOY3JTGUkOipr"
+      },
+      {
+        "oldName": "Spell-Storing Rune",
+        "newName": "Spell Reservoir",
+        "targetId": "payq4TwkN2BRF6fs"
+      },
+      {
+        "oldName": "Staff of Abjuration",
+        "newName": "Staff of Protection",
+        "targetId": "4O00N0HoPz5ywNyz"
+      },
+      {
+        "oldName": "Staff of Conjuration",
+        "newName": "Staff of Summoning",
+        "targetId": "v0IrX97Pf96jPvxP"
+      },
+      {
+        "oldName": "Staff of Divination",
+        "newName": "Staff of the Unblinking Eye",
+        "targetId": "uhsVSBF4f3D5oym0"
+      },
+      {
+        "oldName": "Staff of Enchantment",
+        "newName": "Staff of Control",
+        "targetId": "wUFQ8cqkwn2xTCma"
+      },
+      {
+        "oldName": "Staff of Evocation",
+        "newName": "Staff of Elemental Power",
+        "targetId": "0Vw44XmzVS4knsa8"
+      },
+      {
+        "oldName": "Staff of Illusion",
+        "newName": "Staff of Phantasms",
+        "targetId": "HVgolLqbXUeRHXVN"
+      },
+      {
+        "oldName": "Staff of Necromancy",
+        "newName": "Staff of the Dead",
+        "targetId": "1uWytZ76MwVQYIO9"
+      },
+      {
+        "oldName": "Staff of Transmutation",
+        "newName": "Fluid Form Staff",
+        "targetId": "B71BgdfFApkYmAjc"
+      },
+      {
+        "oldName": "Sunrod",
+        "newName": "Glow Rod",
+        "targetId": "y4WJY8rCbY6d1MET"
+      },
+      {
+        "oldName": "Tanglefoot Bag",
+        "newName": "Glue Bomb",
+        "targetId": "T6Appwwl6nUl56Xj"
+      },
+      {
+        "oldName": "Tanglefoot Extruder",
+        "newName": "Splatrope Extruder",
+        "targetId": "2KnSYPFGKz4MDeiW"
+      },
+      {
+        "oldName": "Thunderstone",
+        "newName": "Blasting Stone",
+        "targetId": "Xnqglykl3Cif8rN9"
+      },
+      {
+        "oldName": "Tindertwig",
+        "newName": "Matchstick",
+        "targetId": "ylUdMTsfOQGJ3MN3"
+      },
+      {
+        "oldName": "Universal Solvent",
+        "newName": "Absolute Solvent",
+        "targetId": "QSVIv5obLhKkmy67"
+      },
+      {
+        "oldName": "Owlbear Claw",
+        "newName": "Predator's Claw",
+        "targetId": "qoM7Va5GqcLLBzgu"
+      },
+      {
+        "oldName": "Potion of Tongues",
+        "newName": "Potion of Truespeech",
+        "targetId": "drxEWZl8mqMOZ23E"
+      },
+      {
+        "oldName": "Wand of Manifold Missiles",
+        "newName": "Wand of Shardstorm",
+        "targetId": "KPWN5tGGkvZR7K3K"
+      },
+      {
+        "oldName": "Wand of Slaying",
+        "newName": "Wand of Slaughter",
+        "targetId": "CjfBdn0fOIarWzBc"
+      },
+      {
+        "oldName": "Winged Boots",
+        "newName": "Winged Sandals",
+        "targetId": "aKoMqPDmVzPI7Q20"
+      },
+      {
+        "oldName": "Winter Wolf Elixir",
+        "newName": "Witchwarg Elixir",
+        "targetId": "n9VrmK9Us0viv20P"
+      }
+    ],
+    "spells": [
+      {
+        "oldName": "Abundant Step",
+        "newName": "Shrink the Span",
+        "targetId": "Az3PmWnlWSb5ELX9"
+      },
+      {
+        "oldName": "Abyssal Wrath",
+        "newName": "Chthonian Wrath",
+        "targetId": "crF4g9jRN1y84MSD"
+      },
+      {
+        "oldName": "Animate Dead",
+        "newName": "Summon Undead",
+        "targetId": "9WGeBwIIbbUuWKq0"
+      },
+      {
+        "oldName": "Augment Summoning",
+        "newName": "Fortify Summoning",
+        "targetId": "tWzxuJdbXqvskdIo"
+      },
+      {
+        "oldName": "Baleful Polymorph",
+        "newName": "Cursed Metamorphosis",
+        "targetId": "dN8QBNuTiaBHCKUe"
+      },
+      {
+        "oldName": "Barkskin",
+        "newName": "Oaken Resilience",
+        "targetId": "YWrfKetOqDwVFut7"
+      },
+      {
+        "oldName": "Bind Soul",
+        "newName": "Seize Soul",
+        "targetId": "GYmXvS9NJ7QwfWGg"
+      },
+      {
+        "oldName": "Blind Ambition",
+        "newName": "Ignite Ambition",
+        "targetId": "Dj44lViYKvOJ8a53"
+      },
+      {
+        "oldName": "Blink",
+        "newName": "Flicker",
+        "targetId": "zR67Rt3UMHKC5evy"
+      },
+      {
+        "oldName": "Burning Hands",
+        "newName": "Breathe Fire",
+        "targetId": "y6rAdMK6EFlV6U0t"
+      },
+      {
+        "oldName": "Calm Emotions",
+        "newName": "Calm",
+        "targetId": "b515AZlB0sridKSq"
+      },
+      {
+        "oldName": "Charming Words",
+        "newName": "Charming Push",
+        "targetId": "KMFRKzNCq7hVNH7H"
+      },
+      {
+        "oldName": "Chill Touch",
+        "newName": "Void Warp",
+        "targetId": "mAMEt4FFbdqoRnkN"
+      },
+      {
+        "oldName": "Cloudkill",
+        "newName": "Toxic Cloud",
+        "targetId": "MlpbeZ61Euhl0d60"
+      },
+      {
+        "oldName": "Color Spray",
+        "newName": "Dizzying Colors",
+        "targetId": "UKsIOWmMx4hSpafl"
+      },
+      {
+        "oldName": "Commune with Nature",
+        "newName": "Commune",
+        "targetId": "7DN13ILADW2N9Z1t"
+      },
+      {
+        "oldName": "Comprehend Language",
+        "newName": "Translate",
+        "targetId": "vTQvfYu2llKQedmY"
+      },
+      {
+        "oldName": "Continual Flame",
+        "newName": "Everlight",
+        "targetId": "ynm8JIU3sc3qUMpa"
+      },
+      {
+        "oldName": "Crushing Despair",
+        "newName": "Wave of Despair",
+        "targetId": "GaRQlC9Yw1BGKHfN"
+      },
+      {
+        "oldName": "Dancing Lights",
+        "newName": "Light",
+        "targetId": "WBmvzNDfpwka3qT4"
+      },
+      {
+        "oldName": "Dimension Door",
+        "newName": "Translocate",
+        "targetId": "VlNcjmYyu95vOUe8"
+      },
+      {
+        "oldName": "Dimensional Anchor",
+        "newName": "Planar Tether",
+        "targetId": "ksLCg62cLOojw3gN"
+      },
+      {
+        "oldName": "Dimensional Lock",
+        "newName": "Planar Seal",
+        "targetId": "XZE4BawIlTf88Yl9"
+      },
+      {
+        "oldName": "Discern Location",
+        "newName": "Pinpoint",
+        "targetId": "CeSh8QcVnqP5OlLj"
+      },
+      {
+        "oldName": "Disrupt Undead",
+        "newName": "Vitality Lash",
+        "targetId": "kcelf6IHl3L9VXXg"
+      },
+      {
+        "oldName": "Disrupting Weapons",
+        "newName": "Infuse Vitality",
+        "targetId": "2iQKhCQBijhj5Rf3"
+      },
+      {
+        "oldName": "Divine Vessel",
+        "newName": "—",
+        "targetId": null
+      },
+      {
+        "oldName": "Dragon Claws",
+        "newName": "Flurry of Claws",
+        "targetId": "K8vvrOgW4bGakXxm"
+      },
+      {
+        "oldName": "Efficient Apport",
+        "newName": "Reclined Apport",
+        "targetId": "lsR3RLEdBG4rcSzd"
+      },
+      {
+        "oldName": "Empty Body",
+        "newName": "Embrace Nothingness",
+        "targetId": "mau1Olq58ECF0ZPi"
+      },
+      {
+        "oldName": "Endure Elements",
+        "newName": "Environmental Endurance",
+        "targetId": "5esP2GVzvxWsMgaX"
+      },
+      {
+        "oldName": "Entangle",
+        "newName": "Entangling Flora",
+        "targetId": "J6vNvrUT3b1hx2iA"
+      },
+      {
+        "oldName": "Faerie Fire",
+        "newName": "Revealing Light",
+        "targetId": "0qaqksrGGDj74HXE"
+      },
+      {
+        "oldName": "False Life",
+        "newName": "False Vitality",
+        "targetId": "8ViwItUgwT4lOvvb"
+      },
+      {
+        "oldName": "Feather Fall",
+        "newName": "Gentle Landing",
+        "targetId": "TTwOKGqmZeKSyNMH"
+      },
+      {
+        "oldName": "Feeblemind",
+        "newName": "Never Mind",
+        "targetId": "5BbU1V6wGSGbrmRD"
+      },
+      {
+        "oldName": "Finger of Death",
+        "newName": "Execute",
+        "targetId": "Z9OrRXKgAPv6Hn5l"
+      },
+      {
+        "oldName": "Flaming Sphere",
+        "newName": "Floating Flame",
+        "targetId": "2ZdHjnpEQJuqOYSG"
+      },
+      {
+        "oldName": "Flesh To Stone",
+        "newName": "Petrify",
+        "targetId": "znv4ECL7ZtuiagtA"
+      },
+      {
+        "oldName": "Floating Disk",
+        "newName": "Carryall",
+        "targetId": "LvezN4a3kYf1OHMg"
+      },
+      {
+        "oldName": "Force Cage",
+        "newName": "Lifewood Cage",
+        "targetId": "HES5jvGiNZZnJycK"
+      },
+      {
+        "oldName": "Freedom of Movement",
+        "newName": "Unfettered Movement",
+        "targetId": "aqRYNoSvxsVfqglH"
+      },
+      {
+        "oldName": "Gaseous Form",
+        "newName": "Vapor Form",
+        "targetId": "V8wXOsoejQhe6CyG"
+      },
+      {
+        "oldName": "Gentle Repose",
+        "newName": "Peaceful Rest",
+        "targetId": "xRgU9rrhmGAgG4Rc"
+      },
+      {
+        "oldName": "Glibness",
+        "newName": "Honeyed Words",
+        "targetId": "JyxTmqjYYn63V5LY"
+      },
+      {
+        "oldName": "Glitterdust",
+        "newName": "Revealing Light",
+        "targetId": "0qaqksrGGDj74HXE"
+      },
+      {
+        "oldName": "Globe of Invulnerability",
+        "newName": "Dispelling Globe",
+        "targetId": "JOdOpbPDl7nqvJUm"
+      },
+      {
+        "oldName": "Glutton's Jaw",
+        "newName": "Glutton's Jaws",
+        "targetId": "SdXFiQ4Py8761sNO"
+      },
+      {
+        "oldName": "Glyph of Warding",
+        "newName": "Rune Trap",
+        "targetId": "o0l57UfBm9ScEUMW"
+      },
+      {
+        "oldName": "Goodberry",
+        "newName": "Cornucopia",
+        "targetId": "vQuwLqtFFYt0K15N"
+      },
+      {
+        "oldName": "Hallucinatory Terrain",
+        "newName": "Mirage",
+        "targetId": "HBJPsonQnWcC3qdX"
+      },
+      {
+        "oldName": "Heroes' Feast",
+        "newName": "Fortifying Brew",
+        "targetId": "yRf59eFtZ50cGlem"
+      },
+      {
+        "oldName": "Hideous Laughter",
+        "newName": "Laughing Fit",
+        "targetId": "tlSE7Ly8vi1Dgddv"
+      },
+      {
+        "oldName": "Horrid Wilting",
+        "newName": "Desiccate",
+        "targetId": "M0jQlpQYUr0pp2Sv"
+      },
+      {
+        "oldName": "Hyperfocus",
+        "newName": "Clouded Focus",
+        "targetId": "XhgMx9WC6NfXd9RP"
+      },
+      {
+        "oldName": "Hypnotic Pattern",
+        "newName": "Hypnotize",
+        "targetId": "K2WpC3FFoHrqX9Q5"
+      },
+      {
+        "oldName": "Inspire Competence",
+        "newName": "Uplifting Overture",
+        "targetId": "f0Z5mqGA6Yu79B8x"
+      },
+      {
+        "oldName": "Inspire Courage",
+        "newName": "Courageous Anthem",
+        "targetId": "IAjvwqgiDr3qGYxY"
+      },
+      {
+        "oldName": "Inspire Defense",
+        "newName": "Rallying Anthem",
+        "targetId": "bH0kPuf7UKxRvi2P"
+      },
+      {
+        "oldName": "Inspire Heroics",
+        "newName": "Fortissimo Composition",
+        "targetId": "kF0rs9mCPvJGfAZE"
+      },
+      {
+        "oldName": "Invisibility Sphere",
+        "newName": "Shared Invisibility",
+        "targetId": "I0j56TNRmGcTyoqJ"
+      },
+      {
+        "oldName": "Ki Strike",
+        "newName": "Inner Upheaval",
+        "targetId": "ZL8NTvB22NeEWhVG"
+      },
+      {
+        "oldName": "Ki Blast",
+        "newName": "Qi Blast",
+        "targetId": "oo7YcRC2gcez81PV"
+      },
+      {
+        "oldName": "Ki Form",
+        "newName": "Qi Form",
+        "targetId": "YDMOqndvYFu3OjA6"
+      },
+      {
+        "oldName": "Ki Rush",
+        "newName": "Qi Rush",
+        "targetId": "ps0nmhclT6aIXgd8"
+      },
+      {
+        "oldName": "Know Direction",
+        "newName": "Know the Way",
+        "targetId": "tXa5vOu5giBNCjdR"
+      },
+      {
+        "oldName": "Legend Lore",
+        "newName": "Collective Memories",
+        "targetId": "hp6Q64dl7xbdn4gQ"
+      },
+      {
+        "oldName": "Litany against Sloth",
+        "newName": "—",
+        "targetId": null
+      },
+      {
+        "oldName": "Litany against Wrath",
+        "newName": "—",
+        "targetId": null
+      },
+      {
+        "oldName": "Litany of Depravity",
+        "newName": "—",
+        "targetId": null
+      },
+      {
+        "oldName": "Litany of Righteousness",
+        "newName": "—",
+        "targetId": null
+      },
+      {
+        "oldName": "Litany of Self-Interest",
+        "newName": "—",
+        "targetId": null
+      },
+      {
+        "oldName": "Longstrider",
+        "newName": "Tailwind",
+        "targetId": "KcLVELhCUcKXxiKE"
+      },
+      {
+        "oldName": "Mage Armor",
+        "newName": "Mystic Armor",
+        "targetId": "aAbfKn8maGjJjk2W"
+      },
+      {
+        "oldName": "Mage Hand",
+        "newName": "Telekinetic Hand",
+        "targetId": "pwzdSlJgYqN7bs2w"
+      },
+      {
+        "oldName": "Magic Aura",
+        "newName": "Disguise Magic",
+        "targetId": "PRrZ7anETWPm90YY"
+      },
+      {
+        "oldName": "Magic Fang",
+        "newName": "Runic Body",
+        "targetId": "EE7Q5BHIrfWNCPtT"
+      },
+      {
+        "oldName": "Magic Missile",
+        "newName": "Force Barrage",
+        "targetId": "gKKqvLohtrSJj3BM"
+      },
+      {
+        "oldName": "Magic Mouth",
+        "newName": "Embed Message",
+        "targetId": "eIQ86FOXK34HiNLs"
+      },
+      {
+        "oldName": "Magic Weapon",
+        "newName": "Runic Weapon",
+        "targetId": "TFitdEOpQC4SzKQQ"
+      },
+      {
+        "oldName": "Magnificent Mansion",
+        "newName": "Planar Palace",
+        "targetId": "vPWMEyVTreMOoFnm"
+      },
+      {
+        "oldName": "Maze",
+        "newName": "Quandary",
+        "targetId": "Oj1PJBMQD9vuwCv7"
+      },
+      {
+        "oldName": "Meld into Stone",
+        "newName": "One with Stone",
+        "targetId": "vh1RpbWfqdNC4L3P"
+      },
+      {
+        "oldName": "Meteor Swarm",
+        "newName": "Falling Stars",
+        "targetId": "jrBa9deU2ULFWvSl"
+      },
+      {
+        "oldName": "Mind Blank",
+        "newName": "Hidden Mind",
+        "targetId": "C2w3YfBKjIRS07DP"
+      },
+      {
+        "oldName": "Misdirection",
+        "newName": "Disguise Magic",
+        "targetId": "PRrZ7anETWPm90YY"
+      },
+      {
+        "oldName": "Modify Memory",
+        "newName": "Rewrite Memory",
+        "targetId": "FhOaQDTSnsY7tiam"
+      },
+      {
+        "oldName": "Neutralize Poison",
+        "newName": "Cleanse Affliction",
+        "targetId": "SUKaxVZW2TlM8lu0"
+      },
+      {
+        "oldName": "Nondetection",
+        "newName": "Veil of Privacy",
+        "targetId": "EoKBlgf6Smt8opaU"
+      },
+      {
+        "oldName": "Obscuring Mist",
+        "newName": "Mist",
+        "targetId": "9XHmC2JgTUIQ1CCm"
+      },
+      {
+        "oldName": "Pass Without Trace",
+        "newName": "Vanishing Tracks",
+        "targetId": "zlnXpME1T2uvn8Lr"
+      },
+      {
+        "oldName": "Passwall",
+        "newName": "Magic Passage",
+        "targetId": "115Xp9E38CJENhNS"
+      },
+      {
+        "oldName": "Phantom Mount",
+        "newName": "Marvelous Mount",
+        "targetId": "WPKJOhEihhcIm2uQ"
+      },
+      {
+        "oldName": "Planar Binding",
+        "newName": "Planar Servitor",
+        "targetId": "vgy00hnqxN9VoeoF"
+      },
+      {
+        "oldName": "Plane Shift",
+        "newName": "Interplanar Teleport",
+        "targetId": "5bTt2CvYHPvaR7QQ"
+      },
+      {
+        "oldName": "Positive Luminance",
+        "newName": "Vital Luminance",
+        "targetId": "8XuNn0h0rHE24m3B"
+      },
+      {
+        "oldName": "Private Sanctum",
+        "newName": "Peaceful Bubble",
+        "targetId": "onjZCEHs3JJJRTD0"
+      },
+      {
+        "oldName": "Produce Flame",
+        "newName": "Ignition",
+        "targetId": "6DfLZBl8wKIV03Iq"
+      },
+      {
+        "oldName": "Prying Eye",
+        "newName": "Scouting Eye",
+        "targetId": "Ek5XI0aEdZhBgm21"
+      },
+      {
+        "oldName": "Pulse of The City",
+        "newName": "Pulse of Civilization",
+        "targetId": "ivKnEtI1z4UqEKIA"
+      },
+      {
+        "oldName": "Purify Food And Drink",
+        "newName": "Cleanse Cuisine",
+        "targetId": "qXTB7Ec9yYh5JPPV"
+      },
+      {
+        "oldName": "Quivering Palm",
+        "newName": "Touch of Death",
+        "targetId": "Ovvflf5aFbmBxqq8"
+      },
+      {
+        "oldName": "Ray of Enfeeblement",
+        "newName": "Enfeeble",
+        "targetId": "J7Y7tl0bbdz7TcCc"
+      },
+      {
+        "oldName": "Remove Curse",
+        "newName": "Cleanse Affliction",
+        "targetId": "SUKaxVZW2TlM8lu0"
+      },
+      {
+        "oldName": "Remove Disease",
+        "newName": "Cleanse Affliction",
+        "targetId": "SUKaxVZW2TlM8lu0"
+      },
+      {
+        "oldName": "Remove Fear",
+        "newName": "Clear Mind",
+        "targetId": "EfFMLVbmkBWmzoLF"
+      },
+      {
+        "oldName": "Remove Paralysis",
+        "newName": "Sure Footing",
+        "targetId": "BCuHKrDeJ4eq53M6"
+      },
+      {
+        "oldName": "Resilient Sphere",
+        "newName": "Containment",
+        "targetId": "qJQADktwD0x8kLAy"
+      },
+      {
+        "oldName": "Restore Senses",
+        "newName": "Sound Body",
+        "targetId": "Et8RSCLx8w7uOLvo"
+      },
+      {
+        "oldName": "Righteous Might",
+        "newName": "Sacred Form",
+        "targetId": "MMCQsh12TPaDdPbV"
+      },
+      {
+        "oldName": "Roar of the Wyrm",
+        "newName": "Roar of the Dragon",
+        "targetId": "FSu6ZKxr3xdS75wq"
+      },
+      {
+        "oldName": "Sanctified Ground",
+        "newName": "Anointed Ground",
+        "targetId": "y3jlOfgsQH1JjkJE"
+      },
+      {
+        "oldName": "Scorching Ray",
+        "newName": "Blazing Bolt",
+        "targetId": "ZxHC7V7HtjUsB8zH"
+      },
+      {
+        "oldName": "Searing Light",
+        "newName": "Holy Light",
+        "targetId": "DyiD239dNS7RIxZE"
+      },
+      {
+        "oldName": "Scintillating Pattern",
+        "newName": "Confusing Colors",
+        "targetId": "uEyfLoFQsRKBRIcB"
+      },
+      {
+        "oldName": "See Invisibility",
+        "newName": "See the Unseen",
+        "targetId": "jwK43yKsHTkJQvQ9"
+      },
+      {
+        "oldName": "Shadow Walk",
+        "newName": "Umbral Journey",
+        "targetId": "rxvS7EMJ7qmexAyA"
+      },
+      {
+        "oldName": "Shapechange",
+        "newName": "Metamorphosis",
+        "targetId": "pswdik31kuHEvdno"
+      },
+      {
+        "oldName": "Shield Other",
+        "newName": "Share Life",
+        "targetId": "d7Lwx6KAs47MtF0q"
+      },
+      {
+        "oldName": "Simulacrum",
+        "newName": "Shadow Double",
+        "targetId": "h5UqEdeqK8iTcU0J"
+      },
+      {
+        "oldName": "Sound Burst",
+        "newName": "Noise Blast",
+        "targetId": "wzLkNU3AAqOSKFPR"
+      },
+      {
+        "oldName": "Spectral Hand",
+        "newName": "Ghostly Carrier",
+        "targetId": "rthC6dGm3nNrt1xN"
+      },
+      {
+        "oldName": "Spider Climb",
+        "newName": "Gecko Grip",
+        "targetId": "5KobTMrZeZxuXMgl"
+      },
+      {
+        "oldName": "Splash of Art",
+        "newName": "Creative Splash",
+        "targetId": "xTpp8dHZsNMDm75B"
+      },
+      {
+        "oldName": "Stone Tell",
+        "newName": "Speak with Stones",
+        "targetId": "YIMampGpij4Y30yE"
+      },
+      {
+        "oldName": "Stoneskin",
+        "newName": "Mountain Resilience",
+        "targetId": "2BV2yYPfVJ5zirZt"
+      },
+      {
+        "oldName": "Tanglefoot",
+        "newName": "Tangle Vine",
+        "targetId": "uZK2BYzPnxUBnDjr"
+      },
+      {
+        "oldName": "Time Stop",
+        "newName": "Freeze Time",
+        "targetId": "1dsahW4g1ggXtypx"
+      },
+      {
+        "oldName": "Tongues",
+        "newName": "Truespeech",
+        "targetId": "SwUiVavHKMWG7t5K"
+      },
+      {
+        "oldName": "Touch of Corruption",
+        "newName": "Touch of the Void",
+        "targetId": "jFmWSIpJGGebim6y"
+      },
+      {
+        "oldName": "Touch of Idiocy",
+        "newName": "Stupefy",
+        "targetId": "CQb8HtQ1BPeZmu9h"
+      },
+      {
+        "oldName": "Tree Shape",
+        "newName": "One with Plants",
+        "targetId": "dileJ0Yxqg76LMvu"
+      },
+      {
+        "oldName": "Tree Stride",
+        "newName": "Nature's Pathway",
+        "targetId": "F1qxaqsEItmBura2"
+      },
+      {
+        "oldName": "Trueseeing",
+        "newName": "Truesight",
+        "targetId": "uqlxMQQeSGWEVjki"
+      },
+      {
+        "oldName": "True Strike",
+        "newName": "Sure Strike",
+        "targetId": "Gb7SeieEvd0pL2Eh"
+      },
+      {
+        "oldName": "Undetectable Alignment",
+        "newName": "—",
+        "targetId": null
+      },
+      {
+        "oldName": "Unseen Custodians",
+        "newName": "Phantasmal Custodians",
+        "targetId": "uuoPmbjEtqzWZs0v"
+      },
+      {
+        "oldName": "Unseen Servant",
+        "newName": "Phantasmal Minion",
+        "targetId": "xqmHD8JIjak15lRk"
+      },
+      {
+        "oldName": "Vampiric Touch",
+        "newName": "Vampiric Feast",
+        "targetId": "N1Z1oLPdBxaSgrEE"
+      },
+      {
+        "oldName": "Veil",
+        "newName": "Illusory Disguise",
+        "targetId": "i35dpZFI7jZcRoBo"
+      },
+      {
+        "oldName": "Vigilant Eye",
+        "newName": "Rune of Observation",
+        "targetId": "4LSf04FFvDgMyDk6"
+      },
+      {
+        "oldName": "Wail of the Banshee",
+        "newName": "Wails of the Damned",
+        "targetId": "FEsuyf203wTNE2et"
+      },
+      {
+        "oldName": "Wind Walk",
+        "newName": "Migration",
+        "targetId": "U0hL0LLaprcnAyzC"
+      },
+      {
+        "oldName": "Wholeness of Body",
+        "newName": "Harmonize Self",
+        "targetId": "qJZZdYBdNaWRJFER"
+      },
+      {
+        "oldName": "Word of Recall",
+        "newName": "Gathering Call",
+        "targetId": "nzbnTqHgNKiGZkrZ"
+      },
+      {
+        "oldName": "Zone of Truth",
+        "newName": "Ring of Truth",
+        "targetId": "aewxsale5xWEPKLk"
+      }
+    ],
+    "feats": [
+      {
+        "oldName": "Aasimar's Mercy",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Abundant Step",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "@UUID[Compendium.pf2e.feats-srd.Item.5hUj7glY8YnO5sBI]{Advanced School Spell}",
+        "newName": "Altered mechanics",
+        "targetId": null
+      },
+      {
+        "oldName": "Alchemical Savant",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Align Armament",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Align Ki",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Angelic Magic",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Animal Feature",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Archon Magic",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Arrow Snatching",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Aura of Preservation",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Aura of Unbreakable Virtue",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Azata Magic",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Beastbrood",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Bespell Weapon",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Blade of Justice",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Bloodline Wellspring",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Bone Rider",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Buckler Expertise",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Burrow Elocutionist",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Call Bonded Item",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "@UUID[Compendium.pf2e.feats-srd.Item.zUtdBd3IbM7UX0AD]{Cauldron}",
+        "newName": "Altered mechanics",
+        "targetId": null
+      },
+      {
+        "oldName": "Celestial Eyes",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Celestial Lore",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Celestial Mount",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Celestial Resistance",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Celestial Wings",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Celestial Word",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Channeled Succor",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Combat Reflexes",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Conceited Mindset",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Conflux Wellspring",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Connections",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Corrupted Shield",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Courageous Opportunity",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "@UUID[Compendium.pf2e.feats-srd.Item.CpjN7v1QN8TQFcvI]{Crossbow Ace}",
+        "newName": "Altered mechanics",
+        "targetId": null
+      },
+      {
+        "oldName": "Crystalline Dust",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Daemon Magic",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Deepest Wellspring",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Deflect Arrow",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Demon Magic",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Devil Magic",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Disrupt Ki",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Divine Ally",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Diviner Sense",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Domain Wellspring",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Dragging Strike",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Dragonslayer Oath",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Drow Shootist",
+        "newName": "Renamed, altered mechanics",
+        "targetId": null
+      },
+      {
+        "oldName": "Dueling Parry",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Dwarven Weapon Cunning",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Dwarven Weapon Expertise",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Eldritch Nails",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Elven Weapon Elegance",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Elven Weapon Expertise",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Emberkin",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Empty Body",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Empyreal Blessing",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Enchanting Arrow",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Environmental Grace",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Ephemeral Tracking",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Eschew Materials",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Esoteric Oath",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Expanded Luck",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Expert Disassembler",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Expert Herbalism",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Expert Poison",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Extend Armament Alignment",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Eyes of the Night",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Favored Enemy",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Fiend's Door",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Fiendish Eyes",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Fiendish Mount",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Fiendish Lore",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Fiendish Resistance",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Fiendish Wings",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Fiendish Word",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Fiendsbane Oath",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Firearm Expert",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Form of the Fiend",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Ganzi Gaze",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Gnoll Lore",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Gnoll Weapon Familiarity",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Gnome Weapon Expertise",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Gnome Weapon Innovator",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Goblin Weapon Expertise",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Goblin Weapon Frenzy",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Godless Healing",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Golem Dynamo",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Gravity Weapon",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Green Empathy",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Grippli Guide",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Grippli Lore",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Grippli Weapon Familiarity",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Halfling Weapon Expertise",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Halfling Weapon Trickster",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Hand of the Apprentice",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Hatchling Flight",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Healing Touch",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Hex Wellspring",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "@UUID[Compendium.pf2e.feats-srd.Item.aQNsD2t0Tb4vToA4]{Hold Mark}",
+        "newName": "Altered mechanics",
+        "targetId": null
+      },
+      {
+        "oldName": "Holy Castigation",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Hunter's Luck",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Hunter's Vision",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Idyllkin",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Improved Communal Healing",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Improved Knockdown",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Inspirational Performance",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Inspire Competence",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Inspire Defense",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Inspire Heroics",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Intercorporate",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Ki Blast",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Ki Center",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Ki Form",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Ki Rush",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Ki Strike",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Knockdown",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Leech-Clipper",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Lemma of Vision",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Lightslayer Oath",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Link Wellspring",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Litany against Sloth",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Litany against Wrath",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Litany of Depravity",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Litany of Righteousness",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Litany of Self-Interest",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Living Hair",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Magic Arrow",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Malicious Bane",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Meditative Wellspring",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Medusa's Wrath",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Metamagic Channel",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Necrotic Infusion",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Nimble Dodge",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Nimble Roll",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Nocturnal Grippli",
+        "newName": "Rename",
+        "targetId": null
+      },
+      {
+        "oldName": "Nocturnal Sense",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Opportunist",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Orc Weapon Carnage",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Orc Weapon Expertise",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Pale Horse",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Pirate Weapon Training",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Plumekith",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Polearm Tricks",
+        "newName": "Renamed, altered mechanics",
+        "targetId": null
+      },
+      {
+        "oldName": "Point-Blank Shot",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Power Attack",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Precious Arrow",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Primal Wellspring",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Quick Alchemy",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Quivering Palm",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Radiant Blade Master",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Radiant Blade Spirit",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Radiant Infusion",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Ranged Reprisal",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Ranger's Bramble",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Ratfolk Growth",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Razor Claws",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Red Herring",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Reckless Abandon",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Relentless Wings",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Riftmarked",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Sacred Ki",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Safeguarded Spell",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "School Counterspell",
+        "newName": "Renamed, altered mechanics",
+        "targetId": null
+      },
+      {
+        "oldName": "Scroll Savant",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Second Ally",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Second Chance Spell",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Seeker Arrow",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Sense Evil",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Sense Good",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Shackleborn",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Shared Luck",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Sharp Fangs",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Shining Oath",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Silent Spell",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Skillful Tail",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Smite Evil",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Smite Good",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Sneak Savant",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Soothing Mist",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "@UUID[Compendium.pf2e.feats-srd.Item.FCzfh8QHMo7QJpAM]{Spellbook Prodigy}",
+        "newName": "Altered mechanics",
+        "targetId": null
+      },
+      {
+        "oldName": "Speedy Rituals",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Spell Penetration",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Spirit Strikes",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Spring Attack",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Stance Savant",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Stance Savant",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Stonecunning",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Stunning Fist",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Subtle Delivery",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Summon Celestial Kin",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Summon Fiendish Kin",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Tail Whip",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Temporary Potions",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Terrain Transposition",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Thousand Faces",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Turn Undead",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Unconventional Expertise",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Universal Versatility",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Vanth's Weapon Familiarity",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Vengeful Hatred",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Vigorous Inspiration",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Vile Desecration",
+        "newName": "Merged",
+        "targetId": null
+      },
+      {
+        "oldName": "Warden's Wellspring",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Warding Rune",
+        "newName": "Removed",
+        "targetId": null
+      },
+      {
+        "oldName": "Wild Empathy",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Wild Shape",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Wholeness of Body",
+        "newName": "Renamed",
+        "targetId": null
+      },
+      {
+        "oldName": "Woodland Stride",
+        "newName": "Renamed",
+        "targetId": null
+      }
+    ],
+    "bestiaries": [
+      {
+        "oldName": "Adhukait",
+        "newName": "Hārakasura",
+        "targetId": null
+      },
+      {
+        "oldName": "Air Mephit",
+        "newName": "Air Scamp",
+        "targetId": null
+      },
+      {
+        "oldName": "Ankou",
+        "newName": "Ozthoom",
+        "targetId": null
+      },
+      {
+        "oldName": "Ankou Shadow Double",
+        "newName": "Ozthoom Shadow Double",
+        "targetId": null
+      },
+      {
+        "oldName": "Astral Deva",
+        "newName": "Tabellia",
+        "targetId": null
+      },
+      {
+        "oldName": "Azer",
+        "newName": "Munsahir",
+        "targetId": null
+      },
+      {
+        "oldName": "Azure Worm",
+        "newName": "Benthic Worm",
+        "targetId": null
+      },
+      {
+        "oldName": "Ball Python",
+        "newName": "Python",
+        "targetId": null
+      },
+      {
+        "oldName": "Belker",
+        "newName": "Smoke Creeper",
+        "targetId": null
+      },
+      {
+        "oldName": "Brain Collector",
+        "newName": "Jah-Tohl",
+        "targetId": null
+      },
+      {
+        "oldName": "Bugbear Thug",
+        "newName": "Bugbear Prowler",
+        "targetId": null
+      },
+      {
+        "oldName": "Caligni Creeper",
+        "newName": "Caligni Skulker",
+        "targetId": null
+      },
+      {
+        "oldName": "Crimson Worm",
+        "newName": "Magma Worm",
+        "targetId": null
+      },
+      {
+        "oldName": "Deep Gnome Rockwarden",
+        "newName": "Umbral Gnome Rockwarden",
+        "targetId": null
+      },
+      {
+        "oldName": "Deep Gnome Scout",
+        "newName": "Umbral Gnome Scout",
+        "targetId": null
+      },
+      {
+        "oldName": "Deep Gnome Warrior",
+        "newName": "Umbral Gnome Warrior",
+        "targetId": null
+      },
+      {
+        "oldName": "Djinni",
+        "newName": "Jaathoom",
+        "targetId": null
+      },
+      {
+        "oldName": "Dread Wraith",
+        "newName": "War Wraith",
+        "targetId": null
+      },
+      {
+        "oldName": "Dretch (Sloth Demon)",
+        "newName": "Pusk",
+        "targetId": null
+      },
+      {
+        "oldName": "Duergar Bombardier",
+        "newName": "Hryngar Bombardier",
+        "targetId": null
+      },
+      {
+        "oldName": "Duergar Sharpshooter",
+        "newName": "Hryngar Sharpshooter",
+        "targetId": null
+      },
+      {
+        "oldName": "Duergar Taskmaster",
+        "newName": "Hryngar Taskmaster",
+        "targetId": null
+      },
+      {
+        "oldName": "Earth Mephit",
+        "newName": "Earth Scamp",
+        "targetId": null
+      },
+      {
+        "oldName": "Efreeti",
+        "newName": "Ifrit",
+        "targetId": null
+      },
+      {
+        "oldName": "Faceless Stalker",
+        "newName": "Ugothol",
+        "targetId": null
+      },
+      {
+        "oldName": "Faerie Dragon",
+        "newName": "Fey Dragonet",
+        "targetId": null
+      },
+      {
+        "oldName": "Fire Mephit",
+        "newName": "Fire Scamp",
+        "targetId": null
+      },
+      {
+        "oldName": "Fire Yai",
+        "newName": "Caldera Oni",
+        "targetId": null
+      },
+      {
+        "oldName": "Frost Troll",
+        "newName": "Ice Troll",
+        "targetId": null
+      },
+      {
+        "oldName": "Gnoll Cultist",
+        "newName": "Kholo Bonekeeper",
+        "targetId": null
+      },
+      {
+        "oldName": "Gnoll Hunter",
+        "newName": "Kholo Hunter",
+        "targetId": null
+      },
+      {
+        "oldName": "Gnoll Sergeant",
+        "newName": "Kholo Sergeant",
+        "targetId": null
+      },
+      {
+        "oldName": "Hive Mother",
+        "newName": "Ankhrav Hive Mother",
+        "targetId": null
+      },
+      {
+        "oldName": "Ice Yai",
+        "newName": "Snow Oni",
+        "targetId": null
+      },
+      {
+        "oldName": "Ifrit Pyrochemist",
+        "newName": "Naari Pyrochemist",
+        "targetId": null
+      },
+      {
+        "oldName": "Invisible Stalker",
+        "newName": "Phade",
+        "targetId": null
+      },
+      {
+        "oldName": "Janni",
+        "newName": "Jann",
+        "targetId": null
+      },
+      {
+        "oldName": "Lemure",
+        "newName": "Ort",
+        "targetId": null
+      },
+      {
+        "oldName": "Lillend",
+        "newName": "Kanya",
+        "targetId": null
+      },
+      {
+        "oldName": "Locathah Hunter",
+        "newName": "Athamaru Hunter",
+        "targetId": null
+      },
+      {
+        "oldName": "Manticore",
+        "newName": "Manticore (Quill Tail)",
+        "targetId": null
+      },
+      {
+        "oldName": "Marid",
+        "newName": "Faydhaan",
+        "targetId": null
+      },
+      {
+        "oldName": "Minotaur",
+        "newName": "Minotaur Hunter",
+        "targetId": null
+      },
+      {
+        "oldName": "Mix Couatl",
+        "newName": "Mix Coatl",
+        "targetId": null
+      },
+      {
+        "oldName": "Nessian Warhound",
+        "newName": "Greater Hell Hound",
+        "targetId": null
+      },
+      {
+        "oldName": "Orc Brute",
+        "newName": "Orc Scrapper",
+        "targetId": null
+      },
+      {
+        "oldName": "Orc Warchief",
+        "newName": "Orc Commander",
+        "targetId": null
+      },
+      {
+        "oldName": "Orc Warrior",
+        "newName": "Orc Veteran",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Abaddon)",
+        "newName": "Shade (Abaddon)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Abyss)",
+        "newName": "Shade (Outer Rifts)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Astral Plane)",
+        "newName": "Shade (Astral Plane)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Axis)",
+        "newName": "Shade (Axis)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Boneyard)",
+        "newName": "Shade (Boneyard)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Dead Vault)",
+        "newName": "Shade (Dead Vault)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Dimension of Dreams)",
+        "newName": "Shade (Dreamlands)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Elysium)",
+        "newName": "Shade (Elysium)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Ethereal Plane)",
+        "newName": "Shade (Ethereal Plane)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Heaven)",
+        "newName": "Shade (Heaven)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Hell)",
+        "newName": "Shade (Hell)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Maelstrom)",
+        "newName": "Shade (Maelstrom)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Material Plane)",
+        "newName": "Shade (Universe)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Nirvana)",
+        "newName": "Shade (Nirvana)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Plane of Air)",
+        "newName": "Shade (Plane of Air)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Plane of Earth)",
+        "newName": "Shade (Plane of Earth)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Plane of Fire)",
+        "newName": "Shade (Plane of Fire)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Plane of Water)",
+        "newName": "Shade (Plane of Water)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Positive Energy Plane)",
+        "newName": "Shade (Creation's Forge)",
+        "targetId": null
+      },
+      {
+        "oldName": "Petitioner (Shadow Plane)",
+        "newName": "Shade (Netherworld)",
+        "targetId": null
+      },
+      {
+        "oldName": "Pit Fiend",
+        "newName": "Nessari",
+        "targetId": null
+      },
+      {
+        "oldName": "Purple Worm",
+        "newName": "Cave Worm",
+        "targetId": null
+      },
+      {
+        "oldName": "Raven",
+        "newName": "Trained Raven",
+        "targetId": null
+      },
+      {
+        "oldName": "Sea Devil Baron",
+        "newName": "Sedacthy Speaker",
+        "targetId": null
+      },
+      {
+        "oldName": "Sea Devil Brute",
+        "newName": "Sedacthy Marauder",
+        "targetId": null
+      },
+      {
+        "oldName": "Sea Devil Scout",
+        "newName": "Sedacthy Scout",
+        "targetId": null
+      },
+      {
+        "oldName": "Shaitan",
+        "newName": "Jabali",
+        "targetId": null
+      },
+      {
+        "oldName": "Shaukeen",
+        "newName": "Shokasura",
+        "targetId": null
+      },
+      {
+        "oldName": "Spark Bat",
+        "newName": "Spark Moth",
+        "targetId": null
+      },
+      {
+        "oldName": "Tiefling Adept",
+        "newName": "Pitborn Adept",
+        "targetId": null
+      },
+      {
+        "oldName": "Vampire Spawn Rogue",
+        "newName": "Vampire Servitor",
+        "targetId": null
+      },
+      {
+        "oldName": "Water Mephit",
+        "newName": "Water Scamp",
+        "targetId": null
+      },
+      {
+        "oldName": "Water Yai",
+        "newName": "Island Oni",
+        "targetId": null
+      },
+      {
+        "oldName": "Winter Wolf",
+        "newName": "Witchwarg",
+        "targetId": null
+      },
+      {
+        "oldName": "Xiuh Couatl",
+        "newName": "Xiuh Coatl",
+        "targetId": null
+      }
+    ]
+  },
+  "equipStatus": {
+    "renamedToNew": [
+      {
+        "oldName": "Aeon Stone (Dull Grey)",
+        "newName": "Aeon Stone (Consumed)"
+      },
+      {
+        "oldName": "Aeon Stone (Clear Spindle)",
+        "newName": "Aeon Stone (Nourishing)"
+      },
+      {
+        "oldName": "Aeon Stone (Tourmaline Sphere)",
+        "newName": "Aeon Stone (Delaying)"
+      },
+      {
+        "oldName": "Aeon Stone (Orange Prism)",
+        "newName": "Aeon Stone (Amplifying)"
+      },
+      {
+        "oldName": "Barkskin Potion",
+        "newName": "Oak Potion"
+      },
+      {
+        "oldName": "Boots of Speed",
+        "newName": "Propulsive Boots"
+      },
+      {
+        "oldName": "Bracers of Armor",
+        "newName": "Bands of Force"
+      },
+      {
+        "oldName": "Bralani Breath",
+        "newName": "Deadlock Mint"
+      },
+      {
+        "oldName": "Breastplate of Command",
+        "newName": "Warleader's Bulwark"
+      },
+      {
+        "oldName": "Broom of Flying",
+        "newName": "Flying Broomstick"
+      },
+      {
+        "oldName": "Cape of the Mounteback",
+        "newName": "Charlatan's Cape"
+      },
+      {
+        "oldName": "Celestial Armor",
+        "newName": "Holy Chain"
+      },
+      {
+        "oldName": "Class Kits",
+        "newName": "Adventurer's Pack"
+      },
+      {
+        "oldName": "Dagger of Venom",
+        "newName": "Serpent Dagger"
+      },
+      {
+        "oldName": "Dancing Rune",
+        "newName": "Animated"
+      },
+      {
+        "oldName": "Demon Armor",
+        "newName": "Unholy Plate"
+      },
+      {
+        "oldName": "Disrupting Oil",
+        "newName": "Burial Oil"
+      },
+      {
+        "oldName": "Draconic Toxin Bottle",
+        "newName": "Energy Toxin Bottle"
+      },
+      {
+        "oldName": "Druid's Vestments",
+        "newName": "Living Mantle"
+      },
+      {
+        "oldName": "Everburning Torch",
+        "newName": "Everlight Crystal"
+      },
+      {
+        "oldName": "Eyes of the Eagle",
+        "newName": "Eyes of the Cat"
+      },
+      {
+        "oldName": "Faerie Dragon Liqueur",
+        "newName": "Fey Dragonet Liqueur"
+      },
+      {
+        "oldName": "Flame Tongue",
+        "newName": "Searing Blade"
+      },
+      {
+        "oldName": "Gloves of Storing",
+        "newName": "Retrieval Belt"
+      },
+      {
+        "oldName": "Goggles of Night",
+        "newName": "Obsidian Goggles"
+      },
+      {
+        "oldName": "Hat of Disagreeable Disguise",
+        "newName": "Handkerchief of Disagreeable Disguise"
+      },
+      {
+        "oldName": "Hat of Disguise",
+        "newName": "Masquerade Scarf"
+      },
+      {
+        "oldName": "Hat of the Magi",
+        "newName": "Mage's Hat"
+      },
+      {
+        "oldName": "Helm of Underwater Action",
+        "newName": "Submersible Helmet"
+      },
+      {
+        "oldName": "Holy Avenger",
+        "newName": "Chalice of Justice"
+      },
+      {
+        "oldName": "Horn of Fog",
+        "newName": "Cloud Pouch"
+      },
+      {
+        "oldName": "Horseshoes of Speed",
+        "newName": "Alacritous Horseshoes"
+      },
+      {
+        "oldName": "Hunger Oil",
+        "newName": "Gnawbone Toxin"
+      },
+      {
+        "oldName": "Hunting Spider Venom",
+        "newName": "Spider Venom"
+      },
+      {
+        "oldName": "Javelin of Lightning",
+        "newName": "Trident of Lightning"
+      },
+      {
+        "oldName": "Lich Dust",
+        "newName": "Enervating Powder"
+      },
+      {
+        "oldName": "Malyass Root Paste",
+        "newName": "Tangle Root Toxin"
+      },
+      {
+        "oldName": "Marvelous Pigments",
+        "newName": "Miraculous Paintbrush"
+      },
+      {
+        "oldName": "Mask of the Banshee",
+        "newName": "Guise of the Smirking Devil"
+      },
+      {
+        "oldName": "Mithral Tree",
+        "newName": "Dawnsilver Tree"
+      },
+      {
+        "oldName": "Oil of Object Animation",
+        "newName": "Oil of Dynamism"
+      },
+      {
+        "oldName": "Owlbear Egg",
+        "newName": "Owl Screech Egg"
+      },
+      {
+        "oldName": "Portable Hole",
+        "newName": "Planar Tunnel"
+      },
+      {
+        "oldName": "Potion of Expeditious Retreat",
+        "newName": "Potion of Emergency Escape"
+      },
+      {
+        "oldName": "Purple Worm Venom",
+        "newName": "Cave Worm Venom"
+      },
+      {
+        "oldName": "Remorhaz Armor",
+        "newName": "Smoldering Armor"
+      },
+      {
+        "oldName": "Rhino Hide",
+        "newName": "Onslaught Hide"
+      },
+      {
+        "oldName": "Ring of Energy Resistance",
+        "newName": "Charm of Resistance"
+      },
+      {
+        "oldName": "Rungu",
+        "newName": "Cruuk"
+      },
+      {
+        "oldName": "Salamander Elixir",
+        "newName": "Cooling Elixir (Lesser)"
+      },
+      {
+        "oldName": "Salve of Slipperiness",
+        "newName": "Tricky Liniment"
+      },
+      {
+        "oldName": "Shadow Essence",
+        "newName": "Nethershade"
+      },
+      {
+        "oldName": "Sight-Theft Grit",
+        "newName": "Sightless Tincture"
+      },
+      {
+        "oldName": "Silversheen",
+        "newName": "Silver Salve"
+      },
+      {
+        "oldName": "Sinew-Shock Serum",
+        "newName": "Surging Serum (Lesser)"
+      },
+      {
+        "oldName": "Smokestick",
+        "newName": "Smoke Ball (Lesser)"
+      },
+      {
+        "oldName": "Sovereign Glue",
+        "newName": "Everlasting Adhesive"
+      },
+      {
+        "oldName": "Speed Rune",
+        "newName": "Quickstrike"
+      },
+      {
+        "oldName": "Spellbreaking (various)",
+        "newName": "Spellwatch"
+      },
+      {
+        "oldName": "Spell-Storing Rune",
+        "newName": "Spell Reservoir"
+      },
+      {
+        "oldName": "Staff of Abjuration",
+        "newName": "Staff of Protection"
+      },
+      {
+        "oldName": "Staff of Conjuration",
+        "newName": "Staff of Summoning"
+      },
+      {
+        "oldName": "Staff of Divination",
+        "newName": "Staff of the Unblinking Eye"
+      },
+      {
+        "oldName": "Staff of Enchantment",
+        "newName": "Staff of Control"
+      },
+      {
+        "oldName": "Staff of Evocation",
+        "newName": "Staff of Elemental Power"
+      },
+      {
+        "oldName": "Staff of Illusion",
+        "newName": "Staff of Phantasms"
+      },
+      {
+        "oldName": "Staff of Necromancy",
+        "newName": "Staff of the Dead"
+      },
+      {
+        "oldName": "Staff of Transmutation",
+        "newName": "Fluid Form Staff"
+      },
+      {
+        "oldName": "Sunrod",
+        "newName": "Glow Rod"
+      },
+      {
+        "oldName": "Tanglefoot Extruder",
+        "newName": "Splatrope Extruder"
+      },
+      {
+        "oldName": "Tindertwig",
+        "newName": "Matchstick"
+      },
+      {
+        "oldName": "Owlbear Claw",
+        "newName": "Predator's Claw"
+      },
+      {
+        "oldName": "Potion of Tongues",
+        "newName": "Potion of Truespeech"
+      },
+      {
+        "oldName": "Winged Boots",
+        "newName": "Winged Sandals"
+      }
+    ],
+    "stillOld": [],
+    "bothPresent": [
+      {
+        "oldName": "Liar's Demise",
+        "newName": "Fraudslayer Oil"
+      }
+    ],
+    "neither": [
+      {
+        "oldName": "Bag of Holding",
+        "newName": "Spacious Pouch"
+      },
+      {
+        "oldName": "Choker-Arm Mutagen",
+        "newName": "Bendy-Arm Mutagen"
+      },
+      {
+        "oldName": "Death Knell Powder",
+        "newName": "Death Knell Powder"
+      },
+      {
+        "oldName": "Disrupting Rune",
+        "newName": "Vitalizing Rune"
+      },
+      {
+        "oldName": "Dragon's Breath potion (various)",
+        "newName": "Energy Breath Potion (various)"
+      },
+      {
+        "oldName": "Feather Token (Chest, Ladder, Swan Boat)",
+        "newName": "Boat"
+      },
+      {
+        "oldName": "Greater Disrupting Rune",
+        "newName": "Greater Vitalizing Rune"
+      },
+      {
+        "oldName": "Tanglefoot Bag",
+        "newName": "Glue Bomb"
+      },
+      {
+        "oldName": "Thunderstone",
+        "newName": "Blasting Stone"
+      },
+      {
+        "oldName": "Universal Solvent",
+        "newName": "Absolute Solvent"
+      },
+      {
+        "oldName": "Wand of Manifold Missiles",
+        "newName": "Wand of Shardstorm"
+      },
+      {
+        "oldName": "Wand of Slaying",
+        "newName": "Wand of Slaughter"
+      },
+      {
+        "oldName": "Winter Wolf Elixir",
+        "newName": "Witchwarg Elixir"
+      }
+    ]
+  },
+  "spellStatus": {
+    "renamedToNew": [
+      {
+        "oldName": "Abundant Step",
+        "newName": "Shrink the Span"
+      },
+      {
+        "oldName": "Abyssal Wrath",
+        "newName": "Chthonian Wrath"
+      },
+      {
+        "oldName": "Animate Dead",
+        "newName": "Summon Undead"
+      },
+      {
+        "oldName": "Augment Summoning",
+        "newName": "Fortify Summoning"
+      },
+      {
+        "oldName": "Baleful Polymorph",
+        "newName": "Cursed Metamorphosis"
+      },
+      {
+        "oldName": "Barkskin",
+        "newName": "Oaken Resilience"
+      },
+      {
+        "oldName": "Bind Soul",
+        "newName": "Seize Soul"
+      },
+      {
+        "oldName": "Blind Ambition",
+        "newName": "Ignite Ambition"
+      },
+      {
+        "oldName": "Blink",
+        "newName": "Flicker"
+      },
+      {
+        "oldName": "Burning Hands",
+        "newName": "Breathe Fire"
+      },
+      {
+        "oldName": "Calm Emotions",
+        "newName": "Calm"
+      },
+      {
+        "oldName": "Charming Words",
+        "newName": "Charming Push"
+      },
+      {
+        "oldName": "Chill Touch",
+        "newName": "Void Warp"
+      },
+      {
+        "oldName": "Cloudkill",
+        "newName": "Toxic Cloud"
+      },
+      {
+        "oldName": "Color Spray",
+        "newName": "Dizzying Colors"
+      },
+      {
+        "oldName": "Commune with Nature",
+        "newName": "Commune"
+      },
+      {
+        "oldName": "Comprehend Language",
+        "newName": "Translate"
+      },
+      {
+        "oldName": "Continual Flame",
+        "newName": "Everlight"
+      },
+      {
+        "oldName": "Crushing Despair",
+        "newName": "Wave of Despair"
+      },
+      {
+        "oldName": "Dancing Lights",
+        "newName": "Light"
+      },
+      {
+        "oldName": "Dimension Door",
+        "newName": "Translocate"
+      },
+      {
+        "oldName": "Dimensional Anchor",
+        "newName": "Planar Tether"
+      },
+      {
+        "oldName": "Dimensional Lock",
+        "newName": "Planar Seal"
+      },
+      {
+        "oldName": "Discern Location",
+        "newName": "Pinpoint"
+      },
+      {
+        "oldName": "Disrupt Undead",
+        "newName": "Vitality Lash"
+      },
+      {
+        "oldName": "Disrupting Weapons",
+        "newName": "Infuse Vitality"
+      },
+      {
+        "oldName": "Dragon Claws",
+        "newName": "Flurry of Claws"
+      },
+      {
+        "oldName": "Efficient Apport",
+        "newName": "Reclined Apport"
+      },
+      {
+        "oldName": "Empty Body",
+        "newName": "Embrace Nothingness"
+      },
+      {
+        "oldName": "Endure Elements",
+        "newName": "Environmental Endurance"
+      },
+      {
+        "oldName": "Entangle",
+        "newName": "Entangling Flora"
+      },
+      {
+        "oldName": "False Life",
+        "newName": "False Vitality"
+      },
+      {
+        "oldName": "Feather Fall",
+        "newName": "Gentle Landing"
+      },
+      {
+        "oldName": "Feeblemind",
+        "newName": "Never Mind"
+      },
+      {
+        "oldName": "Finger of Death",
+        "newName": "Execute"
+      },
+      {
+        "oldName": "Flaming Sphere",
+        "newName": "Floating Flame"
+      },
+      {
+        "oldName": "Flesh To Stone",
+        "newName": "Petrify"
+      },
+      {
+        "oldName": "Floating Disk",
+        "newName": "Carryall"
+      },
+      {
+        "oldName": "Force Cage",
+        "newName": "Lifewood Cage"
+      },
+      {
+        "oldName": "Freedom of Movement",
+        "newName": "Unfettered Movement"
+      },
+      {
+        "oldName": "Gaseous Form",
+        "newName": "Vapor Form"
+      },
+      {
+        "oldName": "Gentle Repose",
+        "newName": "Peaceful Rest"
+      },
+      {
+        "oldName": "Glibness",
+        "newName": "Honeyed Words"
+      },
+      {
+        "oldName": "Glitterdust",
+        "newName": "Revealing Light"
+      },
+      {
+        "oldName": "Globe of Invulnerability",
+        "newName": "Dispelling Globe"
+      },
+      {
+        "oldName": "Glutton's Jaw",
+        "newName": "Glutton's Jaws"
+      },
+      {
+        "oldName": "Glyph of Warding",
+        "newName": "Rune Trap"
+      },
+      {
+        "oldName": "Goodberry",
+        "newName": "Cornucopia"
+      },
+      {
+        "oldName": "Hallucinatory Terrain",
+        "newName": "Mirage"
+      },
+      {
+        "oldName": "Heroes' Feast",
+        "newName": "Fortifying Brew"
+      },
+      {
+        "oldName": "Hideous Laughter",
+        "newName": "Laughing Fit"
+      },
+      {
+        "oldName": "Horrid Wilting",
+        "newName": "Desiccate"
+      },
+      {
+        "oldName": "Hyperfocus",
+        "newName": "Clouded Focus"
+      },
+      {
+        "oldName": "Hypnotic Pattern",
+        "newName": "Hypnotize"
+      },
+      {
+        "oldName": "Inspire Competence",
+        "newName": "Uplifting Overture"
+      },
+      {
+        "oldName": "Inspire Courage",
+        "newName": "Courageous Anthem"
+      },
+      {
+        "oldName": "Inspire Defense",
+        "newName": "Rallying Anthem"
+      },
+      {
+        "oldName": "Inspire Heroics",
+        "newName": "Fortissimo Composition"
+      },
+      {
+        "oldName": "Invisibility Sphere",
+        "newName": "Shared Invisibility"
+      },
+      {
+        "oldName": "Ki Strike",
+        "newName": "Inner Upheaval"
+      },
+      {
+        "oldName": "Ki Blast",
+        "newName": "Qi Blast"
+      },
+      {
+        "oldName": "Ki Form",
+        "newName": "Qi Form"
+      },
+      {
+        "oldName": "Ki Rush",
+        "newName": "Qi Rush"
+      },
+      {
+        "oldName": "Know Direction",
+        "newName": "Know the Way"
+      },
+      {
+        "oldName": "Legend Lore",
+        "newName": "Collective Memories"
+      },
+      {
+        "oldName": "Longstrider",
+        "newName": "Tailwind"
+      },
+      {
+        "oldName": "Mage Armor",
+        "newName": "Mystic Armor"
+      },
+      {
+        "oldName": "Mage Hand",
+        "newName": "Telekinetic Hand"
+      },
+      {
+        "oldName": "Magic Aura",
+        "newName": "Disguise Magic"
+      },
+      {
+        "oldName": "Magic Fang",
+        "newName": "Runic Body"
+      },
+      {
+        "oldName": "Magic Missile",
+        "newName": "Force Barrage"
+      },
+      {
+        "oldName": "Magic Mouth",
+        "newName": "Embed Message"
+      },
+      {
+        "oldName": "Magic Weapon",
+        "newName": "Runic Weapon"
+      },
+      {
+        "oldName": "Magnificent Mansion",
+        "newName": "Planar Palace"
+      },
+      {
+        "oldName": "Maze",
+        "newName": "Quandary"
+      },
+      {
+        "oldName": "Meld into Stone",
+        "newName": "One with Stone"
+      },
+      {
+        "oldName": "Meteor Swarm",
+        "newName": "Falling Stars"
+      },
+      {
+        "oldName": "Mind Blank",
+        "newName": "Hidden Mind"
+      },
+      {
+        "oldName": "Misdirection",
+        "newName": "Disguise Magic"
+      },
+      {
+        "oldName": "Modify Memory",
+        "newName": "Rewrite Memory"
+      },
+      {
+        "oldName": "Neutralize Poison",
+        "newName": "Cleanse Affliction"
+      },
+      {
+        "oldName": "Nondetection",
+        "newName": "Veil of Privacy"
+      },
+      {
+        "oldName": "Obscuring Mist",
+        "newName": "Mist"
+      },
+      {
+        "oldName": "Pass Without Trace",
+        "newName": "Vanishing Tracks"
+      },
+      {
+        "oldName": "Passwall",
+        "newName": "Magic Passage"
+      },
+      {
+        "oldName": "Phantom Mount",
+        "newName": "Marvelous Mount"
+      },
+      {
+        "oldName": "Planar Binding",
+        "newName": "Planar Servitor"
+      },
+      {
+        "oldName": "Plane Shift",
+        "newName": "Interplanar Teleport"
+      },
+      {
+        "oldName": "Positive Luminance",
+        "newName": "Vital Luminance"
+      },
+      {
+        "oldName": "Private Sanctum",
+        "newName": "Peaceful Bubble"
+      },
+      {
+        "oldName": "Produce Flame",
+        "newName": "Ignition"
+      },
+      {
+        "oldName": "Prying Eye",
+        "newName": "Scouting Eye"
+      },
+      {
+        "oldName": "Pulse of The City",
+        "newName": "Pulse of Civilization"
+      },
+      {
+        "oldName": "Purify Food And Drink",
+        "newName": "Cleanse Cuisine"
+      },
+      {
+        "oldName": "Quivering Palm",
+        "newName": "Touch of Death"
+      },
+      {
+        "oldName": "Ray of Enfeeblement",
+        "newName": "Enfeeble"
+      },
+      {
+        "oldName": "Remove Curse",
+        "newName": "Cleanse Affliction"
+      },
+      {
+        "oldName": "Remove Disease",
+        "newName": "Cleanse Affliction"
+      },
+      {
+        "oldName": "Remove Fear",
+        "newName": "Clear Mind"
+      },
+      {
+        "oldName": "Remove Paralysis",
+        "newName": "Sure Footing"
+      },
+      {
+        "oldName": "Resilient Sphere",
+        "newName": "Containment"
+      },
+      {
+        "oldName": "Restore Senses",
+        "newName": "Sound Body"
+      },
+      {
+        "oldName": "Righteous Might",
+        "newName": "Sacred Form"
+      },
+      {
+        "oldName": "Roar of the Wyrm",
+        "newName": "Roar of the Dragon"
+      },
+      {
+        "oldName": "Sanctified Ground",
+        "newName": "Anointed Ground"
+      },
+      {
+        "oldName": "Scorching Ray",
+        "newName": "Blazing Bolt"
+      },
+      {
+        "oldName": "Searing Light",
+        "newName": "Holy Light"
+      },
+      {
+        "oldName": "Scintillating Pattern",
+        "newName": "Confusing Colors"
+      },
+      {
+        "oldName": "See Invisibility",
+        "newName": "See the Unseen"
+      },
+      {
+        "oldName": "Shadow Walk",
+        "newName": "Umbral Journey"
+      },
+      {
+        "oldName": "Shapechange",
+        "newName": "Metamorphosis"
+      },
+      {
+        "oldName": "Shield Other",
+        "newName": "Share Life"
+      },
+      {
+        "oldName": "Simulacrum",
+        "newName": "Shadow Double"
+      },
+      {
+        "oldName": "Sound Burst",
+        "newName": "Noise Blast"
+      },
+      {
+        "oldName": "Spectral Hand",
+        "newName": "Ghostly Carrier"
+      },
+      {
+        "oldName": "Spider Climb",
+        "newName": "Gecko Grip"
+      },
+      {
+        "oldName": "Splash of Art",
+        "newName": "Creative Splash"
+      },
+      {
+        "oldName": "Stone Tell",
+        "newName": "Speak with Stones"
+      },
+      {
+        "oldName": "Stoneskin",
+        "newName": "Mountain Resilience"
+      },
+      {
+        "oldName": "Tanglefoot",
+        "newName": "Tangle Vine"
+      },
+      {
+        "oldName": "Time Stop",
+        "newName": "Freeze Time"
+      },
+      {
+        "oldName": "Tongues",
+        "newName": "Truespeech"
+      },
+      {
+        "oldName": "Touch of Corruption",
+        "newName": "Touch of the Void"
+      },
+      {
+        "oldName": "Touch of Idiocy",
+        "newName": "Stupefy"
+      },
+      {
+        "oldName": "Tree Shape",
+        "newName": "One with Plants"
+      },
+      {
+        "oldName": "Tree Stride",
+        "newName": "Nature's Pathway"
+      },
+      {
+        "oldName": "Trueseeing",
+        "newName": "Truesight"
+      },
+      {
+        "oldName": "True Strike",
+        "newName": "Sure Strike"
+      },
+      {
+        "oldName": "Unseen Custodians",
+        "newName": "Phantasmal Custodians"
+      },
+      {
+        "oldName": "Unseen Servant",
+        "newName": "Phantasmal Minion"
+      },
+      {
+        "oldName": "Vampiric Touch",
+        "newName": "Vampiric Feast"
+      },
+      {
+        "oldName": "Veil",
+        "newName": "Illusory Disguise"
+      },
+      {
+        "oldName": "Vigilant Eye",
+        "newName": "Rune of Observation"
+      },
+      {
+        "oldName": "Wail of the Banshee",
+        "newName": "Wails of the Damned"
+      },
+      {
+        "oldName": "Wind Walk",
+        "newName": "Migration"
+      },
+      {
+        "oldName": "Wholeness of Body",
+        "newName": "Harmonize Self"
+      },
+      {
+        "oldName": "Word of Recall",
+        "newName": "Gathering Call"
+      },
+      {
+        "oldName": "Zone of Truth",
+        "newName": "Ring of Truth"
+      }
+    ],
+    "stillOld": [
+      {
+        "oldName": "Divine Vessel",
+        "newName": "—"
+      }
+    ],
+    "bothPresent": [
+      {
+        "oldName": "Faerie Fire",
+        "newName": "Revealing Light"
+      }
+    ],
+    "neither": [
+      {
+        "oldName": "Litany against Sloth",
+        "newName": "—"
+      },
+      {
+        "oldName": "Litany against Wrath",
+        "newName": "—"
+      },
+      {
+        "oldName": "Litany of Depravity",
+        "newName": "—"
+      },
+      {
+        "oldName": "Litany of Righteousness",
+        "newName": "—"
+      },
+      {
+        "oldName": "Litany of Self-Interest",
+        "newName": "—"
+      },
+      {
+        "oldName": "Undetectable Alignment",
+        "newName": "—"
+      }
+    ]
+  },
+  "featStatus": {
+    "renamedToNew": [],
+    "stillOld": [
+      {
+        "oldName": "Beastbrood",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Conflux Wellspring",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Dragging Strike",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Dueling Parry",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Emberkin",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Godless Healing",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Green Empathy",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Idyllkin",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Nimble Dodge",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Nimble Roll",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Pale Horse",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Plumekith",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Ranger's Bramble",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Reckless Abandon",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Riftmarked",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Shackleborn",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Skillful Tail",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Unconventional Expertise",
+        "newName": "Removed"
+      }
+    ],
+    "bothPresent": [],
+    "neither": [
+      {
+        "oldName": "Aasimar's Mercy",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Abundant Step",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "@UUID[Compendium.pf2e.feats-srd.Item.5hUj7glY8YnO5sBI]{Advanced School Spell}",
+        "newName": "Altered mechanics"
+      },
+      {
+        "oldName": "Alchemical Savant",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Align Armament",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Align Ki",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Angelic Magic",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Animal Feature",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Archon Magic",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Arrow Snatching",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Aura of Preservation",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Aura of Unbreakable Virtue",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Azata Magic",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Bespell Weapon",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Blade of Justice",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Bloodline Wellspring",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Bone Rider",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Buckler Expertise",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Burrow Elocutionist",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Call Bonded Item",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "@UUID[Compendium.pf2e.feats-srd.Item.zUtdBd3IbM7UX0AD]{Cauldron}",
+        "newName": "Altered mechanics"
+      },
+      {
+        "oldName": "Celestial Eyes",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Celestial Lore",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Celestial Mount",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Celestial Resistance",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Celestial Wings",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Celestial Word",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Channeled Succor",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Combat Reflexes",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Conceited Mindset",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Connections",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Corrupted Shield",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Courageous Opportunity",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "@UUID[Compendium.pf2e.feats-srd.Item.CpjN7v1QN8TQFcvI]{Crossbow Ace}",
+        "newName": "Altered mechanics"
+      },
+      {
+        "oldName": "Crystalline Dust",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Daemon Magic",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Deepest Wellspring",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Deflect Arrow",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Demon Magic",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Devil Magic",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Disrupt Ki",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Divine Ally",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Diviner Sense",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Domain Wellspring",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Dragonslayer Oath",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Drow Shootist",
+        "newName": "Renamed, altered mechanics"
+      },
+      {
+        "oldName": "Dwarven Weapon Cunning",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Dwarven Weapon Expertise",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Eldritch Nails",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Elven Weapon Elegance",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Elven Weapon Expertise",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Empty Body",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Empyreal Blessing",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Enchanting Arrow",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Environmental Grace",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Ephemeral Tracking",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Eschew Materials",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Esoteric Oath",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Expanded Luck",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Expert Disassembler",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Expert Herbalism",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Expert Poison",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Extend Armament Alignment",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Eyes of the Night",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Favored Enemy",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Fiend's Door",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Fiendish Eyes",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Fiendish Mount",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Fiendish Lore",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Fiendish Resistance",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Fiendish Wings",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Fiendish Word",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Fiendsbane Oath",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Firearm Expert",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Form of the Fiend",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Ganzi Gaze",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Gnoll Lore",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Gnoll Weapon Familiarity",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Gnome Weapon Expertise",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Gnome Weapon Innovator",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Goblin Weapon Expertise",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Goblin Weapon Frenzy",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Golem Dynamo",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Gravity Weapon",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Grippli Guide",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Grippli Lore",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Grippli Weapon Familiarity",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Halfling Weapon Expertise",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Halfling Weapon Trickster",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Hand of the Apprentice",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Hatchling Flight",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Healing Touch",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Hex Wellspring",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "@UUID[Compendium.pf2e.feats-srd.Item.aQNsD2t0Tb4vToA4]{Hold Mark}",
+        "newName": "Altered mechanics"
+      },
+      {
+        "oldName": "Holy Castigation",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Hunter's Luck",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Hunter's Vision",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Improved Communal Healing",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Improved Knockdown",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Inspirational Performance",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Inspire Competence",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Inspire Defense",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Inspire Heroics",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Intercorporate",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Ki Blast",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Ki Center",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Ki Form",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Ki Rush",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Ki Strike",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Knockdown",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Leech-Clipper",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Lemma of Vision",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Lightslayer Oath",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Link Wellspring",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Litany against Sloth",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Litany against Wrath",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Litany of Depravity",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Litany of Righteousness",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Litany of Self-Interest",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Living Hair",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Magic Arrow",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Malicious Bane",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Meditative Wellspring",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Medusa's Wrath",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Metamagic Channel",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Necrotic Infusion",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Nocturnal Grippli",
+        "newName": "Rename"
+      },
+      {
+        "oldName": "Nocturnal Sense",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Opportunist",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Orc Weapon Carnage",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Orc Weapon Expertise",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Pirate Weapon Training",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Polearm Tricks",
+        "newName": "Renamed, altered mechanics"
+      },
+      {
+        "oldName": "Point-Blank Shot",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Power Attack",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Precious Arrow",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Primal Wellspring",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Quick Alchemy",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Quivering Palm",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Radiant Blade Master",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Radiant Blade Spirit",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Radiant Infusion",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Ranged Reprisal",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Ratfolk Growth",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Razor Claws",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Red Herring",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Relentless Wings",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Sacred Ki",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Safeguarded Spell",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "School Counterspell",
+        "newName": "Renamed, altered mechanics"
+      },
+      {
+        "oldName": "Scroll Savant",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Second Ally",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Second Chance Spell",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Seeker Arrow",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Sense Evil",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Sense Good",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Shared Luck",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Sharp Fangs",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Shining Oath",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Silent Spell",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Smite Evil",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Smite Good",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Sneak Savant",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Soothing Mist",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "@UUID[Compendium.pf2e.feats-srd.Item.FCzfh8QHMo7QJpAM]{Spellbook Prodigy}",
+        "newName": "Altered mechanics"
+      },
+      {
+        "oldName": "Speedy Rituals",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Spell Penetration",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Spirit Strikes",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Spring Attack",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Stance Savant",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Stance Savant",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Stonecunning",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Stunning Fist",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Subtle Delivery",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Summon Celestial Kin",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Summon Fiendish Kin",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Tail Whip",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Temporary Potions",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Terrain Transposition",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Thousand Faces",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Turn Undead",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Universal Versatility",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Vanth's Weapon Familiarity",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Vengeful Hatred",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Vigorous Inspiration",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Vile Desecration",
+        "newName": "Merged"
+      },
+      {
+        "oldName": "Warden's Wellspring",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Warding Rune",
+        "newName": "Removed"
+      },
+      {
+        "oldName": "Wild Empathy",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Wild Shape",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Wholeness of Body",
+        "newName": "Renamed"
+      },
+      {
+        "oldName": "Woodland Stride",
+        "newName": "Renamed"
+      }
+    ]
+  }
+}

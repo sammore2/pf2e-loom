@@ -1,11 +1,13 @@
 import { degreeOfSuccess } from './rules.mjs';
 import { localize } from './i18n.mjs';
-import { resolveActorPortrait } from './utils.mjs';
+import { resolveActorPortrait, currentTargetIds, loadHolder } from './utils.mjs';
+import { rollDamage, rollSpellDamage, rollSpellSave } from './roll-engine.mjs';
 import {
   applyIncomingDamage,
   applyHealingToActor,
   calculateShieldBlock,
   mitigationFromActor,
+  basicSaveMultiplier,
 } from './damage.mjs';
 
 function num(v) {
@@ -127,7 +129,7 @@ export function resolveRollLabels(roll) {
     title = rawLabel ? `${localize('pf2e.rolls.strike', 'Strike')}: ${rawLabel}` : localize('pf2e.rolls.strike', 'Strike');
     category = localize('pf2e.rollCategories.attack', 'Strike');
     glyph = glyph || '◆';
-  } else if (rollType === 'damage') {
+  } else if (rollType === 'damage' || rollType === 'spelldamage') {
     title = rawLabel ? `${localize('pf2e.rolls.damage', 'Damage')}: ${rawLabel}` : localize('pf2e.rolls.damage', 'Damage');
     category = meta.critical ? localize('pf2e.rollCategories.critDamage', 'Critical Damage') : localize('pf2e.rollCategories.damage', 'Damage');
     glyph = glyph || '◆';
@@ -252,6 +254,14 @@ export function renderPf2eRollCard(roll, esc) {
     `.trim();
   }
 
+  // Basic save: the card states how much of the damage this target takes
+  let basicNote = '';
+  if (meta.isSpellSave && meta.basic && evaluation.degree) {
+    const mult = basicSaveMultiplier(evaluation.degree);
+    const who = meta.saverName ? `${safeEsc(meta.saverName)} — ` : '';
+    basicNote = `<div class="pf2e-roll-breakdown-note">${who}${safeEsc(localize('pf2e.chat.basicSaveDamage', 'Basic save: ×{mult} damage', { mult: mult === 0.5 ? '½' : mult }))}</div>`;
+  }
+
   // Breakdown note
   let breakdownHtml = '';
   if (meta.breakdown && typeof meta.breakdown === 'string') {
@@ -265,7 +275,7 @@ export function renderPf2eRollCard(roll, esc) {
   let damageActionBar = '';
   const rollTypeLower = String(meta.rollType || '').toLowerCase();
   const catLower = String(category || '').toLowerCase();
-  const isDamage = rollTypeLower === 'damage'
+  const isDamage = rollTypeLower === 'damage' || rollTypeLower === 'spelldamage'
     || String(meta.pf2e?.rollType || '').toLowerCase() === 'damage'
     || Boolean(meta.damageType)
     || catLower.includes('damage')
@@ -286,6 +296,20 @@ export function renderPf2eRollCard(roll, esc) {
         <button type="button" class="pf2e-dmg-apply-btn" data-action="apply-damage" data-multiplier="2" title="${safeEsc(doubleTitle)}">2×</button>
         <button type="button" class="pf2e-dmg-apply-btn" data-action="apply-damage" data-multiplier="1" data-shield="true" title="${safeEsc(shieldTitle)}">🛡️</button>
         <button type="button" class="pf2e-dmg-apply-btn pf2e-heal-btn" data-action="apply-heal" data-multiplier="1" title="${safeEsc(healTitle)}">💚</button>
+      </div>
+    `.trim();
+  }
+
+  // A hit offers the damage roll (crit damage on a critical success); with no DC both are offered. A miss offers none.
+  let attackBar = '';
+  const isAttackRoll = rollTypeLower === 'attack' || rollTypeLower === 'spellattack';
+  const missed = evaluation.degree === 'failure' || evaluation.degree === 'critFailure';
+  if (isAttackRoll && meta.itemId && meta.attackerId && !missed) {
+    const rollBtn = (crit, label) => `<button type="button" class="pf2e-dmg-apply-btn pf2e-roll-dmg-btn" data-crit="${crit}">${safeEsc(label)}</button>`;
+    attackBar = `
+      <div class="pf2e-damage-application-bar pf2e-attack-damage-bar" data-actor-id="${safeEsc(meta.attackerId)}" data-item-id="${safeEsc(meta.itemId)}" data-kind="${rollTypeLower === 'attack' ? 'weapon' : 'spell'}" data-cast-rank="${num(meta.castRank)}" data-targets="${safeEsc((meta.targetIds || []).join(','))}">
+        ${evaluation.degree !== 'critSuccess' ? rollBtn(false, '💥 ' + localize('pf2e.chat.rollDamage', 'Roll Damage')) : ''}
+        ${evaluation.degree !== 'success' ? rollBtn(true, '💀 ' + localize('pf2e.chat.rollCritDamage', 'Roll Critical Damage')) : ''}
       </div>
     `.trim();
   }
@@ -316,8 +340,10 @@ export function renderPf2eRollCard(roll, esc) {
         </div>
       </div>
       ${degreeHtml}
+      ${basicNote}
       ${breakdownHtml}
       ${damageActionBar}
+      ${attackBar}
     </div>
   `.trim();
 }
@@ -326,7 +352,7 @@ export function renderPf2eRollCard(roll, esc) {
  * Dispatches an authentic PF2e chat card to the active LoomVTT chat feed.
  * Multiplexes across Loom.ChatMessage.create, Loom.socket.emit, and dispatchRoll.
  */
-export async function sendChatCard(actor, { name, glyph = '◆', traits = [], desc = '', type = null }) {
+export async function sendChatCard(actor, { name, glyph = '◆', traits = [], desc = '', type = null, extraHtml = '' }) {
   const actorName = actor?.name || 'Character';
   const cardType = type || localize('pf2e.itemTypes.action', 'Action');
   const traitsList = Array.isArray(traits) ? traits : (traits ? [traits] : []);
@@ -346,6 +372,7 @@ export async function sendChatCard(actor, { name, glyph = '◆', traits = [], de
         <div class="pf2e-chat-card-desc">
           ${desc || `<em class="pf2e-card-nodesc">${noDescText}</em>`}
         </div>
+        ${extraHtml}
       </div>
       <footer class="pf2e-chat-card-footer">
         <span class="pf2e-chat-card-actor">${actorName}</span>
@@ -428,6 +455,78 @@ export async function sendChatCard(actor, { name, glyph = '◆', traits = [], de
 }
 
 let chatClickListener = null;
+let autoApplyHooked = false;
+
+/** Applies damage (or healing) to one token: the actor for linked casts, the cast itself otherwise. */
+async function applyToTarget(tid, { amount, damageType = 'untyped', isHeal = false, isShield = false }) {
+  const loaded = await loadHolder(tid);
+  if (!loaded) return;
+  const { holder, path: holderPath } = loaded;
+  const sd = holder.systemData || {};
+  const holderName = holder.name || 'Target';
+
+  const shouldHeal = isHeal || String(damageType).toLowerCase() === 'healing';
+  if (shouldHeal) {
+    const { systemData: updatedSd, healed } = applyHealingToActor(sd, amount);
+    await window.Loom.api.put(holderPath, { systemData: updatedSd });
+    const curHp = updatedSd.hp?.value ?? 0;
+    const maxHp = updatedSd.hp?.max ?? 0;
+    const note = localize('pf2e.chat.healingApplied', `${holderName} recovered ${healed} HP (${curHp}/${maxHp})`, {
+      name: holderName,
+      amount: healed,
+      current: curHp,
+      max: maxHp,
+    });
+    window.Loom?.showToast?.(note, 'success');
+    return;
+  }
+
+  let shieldBlockOpts = null;
+  if (isShield) {
+    const items = Array.isArray(holder.items) ? holder.items : (holder.items?.contents || []);
+    const shieldItem = items.find((i) => i.type === 'shield' || (i.system?.category === 'shield' || i.data?.category === 'shield'));
+    const shieldData = shieldItem ? (shieldItem.system ?? shieldItem.data ?? {}) : {};
+    const hardness = Number(shieldData.hardness) || Number(sd.shield?.hardness) || 0;
+    const shieldHp = Number(shieldData.hp?.value ?? shieldData.hp) || Number(sd.shield?.hp?.value ?? sd.shield?.hp) || 0;
+    const bt = Number(shieldData.hp?.brokenThreshold) || Math.floor(shieldHp / 2);
+
+    const blockRes = calculateShieldBlock({
+      damage: amount,
+      hardness,
+      shieldHp,
+      brokenThreshold: bt,
+    });
+
+    if (shieldItem?.id && blockRes.damageToShield > 0) {
+      try {
+        const updatedItemData = { ...shieldData, hp: { ...shieldData.hp, value: blockRes.newShieldHp } };
+        await window.Loom.api.put(`/items/${encodeURIComponent(shieldItem.id)}`, { data: updatedItemData });
+      } catch (err) {
+        console.warn('[pf2e] Could not update shield item HP:', err);
+      }
+    }
+    shieldBlockOpts = blockRes;
+  }
+
+  const effectiveDmg = shieldBlockOpts ? shieldBlockOpts.damageToCharacter : amount;
+  const mitigation = mitigationFromActor(sd);
+  const { systemData: updatedSd, report } = applyIncomingDamage(sd, {
+    amount: effectiveDmg,
+    damageType,
+    mitigation,
+  });
+
+  await window.Loom.api.put(holderPath, { systemData: updatedSd });
+  const curHp = updatedSd.hp?.value ?? 0;
+  const maxHp = updatedSd.hp?.max ?? 0;
+  const note = localize('pf2e.chat.damageApplied', `${holderName} took ${report.hpLost} damage (${curHp}/${maxHp})`, {
+    name: holderName,
+    amount: report.hpLost,
+    current: curHp,
+    max: maxHp,
+  });
+  window.Loom?.showToast?.(note, 'info');
+}
 
 /**
  * Applies damage or healing from a chat card button click to selected tokens / targets.
@@ -438,21 +537,14 @@ export async function applyDamageFromChat(btn) {
   if (!bar) return;
 
   const rawDmg = Number(bar.dataset.damage) || 0;
-  const damageType = String(bar.dataset.damageType || 'untyped').toLowerCase();
-  const mult = Number(btn.dataset.multiplier) || 1;
-  const isHeal = btn.dataset.action === 'apply-heal';
-  const isShield = btn.dataset.shield === 'true';
+  const opts = {
+    amount: Math.floor(rawDmg * (Number(btn.dataset.multiplier) || 1)),
+    damageType: String(bar.dataset.damageType || 'untyped').toLowerCase(),
+    isHeal: btn.dataset.action === 'apply-heal' || String(bar.dataset.damageType || '').toLowerCase() === 'healing',
+    isShield: btn.dataset.shield === 'true',
+  };
 
-  const amount = Math.floor(rawDmg * mult);
-
-  // Discover targets from LoomVTT
-  const targetIds = [];
-  if (Array.isArray(window.Loom?.targets)) {
-    for (const t of window.Loom.targets) {
-      const tid = t?.castId || t?.actorId || t?.id || t;
-      if (tid && !targetIds.includes(tid)) targetIds.push(tid);
-    }
-  }
+  const targetIds = currentTargetIds();
   const controlled = window.Loom?.canvas?.tokens?.controlled
     || window.Loom?.canvas?.selectedTokens
     || window.Loom?.selectedTokens;
@@ -465,95 +557,127 @@ export async function applyDamageFromChat(btn) {
 
   if (targetIds.length === 0) {
     const msg = localize('pf2e.chat.noTargetSelected', 'Select at least one token on the canvas to apply damage or healing!');
-    if (typeof window.Loom?.showToast === 'function') {
-      window.Loom.showToast(msg, 'warning');
-    }
+    window.Loom?.showToast?.(msg, 'warning');
     return;
   }
 
   for (const tid of targetIds) {
     try {
-      let cast = null;
-      try {
-        cast = await window.Loom.api.get(`/cast/${encodeURIComponent(tid)}`);
-      } catch {
-        // May be an actor directly
-      }
-      const linked = cast?.isLinked && cast?.actorId;
-      const holderPath = linked
-        ? `/actors/${encodeURIComponent(cast.actorId)}`
-        : (cast ? `/cast/${encodeURIComponent(tid)}` : `/actors/${encodeURIComponent(tid)}`);
-
-      const holder = linked
-        ? await window.Loom.api.get(holderPath)
-        : (cast || await window.Loom.api.get(holderPath));
-      if (!holder) continue;
-
-      const sd = holder.systemData || {};
-      const holderName = holder.name || 'Target';
-
-      if (isHeal) {
-        const { systemData: updatedSd, healed } = applyHealingToActor(sd, amount);
-        await window.Loom.api.put(holderPath, { systemData: updatedSd });
-        const curHp = updatedSd.hp?.value ?? 0;
-        const maxHp = updatedSd.hp?.max ?? 0;
-        const note = localize('pf2e.chat.healingApplied', `${holderName} recovered ${healed} HP (${curHp}/${maxHp})`, {
-          name: holderName,
-          amount: healed,
-          current: curHp,
-          max: maxHp,
-        });
-        window.Loom?.showToast?.(note, 'success');
-      } else {
-        let shieldBlockOpts = null;
-        if (isShield) {
-          const items = Array.isArray(holder.items) ? holder.items : (holder.items?.contents || []);
-          const shieldItem = items.find((i) => i.type === 'shield' || (i.system?.category === 'shield' || i.data?.category === 'shield'));
-          const shieldData = shieldItem ? (shieldItem.system ?? shieldItem.data ?? {}) : {};
-          const hardness = Number(shieldData.hardness) || Number(sd.shield?.hardness) || 0;
-          const shieldHp = Number(shieldData.hp?.value ?? shieldData.hp) || Number(sd.shield?.hp?.value ?? sd.shield?.hp) || 0;
-          const bt = Number(shieldData.hp?.brokenThreshold) || Math.floor(shieldHp / 2);
-
-          const blockRes = calculateShieldBlock({
-            damage: amount,
-            hardness,
-            shieldHp,
-            brokenThreshold: bt,
-          });
-
-          if (shieldItem?.id && blockRes.damageToShield > 0) {
-            try {
-              const updatedItemData = { ...shieldData, hp: { ...shieldData.hp, value: blockRes.newShieldHp } };
-              await window.Loom.api.put(`/items/${encodeURIComponent(shieldItem.id)}`, { data: updatedItemData });
-            } catch (err) {
-              console.warn('[pf2e] Could not update shield item HP:', err);
-            }
-          }
-          shieldBlockOpts = blockRes;
-        }
-
-        const effectiveDmg = shieldBlockOpts ? shieldBlockOpts.damageToCharacter : amount;
-        const mitigation = mitigationFromActor(sd);
-        const { systemData: updatedSd, report } = applyIncomingDamage(sd, {
-          amount: effectiveDmg,
-          damageType,
-          mitigation,
-        });
-
-        await window.Loom.api.put(holderPath, { systemData: updatedSd });
-        const curHp = updatedSd.hp?.value ?? 0;
-        const maxHp = updatedSd.hp?.max ?? 0;
-        const note = localize('pf2e.chat.damageApplied', `${holderName} took ${report.hpLost} damage (${curHp}/${maxHp})`, {
-          name: holderName,
-          amount: report.hpLost,
-          current: curHp,
-          max: maxHp,
-        });
-        window.Loom?.showToast?.(note, 'info');
-      }
+      await applyToTarget(tid, opts);
     } catch (err) {
       console.error(`[pf2e] Failed to apply damage/heal to target ${tid}:`, err);
     }
+  }
+}
+
+const autoApplied = new Set();
+
+/**
+ * Applies a damage roll to the tokens that were targeted when it was rolled. Runs on the GM client only
+ * (players cannot write NPC HP), once per roll. Rolls without targets are left to the card's manual buttons.
+ */
+export async function autoApplyDamage(roll) {
+  const m = roll?.meta;
+  if (typeof window === 'undefined' || !m?.autoApply || !m.targetIds?.length || !window.Loom?.user?.isGM) return;
+  // shortcut: replayed history is told from live rolls only by age, so rolls older than 60 s are never applied; upgrade if the engine exposes a roll id
+  if (autoApplied.has(m.rollKey) || Date.now() - num(m.ts) > 60000) return;
+  autoApplied.add(m.rollKey);
+  const amount = Math.floor(num(roll.total));
+  if (amount <= 0) return;
+  for (const tid of m.targetIds) {
+    try {
+      await applyToTarget(tid, { amount, damageType: String(m.damageType || 'untyped').toLowerCase(), isHeal: m.isHeal || String(m.damageType || '').toLowerCase() === 'healing' });
+    } catch (err) {
+      console.error(`[pf2e] Failed to auto-apply damage to target ${tid}:`, err);
+    }
+  }
+}
+
+/** Rolls weapon or spell damage from an attack card's button, reusing the targets the attack was rolled against. */
+export async function rollDamageFromCard(btn) {
+  const bar = btn.closest('.pf2e-attack-damage-bar');
+  if (!bar || !window.Loom?.api) return;
+  const { actorId, itemId, kind, castRank, targets } = bar.dataset;
+  const actor = await window.Loom.api.get(`/actors/${encodeURIComponent(actorId)}`).catch(() => null);
+  const items = Array.isArray(actor?.items) ? actor.items : (actor?.items?.contents || []);
+  const item = itemId === '__unarmed__'
+    ? { id: itemId, name: localize('pf2e.sheets.unarmedStrike', 'Unarmed Strike'), type: 'weapon', system: { category: 'unarmed', damage: '1d4', damageType: 'bludgeoning', traits: ['agile', 'finesse', 'unarmed'], agile: true, finesse: true } }
+    : items.find((i) => i.id === itemId);
+  if (!actor || !item) {
+    window.Loom?.showToast?.(localize('pf2e.chat.damageSourceMissing', 'Could not find the attacker or the weapon/spell on the sheet.'), 'warning');
+    return;
+  }
+  // undefined falls back to whoever is targeted right now
+  const targetIds = targets ? targets.split(',') : undefined;
+  const critical = btn.dataset.crit === 'true';
+  if (kind === 'spell') await rollSpellDamage(actor, item, { castRank: num(castRank) || null, critical, targetIds, castKey: bar.dataset.castKey || null });
+  else await rollDamage(actor, item, { critical, targetIds });
+}
+
+/** Buttons on a save spell's cast card: each target rolls its save against the spell DC, and the caster rolls the damage once. */
+export function renderSpellSaveBar({ actorId, itemId, castRank, dc, stat, basic, hasDamage, targets, castKey }) {
+  const a = (v) => String(v ?? '').replace(/"/g, '&quot;');
+  const statLabel = localize(`pf2e.defenses.${stat}`, stat);
+  return `
+    <div class="pf2e-damage-application-bar pf2e-attack-damage-bar" data-actor-id="${a(actorId)}" data-item-id="${a(itemId)}" data-kind="spell" data-cast-rank="${num(castRank)}" data-targets="${a(targets)}" data-cast-key="${a(castKey)}" data-dc="${num(dc)}" data-stat="${a(stat)}" data-basic="${!!basic}">
+      <button type="button" class="pf2e-dmg-apply-btn pf2e-roll-save-btn">🛡 ${a(localize('pf2e.chat.rollSave', 'Roll {stat} Save (DC {dc})', { stat: statLabel, dc: num(dc) }))}</button>
+      ${hasDamage ? `<button type="button" class="pf2e-dmg-apply-btn pf2e-roll-dmg-btn" data-crit="false">💥 ${a(localize('pf2e.chat.rollDamage', 'Roll Damage'))}</button>` : ''}
+    </div>
+  `.trim();
+}
+
+/** Rolls the save of every target of a save spell against the spell DC; basic-save damage follows from the result. */
+export async function rollSaveFromCard(btn) {
+  const bar = btn.closest('.pf2e-attack-damage-bar');
+  if (!bar || !window.Loom?.api) return;
+  const { dc, stat, basic, targets, castKey } = bar.dataset;
+  const ids = targets ? targets.split(',') : currentTargetIds();
+  if (!ids.length) {
+    window.Loom?.showToast?.(localize('pf2e.chat.noSaveTarget', 'Target a token to roll its saving throw.'), 'warning');
+    return;
+  }
+  for (const tid of ids) {
+    const loaded = await loadHolder(tid);
+    if (!loaded) continue;
+    await rollSpellSave(loaded.holder, {
+      dc: num(dc),
+      statistic: stat,
+      basic: basic === 'true',
+      extra: { castKey, saverId: tid, saverName: loaded.holder.name, ts: Date.now() },
+    });
+  }
+}
+
+const spellCasts = new Map();
+
+async function applySaveDamage(damage, save) {
+  const amount = Math.floor(damage.total * basicSaveMultiplier(save.degree));
+  if (amount <= 0) return;
+  try {
+    await applyToTarget(save.saverId, { amount, damageType: damage.type });
+  } catch (err) {
+    console.error(`[pf2e] Failed to apply save damage to target ${save.saverId}:`, err);
+  }
+}
+
+/**
+ * Basic-save spells on the GM client: the damage roll and each target's save roll arrive in any order;
+ * once both are known the target takes damage × the basic-save multiplier. Non-basic saves only show their degree.
+ */
+export async function trackSpellSaves(roll) {
+  const m = roll?.meta;
+  if (typeof window === 'undefined' || !m?.castKey || !window.Loom?.user?.isGM || Date.now() - num(m.ts) > 60000) return;
+  const state = spellCasts.get(m.castKey) || { damage: null, pending: [] };
+  spellCasts.set(m.castKey, state);
+  if (String(m.rollType).toLowerCase() === 'spelldamage') {
+    state.damage = { total: Math.floor(num(roll.total)), type: String(m.damageType || 'untyped').toLowerCase() };
+    for (const save of state.pending.splice(0)) await applySaveDamage(state.damage, save);
+  } else if (m.isSpellSave && m.basic && m.saverId) {
+    const degree = evaluateRollDegree(roll).degree;
+    if (!degree) return;
+    const save = { saverId: m.saverId, degree };
+    if (state.damage) await applySaveDamage(state.damage, save);
+    else state.pending.push(save);
   }
 }
 
@@ -609,6 +733,20 @@ export function registerChatWrapper() {
   // 3. Global delegated listener for damage application buttons
   if (!chatClickListener && typeof document !== 'undefined') {
     chatClickListener = (e) => {
+      const dmgBtn = e.target?.closest?.('.pf2e-roll-dmg-btn');
+      if (dmgBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        void rollDamageFromCard(dmgBtn);
+        return;
+      }
+      const saveBtn = e.target?.closest?.('.pf2e-roll-save-btn');
+      if (saveBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        void rollSaveFromCard(saveBtn);
+        return;
+      }
       const btn = e.target?.closest?.('.pf2e-dmg-apply-btn');
       if (btn) {
         e.preventDefault();
@@ -617,6 +755,12 @@ export function registerChatWrapper() {
       }
     };
     document.addEventListener('click', chatClickListener);
+  }
+
+  // 4. GM client applies damage rolls to their targets as soon as the dice result reaches the chat
+  if (!autoApplyHooked && window.Loom?.LoomHooks?.on) {
+    autoApplyHooked = true;
+    window.Loom.LoomHooks.on('chat.roll', (roll) => { void autoApplyDamage(roll); void trackSpellSaves(roll); });
   }
 
   return { unwrapRollHandle, unwrapMsgHandle };

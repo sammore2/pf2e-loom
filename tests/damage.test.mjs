@@ -7,6 +7,8 @@ import {
   applyHealingToActor,
   calculateShieldBlock,
   resolveRecoveryCheck,
+  consumeItemData,
+  extractConsumableHealing,
 } from '../scripts/damage.mjs';
 
 describe('Damage, Mitigations, Shield Block & Dying States', () => {
@@ -137,5 +139,64 @@ describe('Damage, Mitigations, Shield Block & Dying States', () => {
     const resCritFail = resolveRecoveryCheck(pc, 'critFailure');
     assert.equal(resCritFail.died, true);
     assert.equal(resCritFail.systemData.dead, true);
+  });
+
+  it('consumeItemData decrements charges, rolls over stack quantity, and halts when depleted', () => {
+    // 1. Single wand with 3 charges
+    const wand = { quantity: 1, uses: { value: 3, max: 3 } };
+    const use1 = consumeItemData(wand);
+    assert.equal(use1.success, true);
+    assert.equal(use1.data.uses.value, 2);
+    assert.equal(use1.data.quantity, 1);
+
+    // 2. Stack of 2 items with 1 charge each
+    const stack = { quantity: 2, uses: { value: 1, max: 1 } };
+    const useStack1 = consumeItemData(stack);
+    assert.equal(useStack1.success, true);
+    assert.equal(useStack1.data.quantity, 1);
+    assert.equal(useStack1.data.uses.value, 1);
+
+    // 3. Last charge in stack drops quantity to 0
+    const useStack2 = consumeItemData(useStack1.data);
+    assert.equal(useStack2.success, true);
+    assert.equal(useStack2.data.quantity, 0);
+
+    // 4. Depleted item cannot be consumed further
+    const useStack3 = consumeItemData(useStack2.data);
+    assert.equal(useStack3.success, false);
+    assert.equal(useStack3.reason, 'empty');
+
+    // 5. Standard simple consumable without uses object (just quantity)
+    const potion = { quantity: 2 };
+    const p1 = consumeItemData(potion);
+    assert.equal(p1.success, true);
+    assert.equal(p1.data.quantity, 1);
+
+    const p2 = consumeItemData(p1.data);
+    assert.equal(p2.success, true);
+    assert.equal(p2.data.quantity, 0);
+
+    const p3 = consumeItemData(p2.data);
+    assert.equal(p3.success, false);
+  });
+
+  it('extractConsumableHealing retrieves healing formulas from data, healing object, or description', () => {
+    const itemDamage = { name: 'Potion', data: { damage: { formula: '2d8+5', kind: 'healing' } } };
+    assert.equal(extractConsumableHealing(itemDamage), '2d8+5');
+
+    const itemHealing = { name: 'Scroll of Heal', system: { healing: { formula: '8d6+21' } } };
+    assert.equal(extractConsumableHealing(itemHealing), '8d6+21');
+
+    const elixir = { name: 'Elixir da Vida', data: { description: 'Cura 1d6 PV e concede +1 de bônus...' } };
+    assert.equal(extractConsumableHealing(elixir), '1d6');
+
+    const macroItem = { name: 'Major Potion', data: { description: '@Damage[(6d8+10)[healing]]' } };
+    assert.equal(extractConsumableHealing(macroItem), '6d8+10');
+
+    const fallbackPotion = { name: 'Poção de Cura Menor', data: { description: 'Restaura vida instantaneamente.' } };
+    assert.equal(extractConsumableHealing(fallbackPotion), '1d8');
+
+    const nonHeal = { name: 'Cheetah Elixir', data: { description: '+5 pés de bônus na velocidade.' } };
+    assert.equal(extractConsumableHealing(nonHeal), null);
   });
 });

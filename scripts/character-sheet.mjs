@@ -6,8 +6,8 @@
 import { xpProgress } from './rules.mjs';
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager, LoomDialog } from '/_loom/sdk/index.js';
 import { ATTRIBUTE_KEYS, SKILL_ABILITIES, SAVE_KEYS, CONDITIONS, RANK_KEYS, ITEM_TYPE_ICON } from './config.mjs';
-import { fmtMod, setPathValue, resolveActorPortrait, getItemType, getActorType, readValue, readDescription, readActionCost, normalizeItemData } from './utils.mjs';
-import { toggleNativeCondition, syncEquippedEffect, removeItemEffects } from './effects.mjs';
+import { fmtMod, setPathValue, resolveActorPortrait, getItemType, getActorType, readValue, readDescription, readActionCost, normalizeItemData, promptLoomInput, currentTargetIds } from './utils.mjs';
+import { toggleNativeCondition, syncEquippedEffect, removeItemEffects, applyItemEffect } from './effects.mjs';
 import { getDefaultData } from './schema.mjs';
 import { prepareActorRow } from './prepare-data.mjs';
 import { proficiencyBonus, multipleAttackPenalty } from './rules.mjs';
@@ -26,7 +26,7 @@ import {
 } from './roll-engine.mjs';
 import { Pf2eItemSheet } from './item-sheet.mjs';
 import { Pf2eCompendiumBrowser } from './compendium-browser.mjs';
-import { sendChatCard } from './chat-card.mjs';
+import { sendChatCard, renderSpellSaveBar } from './chat-card.mjs';
 import { localize } from './i18n.mjs';
 import { collectRuleElements } from './rule-elements.mjs';
 import {
@@ -36,6 +36,8 @@ import {
   mitigationFromActor,
   resolveRecoveryCheck,
   rollRecoveryFlatCheck,
+  consumeItemData,
+  extractConsumableHealing,
 } from './damage.mjs';
 import { parsePersistentInput } from './persistent-damage.mjs';
 import {
@@ -53,7 +55,7 @@ import { levelUpCharacter } from './character-builder.mjs';
 import { getProgressionChoicesForLevel } from './progression-tables.mjs';
 import { calculateEarnIncome, calculateCraftingProgress, DC_BY_LEVEL } from './downtime.mjs';
 
-export { sendChatCard };
+export { sendChatCard, promptLoomInput };
 
 function num(v) {
   if (v && typeof v === 'object') v = v.value;
@@ -103,44 +105,6 @@ function formatActionGlyph(cost) {
   return str || '◆';
 }
 
-export async function promptLoomInput({ title, label, defaultValue = '' }) {
-  if (typeof LoomDialog !== 'undefined' && LoomDialog.wait) {
-    const container = document.createElement('div');
-    container.className = 'pf2e-prompt-dialog-body';
-    container.style.cssText = 'padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;';
-    container.innerHTML = `
-      <label style="font-family: var(--tat-sans, sans-serif); font-size: 0.88rem; font-weight: 700; color: #ffd778; letter-spacing: 0.04em; text-transform: uppercase;">${label}</label>
-      <input type="text" class="tat-in pf2e-prompt-input" value="${defaultValue}" style="width: 100%; box-sizing: border-box; padding: 8px 12px; background: #231b1b; border: 1.5px solid #d8b46a; border-radius: 4px; color: #ffffff; font-size: 0.95rem; font-weight: 600;" />
-    `;
-    const inputEl = container.querySelector('.pf2e-prompt-input');
-    setTimeout(() => {
-      inputEl?.focus();
-      inputEl?.select();
-    }, 50);
-
-    const result = await LoomDialog.wait({
-      window: { title },
-      content: container,
-      width: 400,
-      buttons: [
-        {
-          action: 'cancel',
-          label: localize('pf2e.sheets.cancel', 'Cancelar'),
-          variant: 'ghost',
-          callback: () => null,
-        },
-        {
-          action: 'save',
-          label: localize('pf2e.sheets.save', 'Salvar'),
-          variant: 'primary',
-          callback: () => inputEl?.value ?? null,
-        },
-      ],
-    });
-    return result;
-  }
-  return typeof prompt === 'function' ? prompt(label, defaultValue) : defaultValue;
-}
 
 export async function showRecallKnowledgeDialog(actor) {
   if (typeof LoomDialog === 'undefined' || !LoomDialog.wait) {
@@ -864,6 +828,9 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       class: classItem ? { id: classItem.id, name: classItem.name } : null,
       deity: sd.details?.deity || '—',
       size: (sd.traits?.size || 'med').toUpperCase(),
+      sanctification: sd.details?.sanctification || null,
+      isHoly: sd.details?.sanctification === 'holy',
+      isUnholy: sd.details?.sanctification === 'unholy',
     };
 
     const invTypes = ['weapon', 'armor', 'shield', 'equipment', 'consumable'];
@@ -872,6 +839,10 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       labelKey: `pf2e.itemTypes.${t}`,
       items: items.filter((i) => i.type === t).map((i) => {
         const isys = i.system || i.data || {};
+        const usesObj = isys.uses || isys.charges || null;
+        const hasUses = Boolean(usesObj && (usesObj.max || usesObj.value !== undefined));
+        const usesText = hasUses ? `${num(usesObj.value ?? 0)}/${num(usesObj.max ?? usesObj.value ?? 0)}` : '';
+        const isConsumable = t === 'consumable' || hasUses;
         return {
           id: i.id,
           name: i.name,
@@ -882,6 +853,9 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
           price: isys.price ? String(isys.price) : '',
           level: isys.level !== undefined ? num(isys.level) : null,
           equipped: Boolean(isys.equipped || isys.worn),
+          hasUses,
+          usesText,
+          isConsumable,
         };
       }),
     }));
@@ -1005,6 +979,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       languages,
       speeds,
       currentActionMode: this._actionMode || 'encounter',
+      bulk: sd.derived?.bulk || { totalBulk: 0, rawLight: 0, encumberedLimit: 5, maxLimit: 10, isEncumbered: false, isOverMax: false },
       shield: shieldInfo,
       vitals,
       dyingDots,
@@ -1244,13 +1219,6 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     await this._reloadDocument();
   }
 
-  async _setDots(path, value) {
-    const sd = this.document?.systemData || {};
-    const next = JSON.parse(JSON.stringify(sd));
-    setPathValue(next, path, num(value));
-    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: next });
-    await this._reloadDocument();
-  }
 
   _findItem(id) {
     return itemsArray(this.document?.items).find((i) => i.id === id) || null;
@@ -1725,7 +1693,8 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       return;
     }
     if (action === 'roll-spell-attack') {
-      void rollSpellAttack(this.document);
+      const spell = target?.dataset?.id ? this._findItem(target.dataset.id) : null;
+      void rollSpellAttack(this.document, spell ? { item: spell, castRank: num(target.dataset.rank) || null } : {});
       return;
     }
     if (action === 'roll-crafting') {
@@ -1766,18 +1735,6 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         },
       } : (id ? this._findItem(id) : null);
       void rollDamage(this.document, item, { critical: action === 'roll-damage-crit' });
-      return;
-    }
-    if (action === 'set-hero') {
-      const clickedVal = num(target?.dataset?.value || target?.closest?.('[data-value]')?.dataset?.value);
-      const sd = this.document?.systemData || {};
-      const curVal = num(sd.heroPoints?.value);
-      const nextVal = (curVal === clickedVal) ? clickedVal - 1 : clickedVal;
-      void this._setDots('heroPoints.value', Math.max(0, nextVal));
-      return;
-    }
-    if (action === 'set-focus') {
-      void this._setDots('focus.value', target?.dataset?.value);
       return;
     }
     if (action === 'cond-inc' || action === 'cond-dec') {
@@ -1891,6 +1848,64 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
           const currentQty = num(idata.quantity ?? 1);
           idata.quantity = action === 'item-qty-inc' ? currentQty + 1 : Math.max(0, currentQty - 1);
           void api.put(`/items/${id}`, { data: idata }).then(() => this._reloadDocument());
+        }
+      }
+      return;
+    }
+    if (action === 'item-consume') {
+      if (!id) return;
+      const item = itemsArray(this.document?.items).find((i) => i.id === id);
+      if (!item) return;
+
+      const idata = item.data || item.system || {};
+      const consumed = consumeItemData(idata);
+      if (!consumed.success) {
+        window.Loom?.showToast?.(localize('pf2e.sheets.noUsesRemaining', 'No uses or charges remaining.'), 'warning');
+        return;
+      }
+
+      const shouldDestroy = idata.autoDestroy === true || (idata.uses?.autoDestroy === true && consumed.remainingQty === 0);
+      if (consumed.remainingQty <= 0 && shouldDestroy) {
+        await api.delete(`/items/${id}`);
+      } else {
+        await api.put(`/items/${id}`, { data: consumed.data });
+      }
+      this._reloadDocument();
+
+      const healFormula = extractConsumableHealing(item);
+      const targets = currentTargetIds();
+      const targetIds = targets.length > 0 ? targets : [this.document.id];
+
+      if (healFormula && window.Loom?.dispatchRoll) {
+        window.Loom.dispatchRoll({
+          formula: healFormula,
+          actorId: this.document.id,
+          mode: 'public',
+          meta: {
+            label: `${item.name} - ${localize('pf2e.combatTools.heal', 'Heal')}`,
+            system: 'pf2e',
+            rollType: 'damage',
+            damageType: 'healing',
+            isHeal: true,
+            itemId: item.id,
+            targetIds,
+            autoApply: true,
+          },
+        });
+      } else {
+        void sendChatCard(this.document, {
+          name: item.name,
+          glyph: '⚗️',
+          type: localize('pf2e.itemTypes.consumable', 'Consumable'),
+          desc: idata.description || localize('pf2e.chat.itemConsumed', '{name} was consumed.', { name: item.name }),
+        });
+      }
+
+      if (idata.effects?.length || item.system?.effects?.length) {
+        try {
+          await applyItemEffect(this.document, item);
+        } catch (err) {
+          console.warn(`[pf2e] Failed to apply consumable effect for ${item.name}:`, err);
         }
       }
       return;
@@ -2034,7 +2049,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       return;
     }
     if (action === 'set-hero') {
-      const val = num(target?.dataset?.value);
+      const val = num(target?.dataset?.value || target?.closest?.('[data-value]')?.dataset?.value);
       await this._updateSystemData((sd) => {
         sd.heroPoints = sd.heroPoints || { value: 1, max: 3 };
         sd.heroPoints.value = sd.heroPoints.value === val ? val - 1 : val;
@@ -2083,7 +2098,7 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       return;
     }
     if (action === 'set-focus') {
-      const val = num(target?.dataset?.value);
+      const val = num(target?.dataset?.value || target?.closest?.('[data-value]')?.dataset?.value);
       await this._updateSystemData((sd) => {
         sd.focus = sd.focus || { value: 0, max: 1 };
         sd.focus.value = sd.focus.value === val ? val - 1 : val;
@@ -2269,6 +2284,17 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         traits,
         type: `${localize('pf2e.itemTypes.spell', 'Spell')} (${localize('pf2e.sheets.rank', 'Rank')} ${castRank})`,
         desc: `${resourceNote}${spellDetails}\n\n${readDescription(sdata.description)}`,
+        extraHtml: hasSave ? renderSpellSaveBar({
+          actorId: this.document.id,
+          itemId: item.id,
+          castRank,
+          dc: spellDC,
+          stat: saveStat,
+          basic: isBasic,
+          hasDamage,
+          targets: currentTargetIds().join(','),
+          castKey: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        }) : '',
       });
 
       if (Array.isArray(sdata.effects) && sdata.effects.length > 0) {
@@ -2318,6 +2344,17 @@ export class Pf2eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
           return sd;
         });
       }
+      return;
+    }
+    if (action === 'toggle-sanctification') {
+      await this._updateSystemData((sd) => {
+        sd.details = sd.details || {};
+        const cur = sd.details.sanctification;
+        if (!cur) sd.details.sanctification = 'holy';
+        else if (cur === 'holy') sd.details.sanctification = 'unholy';
+        else sd.details.sanctification = null;
+        return sd;
+      });
       return;
     }
     if (action === 'downtime-earn-income') {

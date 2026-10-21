@@ -294,5 +294,96 @@ describe('Chat Card — Natural d20 Extraction & Degrees of Success', () => {
     assert.ok(html.includes('data-shield="true"'), 'Has shield block button');
     assert.ok(html.includes('data-action="apply-heal"'), 'Has healing button');
   });
+
+  const attackRoll = (natural, total, dc, extra = {}) => ({
+    formula: '1d20',
+    total,
+    terms: [{ kind: 'dice', faces: 20, count: 1, rolls: [natural], dropped: [false], subtotal: natural }],
+    meta: { system: 'pf2e', label: 'Ray of Frost', rollType: 'spellAttack', attackerId: 'a1', itemId: 's1', castRank: 1, targetIds: ['c1'], dc, ...extra },
+  });
+
+  it('attack card offers damage on a hit, crit damage on a crit, nothing on a miss', async () => {
+    const { renderPf2eRollCard } = await import('../scripts/chat-card.mjs');
+    const hit = renderPf2eRollCard(attackRoll(10, 22, 20), (s) => s);
+    assert.ok(hit.includes('data-crit="false"') && !hit.includes('data-crit="true"'), 'success: normal damage only');
+    assert.ok(hit.includes('data-item-id="s1"') && hit.includes('data-targets="c1"') && hit.includes('data-kind="spell"'));
+    const crit = renderPf2eRollCard(attackRoll(10, 31, 20), (s) => s);
+    assert.ok(crit.includes('data-crit="true"') && !crit.includes('data-crit="false"'), 'crit success: crit damage only');
+    const miss = renderPf2eRollCard(attackRoll(10, 15, 20), (s) => s);
+    assert.ok(!miss.includes('pf2e-roll-dmg-btn'), 'failure: no damage button');
+    const noDc = renderPf2eRollCard(attackRoll(10, 15, null), (s) => s);
+    assert.ok(noDc.includes('data-crit="false"') && noDc.includes('data-crit="true"'), 'no DC: both buttons');
+    const noSource = renderPf2eRollCard(attackRoll(10, 22, 20, { itemId: undefined }), (s) => s);
+    assert.ok(!noSource.includes('pf2e-roll-dmg-btn'), 'generic spell attack has no damage to roll');
+  });
+
+  it('autoApplyDamage hurts the targeted cast once, only on the GM client, and skips stale rolls', async () => {
+    const { autoApplyDamage } = await import('../scripts/chat-card.mjs');
+    const puts = [];
+    const cast = { id: 'c1', name: 'Goblin', isLinked: false, systemData: { hp: { value: 20, max: 20, temp: 0 } } };
+    const mk = (isGM) => ({
+      user: { isGM },
+      api: {
+        get: async (p) => { if (p === '/cast/c1') return cast; throw new Error(p); },
+        put: async (p, b) => { puts.push([p, b]); },
+      },
+    });
+    const roll = (key, ts) => ({ total: 8, meta: { autoApply: true, targetIds: ['c1'], damageType: 'fire', rollKey: key, ts } });
+
+    global.window = { Loom: mk(false) };
+    await autoApplyDamage(roll('k0', Date.now()));
+    assert.equal(puts.length, 0, 'players never write');
+
+    global.window = { Loom: mk(true) };
+    await autoApplyDamage(roll('k1', Date.now()));
+    await autoApplyDamage(roll('k1', Date.now()));
+    await autoApplyDamage(roll('k2', Date.now() - 120000));
+    delete global.window;
+    assert.equal(puts.length, 1, 'duplicate and stale rolls are ignored');
+    assert.equal(puts[0][0], '/cast/c1');
+    assert.equal(puts[0][1].systemData.hp.value, 12);
+  });
+
+  const saveRoll = (natural, total, extra = {}) => ({
+    formula: '1d20',
+    total,
+    terms: [{ kind: 'dice', faces: 20, count: 1, rolls: [natural], dropped: [false], subtotal: natural }],
+    meta: { system: 'pf2e', label: 'Reflex Save', isSpellSave: true, basic: true, dc: 15, castKey: 'K', saverId: 'c1', saverName: 'Goblin', ts: Date.now(), ...extra },
+  });
+
+  it('basic save card states the damage multiplier for the degree', async () => {
+    const { renderPf2eRollCard } = await import('../scripts/chat-card.mjs');
+    const html = renderPf2eRollCard(saveRoll(10, 17), (s) => s);
+    assert.ok(html.includes('Goblin') && html.includes('×½'), 'success on a basic save: half damage');
+    assert.ok(renderPf2eRollCard(saveRoll(10, 4), (s) => s).includes('×2'), 'critical failure: double');
+    assert.ok(!renderPf2eRollCard(saveRoll(10, 17, { basic: false }), (s) => s).includes('Basic save'), 'non-basic save: no multiplier');
+  });
+
+  it('trackSpellSaves applies save damage by degree whichever roll arrives first', async () => {
+    const { trackSpellSaves } = await import('../scripts/chat-card.mjs');
+    const puts = {};
+    global.window = {
+      Loom: {
+        user: { isGM: true },
+        api: {
+          get: async (p) => ({ id: p.split('/')[2], name: p, isLinked: false, systemData: { hp: { value: 20, max: 20, temp: 0 } } }),
+          put: async (p, b) => { puts[p] = b.systemData.hp.value; },
+        },
+      },
+    };
+    const damage = (key, total) => ({ total, meta: { rollType: 'spellDamage', castKey: key, damageType: 'fire', ts: Date.now() } });
+
+    await trackSpellSaves(damage('K', 10));
+    await trackSpellSaves(saveRoll(10, 17));
+    await trackSpellSaves(saveRoll(10, 25, { saverId: 'c3' }));
+    await trackSpellSaves(saveRoll(10, 4, { castKey: 'K2', saverId: 'c2' }));
+    assert.equal(puts['/cast/c2'], undefined, 'no damage rolled yet: the save waits');
+    await trackSpellSaves(damage('K2', 6));
+    delete global.window;
+
+    assert.equal(puts['/cast/c1'], 15, 'success: half of 10');
+    assert.equal(puts['/cast/c3'], undefined, 'critical success: nothing');
+    assert.equal(puts['/cast/c2'], 8, 'critical failure: double of 6, applied once the damage arrived');
+  });
 });
 

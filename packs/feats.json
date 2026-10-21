@@ -1,7 +1,7 @@
 [
   {
     "id": "ft-vicious-swing",
-    "name": "Golpe Feroz (Vicious Swing / Power Attack)",
+    "name": "Golpe Feroz (Vicious Swing)",
     "type": "feat",
     "data": {
       "level": 1,

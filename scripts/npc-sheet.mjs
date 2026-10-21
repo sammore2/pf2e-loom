@@ -5,7 +5,7 @@
 // personagem (debounce, drop, onAction); sem abas.
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager } from '/_loom/sdk/index.js';
 import { ATTRIBUTE_KEYS, CONDITIONS, RANK_KEYS, SAVE_KEYS, SKILL_ABILITIES } from './config.mjs';
-import { fmtMod, setPathValue, resolveActorPortrait, getItemType, readValue, readDescription, readActionCost, normalizeItemData } from './utils.mjs';
+import { fmtMod, setPathValue, resolveActorPortrait, getItemType, readValue, readDescription, readActionCost, normalizeItemData, promptLoomInput } from './utils.mjs';
 import { getDefaultData } from './schema.mjs';
 import { prepareActorRow } from './prepare-data.mjs';
 import { proficiencyBonus, multipleAttackPenalty } from './rules.mjs';
@@ -14,7 +14,7 @@ import { rollCheck, rollSkill, rollSave, rollPerception, rollAttack, rollDamage 
 import { Pf2eItemSheet } from './item-sheet.mjs';
 import { sendChatCard } from './chat-card.mjs';
 import { localize } from './i18n.mjs';
-import { promptLoomInput } from './character-sheet.mjs';
+
 import {
   applyIncomingDamage,
   applyHealingToActor,
