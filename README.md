@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="./assets/images/cover.webp" alt="Pathfinder 2ª Edição Remaster no LoomVTT" width="100%" style="border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.6);" />
+  <img src="./assets/images/cover.webp" alt="Pathfinder 2nd Edition Remaster on LoomVTT" width="100%" style="border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.6);" />
 </p>
 
-# Pathfinder 2ª Edição (Remaster) — Ruleset para LoomVTT
+# Pathfinder 2nd Edition (Remaster) — Ruleset for LoomVTT
 
 [![Loom VTT](https://img.shields.io/badge/Loom%20VTT-2.0.5--alpha-blueviolet)](https://loomvtt.com)
 [![License](https://img.shields.io/badge/license-MIT%20AND%20ORC%20AND%20Paizo--Community--Use-blue)](LICENSE)
@@ -23,7 +23,7 @@
 
 ---
 
-## âš”ï¸ About the System
+## ⚔️ About the System
 
 **PF2E Remaster** for **LoomVTT** is a complete, faithful implementation of the rules of *Pathfinder 2nd Edition (Remaster)* published by Paizo. Built for maximum fluidity at the virtual table, it combines smart tactical automation, themed visual design and the mechanical depth that makes Pathfinder 2e one of the most acclaimed RPGs in the world.
 
@@ -31,48 +31,48 @@ The ruleset runs directly on the LoomVTT architecture, providing instant calcula
 
 ---
 
-## ðŸŒŸ Key Features
+## 🌟 Key Features
 
-### ðŸŽ¯ 1. Canonical Rules Engine (Remaster)
+### 🎯 1. Canonical Rules Engine (Remaster)
 - **Strict Bonus Stacking**: Only the highest bonus and the worst penalty per category (*status*, *circumstance* and *item*) are applied, and untyped bonuses are added up, as in the official rules.
-- **Four Degrees of Success**: Automatic evaluation against the target DC â€” *Critical Failure*, *Failure*, *Success* and *Critical Success* â€” with dynamic adjustment on a natural 20 (+1 degree) or natural 1 (-1 degree).
+- **Four Degrees of Success**: Automatic evaluation against the target DC — *Critical Failure*, *Failure*, *Success* and *Critical Success* — with dynamic adjustment on a natural 20 (+1 degree) or natural 1 (-1 degree).
 - **Fortune and Misfortune Rolls**: Native support for *Fortune* and *Misfortune* rolls.
 
-### âš”ï¸ 2. Tactical Combat and Action Resolution
+### ⚔️ 2. Tactical Combat and Action Resolution
 - **Strikes with Automatic MAP**: The attack ladder is calculated in real time with the multiple attack penalty (*0 / -5 / -10* for regular weapons and *0 / -4 / -8* for agile weapons).
 - **Interactive Attack and Damage Cards**: Hits in chat offer a damage roll button (and automatic critical damage on critical successes).
-- **Basic Saving Throws for Spells**: Cards with saving throw options that apply automatic damage using the canonical multipliers (*Critical Failure: 2x*, *Failure: 1x*, *Success: Â½*, *Critical Success: 0x*).
+- **Basic Saving Throws for Spells**: Cards with saving throw options that apply automatic damage using the canonical multipliers (*Critical Failure: 2x*, *Failure: 1x*, *Success: ½*, *Critical Success: 0x*).
 - **Damage and Healing Applied to Tokens**: Detects the targeted tokens on the canvas, syncs with the combat tracker and applies mitigated damage or HP recovery directly to the target.
 - **Mitigation and Shield Block**: Support for weaknesses, resistances, immunities and shield Hardness absorption, with HP tracking and the Broken Threshold.
 - **Survival and Death Cycle**: Automated track for *Dying*, *Wounded* and *Doomed*, with *Recovery Flat Checks*.
 
-### ðŸŽ’ 3. Inventory, Bulk and Consumables
+### 🎒 3. Inventory, Bulk and Consumables
 - **Canonical Bulk Calculation**: Based on Strength (`5 + Strength modifier` to become encumbered, `10 + modifier` for the maximum capacity), automatically grouping 10 light (L) items into 1 Bulk.
 - **Item Consumption, Charges and Uses**: A dedicated consume button in the inventory for potions, elixirs, scrolls and wands. It decrements charges/uses or stacks and rolls the healing formula (for example *Healing Potion* or *Elixir of Life*), applying the HP gain to the sheet.
 
-### ðŸ“œ 4. Diegetic Play Sheets
+### 📜 4. Diegetic Play Sheets
 - **Character Sheet (`Pf2eCharacterSheet`)**: A tactical layout with a side attribute rail, tactile hit point pips, U/T/E/M/L proficiencies, Hero Points, Focus Points and an actions console.
 - **Party Sheet (`Pf2ePartySheet`)**: A consolidated view for the GM to monitor the team's HP, AC, passive Perception, saves, exploration activities and shared treasure.
 - **NPC and Monster Sheet (`Pf2eNpcSheet`)**: A compact interface for fast combat with immediate rolls for attacks, spells, skills and monster traits.
 - **Specialized Sheets**: Native support for *Hazards* (`Pf2eHazardSheet`), *Familiars* (`Pf2eFamiliarSheet`) and *Vehicles* (`Pf2eVehicleSheet`).
 
-### ðŸ§™ 5. Character Creation and Spells
+### 🧙 5. Character Creation and Spells
 - **7-Step Creation Assistant**: Guides the player through choosing Ancestry, Heritage, Background, Class, Ability Scores (direct +1 per Remaster boost), Skills and starting Feats.
 - **Level Up**: Automatic HP increase, consumption of 1000 XP, and calculation of boosts and feats per class.
 - **Spells and Heightening**: Dynamic scaling by interval or fixed ranks, with automatic consumption of spell slots or Focus Points.
 
-### ðŸŽ² 6. GM Tools and Downtime
+### 🎲 6. GM Tools and Downtime
 - **Encounter Calculator and Treasure Budget**: Threat estimates (*Trivial*, *Low*, *Moderate*, *Severe*, *Extreme*) and a coin budget according to the official GM Core tables.
 - **Downtime Activities**: *Crafting* with cost reduction and *Earn Income*, calculated by task level and skill proficiency.
 - **Compendium Browser**: Search and filtering across more than 90 compendiums, with Drag & Drop support.
 
-### ðŸŒ 7. Full Bilingual Support
-- ðŸ‡§ðŸ‡· **Brazilian Portuguese (`pt-BR`)**: Official Remaster translation and terminology.
-- ðŸ‡ºðŸ‡¸ **English (`en`)**: Strict parity of names, traits and terms with the Paizo books.
+### 🌐 7. Full Bilingual Support
+- 🇧🇷 **Brazilian Portuguese (`pt-BR`)**: Official Remaster translation and terminology.
+- 🇺🇸 **English (`en`)**: Strict parity of names, traits and terms with the Paizo books.
 
 ---
 
-## ðŸ“¥ Installation
+## 📥 Installation
 
 ### From the LoomVTT Marketplace
 1. In your world's main menu in LoomVTT, go to **Settings > Modules & Rulesets**.
@@ -88,42 +88,42 @@ https://github.com/sammore2/pf2e-loom/releases/latest/download/ruleset.json
 
 ---
 
-## ðŸ› ï¸ Developer Guide
+## 🛠️ Developer Guide
 
 ### Project Structure
 
 ```text
 pf2e/
-â”œâ”€â”€ assets/             # Cover art, SVG icons, logos and fonts
-â”œâ”€â”€ lang/               # Localization dictionaries (pt-BR.json, en.json)
-â”œâ”€â”€ packs/              # Base compendiums in JSON (actions, equipment, spells, feats)
-â”œâ”€â”€ packs-orc/          # SQLite compendiums with data under the ORC license
-â”œâ”€â”€ scripts/            # Game logic, sheets and integration modules
-â”‚   â”œâ”€â”€ character-builder.mjs        # Character creation and level-up logic
-â”‚   â”œâ”€â”€ character-builder-dialog.mjs # Creation assistant dialog
-â”‚   â”œâ”€â”€ character-sheet.mjs          # Tactical character sheet
-â”‚   â”œâ”€â”€ chat-card.mjs                # Chat cards, target resolution and saving throws
-â”‚   â”œâ”€â”€ compendium-browser.mjs       # ORC compendium browser
-â”‚   â”œâ”€â”€ conditions.mjs               # Condition catalog and decay
-â”‚   â”œâ”€â”€ damage.mjs                   # Damage, healing, mitigation, shields and consumables
-â”‚   â”œâ”€â”€ downtime.mjs                 # Earn Income and Crafting
-â”‚   â”œâ”€â”€ encounter.mjs                # Encounter and treasure calculator
-â”‚   â”œâ”€â”€ formula.mjs                  # Safe dice formula evaluator
-â”‚   â”œâ”€â”€ gm-tools-sheet.mjs           # GM tools panel
-â”‚   â”œâ”€â”€ modifiers.mjs                # Canonical bonus stacking rules
-â”‚   â”œâ”€â”€ npc-sheet.mjs                # Tactical monster and NPC sheet
-â”‚   â”œâ”€â”€ persistent-damage.mjs        # Persistent damage and end-of-turn checks
-â”‚   â”œâ”€â”€ prepare-data.mjs             # Statistics and Bulk preparation pipeline
-â”‚   â”œâ”€â”€ progression-tables.mjs       # Class and level progression tables
-â”‚   â”œâ”€â”€ roll-engine.mjs              # Unified d20 and damage roll engine
-â”‚   â”œâ”€â”€ rule-elements.mjs            # Modifier system and dynamic rules
-â”‚   â””â”€â”€ spellcasting.mjs             # Slot, focus and heightening management
-â”œâ”€â”€ styles/             # Themed stylesheets (pf2e.css)
-â”œâ”€â”€ templates/          # Handlebars (.hbs) templates for sheets and windows
-â”œâ”€â”€ tests/              # Full suite of 161 automated tests (Node test runner)
-â”œâ”€â”€ tools/              # Build helpers and compendium audit tools
-â”œâ”€â”€ pf2e.mjs            # Ruleset entry point in LoomVTT
-â””â”€â”€ ruleset.json        # Package manifest
+├── assets/             # Cover art, SVG icons, logos and fonts
+├── lang/               # Localization dictionaries (pt-BR.json, en.json)
+├── packs/              # Base compendiums in JSON (actions, equipment, spells, feats)
+├── packs-orc/          # SQLite compendiums with data under the ORC license
+├── scripts/            # Game logic, sheets and integration modules
+│   ├── character-builder.mjs        # Character creation and level-up logic
+│   ├── character-builder-dialog.mjs # Creation assistant dialog
+│   ├── character-sheet.mjs          # Tactical character sheet
+│   ├── chat-card.mjs                # Chat cards, target resolution and saving throws
+│   ├── compendium-browser.mjs       # ORC compendium browser
+│   ├── conditions.mjs               # Condition catalog and decay
+│   ├── damage.mjs                   # Damage, healing, mitigation, shields and consumables
+│   ├── downtime.mjs                 # Earn Income and Crafting
+│   ├── encounter.mjs                # Encounter and treasure calculator
+│   ├── formula.mjs                  # Safe dice formula evaluator
+│   ├── gm-tools-sheet.mjs           # GM tools panel
+│   ├── modifiers.mjs                # Canonical bonus stacking rules
+│   ├── npc-sheet.mjs                # Tactical monster and NPC sheet
+│   ├── persistent-damage.mjs        # Persistent damage and end-of-turn checks
+│   ├── prepare-data.mjs             # Statistics and Bulk preparation pipeline
+│   ├── progression-tables.mjs       # Class and level progression tables
+│   ├── roll-engine.mjs              # Unified d20 and damage roll engine
+│   ├── rule-elements.mjs            # Modifier system and dynamic rules
+│   └── spellcasting.mjs             # Slot, focus and heightening management
+├── styles/             # Themed stylesheets (pf2e.css)
+├── templates/          # Handlebars (.hbs) templates for sheets and windows
+├── tests/              # Full suite of 161 automated tests (Node test runner)
+├── tools/              # Build helpers and compendium audit tools
+├── pf2e.mjs            # Ruleset entry point in LoomVTT
+└── ruleset.json        # Package manifest
 ```
 
 ### Automated Tests
@@ -140,7 +140,7 @@ npm run check
 
 ---
 
-## âš–ï¸ Licenses and Intellectual Property
+## ⚖️ Licenses and Intellectual Property
 
 - **Source code and software implementation**: Licensed under the [MIT](LICENSE) license.
 - **Game mechanics and content**: Licensed under the **ORC License** (Library of Congress TX 9-307-067). See [`ORC-NOTICE.md`](ORC-NOTICE.md) for attribution details.
@@ -148,7 +148,7 @@ npm run check
 - **Paizo Inc. legal notice**: *Pathfinder* is a registered trademark of Paizo Inc. This product is not published, endorsed, or specifically approved by Paizo Inc. Charging for use of or access to this content is expressly prohibited.
 
 <details>
-<summary>PortuguÃªs (pt-BR)</summary>
+<summary>Português (pt-BR)</summary>
 
 <p align="center">
   <strong>Ruleset tático, autêntico e de alta performance para Pathfinder 2ª Edição (Remaster) no LoomVTT.</strong><br>
