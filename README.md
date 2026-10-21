@@ -2,7 +2,11 @@
   <img src="./assets/images/cover.webp" alt="Pathfinder 2ª Edição Remaster no LoomVTT" width="100%" style="border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.6);" />
 </p>
 
-# Pathfinder 2ª Edição (Remaster) — Ruleset para LoomVTT
+# Pathfinder 2ª Edição (Remaster) — Ruleset para LoomVTT
+
+[![Loom VTT](https://img.shields.io/badge/Loom%20VTT-2.0.5--alpha-blueviolet)](https://loomvtt.com)
+[![License](https://img.shields.io/badge/license-MIT%20AND%20ORC%20AND%20Paizo--Community--Use-blue)](LICENSE)
+[![Downloads](https://img.shields.io/github/downloads/sammore2/pf2e-loom/latest/pf2e.zip?label=downloads)](https://github.com/sammore2/pf2e-loom/releases/latest)
 
 <p align="center">
   <strong>Ruleset tático, autêntico e de alta performance para Pathfinder 2ª Edição (Remaster) no LoomVTT.</strong><br>
