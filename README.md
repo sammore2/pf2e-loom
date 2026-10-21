@@ -4,21 +4,14 @@
 
 # Pathfinder 2nd Edition (Remaster) — Ruleset for LoomVTT
 
-[![Loom VTT](https://img.shields.io/badge/Loom%20VTT-2.0.5--alpha-blueviolet)](https://loomvtt.com)
+[![Loom VTT](https://img.shields.io/badge/Loom%20VTT-2.0.5--alpha-blueviolet)](https://loomvtt.com)
+[![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsammore2%2Fpf2e-loom%2Fmain%2Fruleset.json&query=%24.version&label=version&color=c99738)](https://github.com/sammore2/pf2e-loom/releases)
 [![License](https://img.shields.io/badge/license-MIT%20AND%20ORC%20AND%20Paizo--Community--Use-blue)](LICENSE)
 [![Downloads](https://img.shields.io/github/downloads/sammore2/pf2e-loom/latest/pf2e.zip?label=downloads)](https://github.com/sammore2/pf2e-loom/releases/latest)
 
 <p align="center">
   <strong>A tactical, faithful, high-performance ruleset for Pathfinder 2nd Edition (Remaster) on LoomVTT.</strong><br>
   <em>Fully integrated with official rules under the ORC License and the Paizo Community Use Policy.</em>
-</p>
-
-<p align="center">
-  <a href="https://github.com/sammore2/pf2e-loom/releases"><img src="https://img.shields.io/badge/version-v0.1.0-c99738?style=flat-square" alt="Ruleset Version" /></a>
-  <a href="https://github.com/sammore2/pf2e-loom"><img src="https://img.shields.io/badge/engine-LoomVTT%20%3E%3D0.1.0-781822?style=flat-square" alt="Loom Engine" /></a>
-  <a href="https://github.com/sammore2/pf2e-loom"><img src="https://img.shields.io/badge/tests-161%20passing-2ea44f?style=flat-square" alt="Tests Status" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT%20%7C%20ORC%20%7C%20CUP-blue?style=flat-square" alt="License" /></a>
-  <a href="lang/"><img src="https://img.shields.io/badge/languages-PT--BR%20%7C%20EN-purple?style=flat-square" alt="Languages" /></a>
 </p>
 
 ---
@@ -153,14 +146,6 @@ npm run check
 <p align="center">
   <strong>Ruleset tático, autêntico e de alta performance para Pathfinder 2ª Edição (Remaster) no LoomVTT.</strong><br>
   <em>Totalmente integrado com regras oficiais sob a ORC License e a Paizo Community Use Policy.</em>
-</p>
-
-<p align="center">
-  <a href="https://github.com/sammore2/pf2e-loom/releases"><img src="https://img.shields.io/badge/versão-v0.1.0-c99738?style=flat-square" alt="Ruleset Version" /></a>
-  <a href="https://github.com/sammore2/pf2e-loom"><img src="https://img.shields.io/badge/engine-LoomVTT%20%3E%3D0.1.0-781822?style=flat-square" alt="Loom Engine" /></a>
-  <a href="https://github.com/sammore2/pf2e-loom"><img src="https://img.shields.io/badge/testes-161%20passando-2ea44f?style=flat-square" alt="Tests Status" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/licença-MIT%20%7C%20ORC%20%7C%20CUP-blue?style=flat-square" alt="License" /></a>
-  <a href="lang/"><img src="https://img.shields.io/badge/idiomas-PT--BR%20%7C%20EN-purple?style=flat-square" alt="Languages" /></a>
 </p>
 
 ---
