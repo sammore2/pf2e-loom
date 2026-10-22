@@ -12,7 +12,7 @@ Each release tag `vX.Y.Z` automatically publishes the section headed `## [X.Y.Z]
 
 ---
 
-## [0.1.0] - 2026-10-12
+## [0.1.0] - 2026-10-21
 
 ### Added
 - **Core Rules Engine & Data Pipeline**:
