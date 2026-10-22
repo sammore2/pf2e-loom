@@ -135,6 +135,7 @@ jobs:
 
       - name: Publish package version to Loom Hub
         if: ${{ !contains(github.ref_name, '-') }}
+        continue-on-error: true
         env:
           RELEASE_TAG: ${{ steps.v.outputs.tag }}
           RELEASE_REPOSITORY: ${{ github.repository }}
